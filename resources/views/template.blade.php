@@ -14,7 +14,7 @@
     <style>
       nav{
         background-color: white !important;
-      }
+        box-shadow: none !important;
 
     </style>
 </head>
@@ -229,7 +229,7 @@
     
 </body>
     <script src="{{asset('/js/jquery-3.5.1.js')}}"></script>
-    <script src="{{asset('/js/lga.js')}}"></script>
+    <!-- <script src="{{asset('/js/lga.js')}}"></script> -->
     <script src="{{asset('/js/pmain.js')}}"></script>
     <script src="{{asset('/js/materialize.min.js')}}"></script>
     <!--<script src="/js/material2.min.css"></script>-->
@@ -241,35 +241,37 @@
     <script src="{{asset('/js/dataTables.searchPanes.min.js')}}"></script>
     <script src="{{asset('/js/highcharts.js')}}"></script>
     <script src="{{asset('/js/exporting.js')}}"></script>
-    <script type="text/javascript">
-      $(function () {
-      var laptops = <?php echo $Laptops ?? ''; ?>;
-      var phones = <?php echo $Phones ?? ''; ?>;
-      $('#basic-area').highcharts({
-          chart: {
-          type: 'column'
-          },
-          title: {
-          text: 'Laptop Computers and Phones Distribution Accross Facilities'
-          },
-          xAxis: {
-          categories: ['FCT','Nasarawa','Katsina','Rivers']
-          },
-          yAxis: {
-              title: {
-              text: 'Quantity / Total'
-          }
-          },
-          series: [{
-          name: 'Phones',
-          data: phones
-          }, {
-          name: 'Laptops',
-          data: laptops
-          }]
-      });
-      });
-    </script>
+    <?php if(isset($dashboard)){ ?>
+      <script type="text/javascript">
+        $(function () {
+        var laptops = <?php echo $Laptops ?? ''; ?>;
+        var phones = <?php echo $Phones ?? ''; ?>;
+        $('#basic-area').highcharts({
+            chart: {
+            type: 'column'
+            },
+            title: {
+            text: 'Laptop Computers and Phones Distribution Accross Facilities'
+            },
+            xAxis: {
+            categories: ['FCT','Nasarawa','Katsina','Rivers']
+            },
+            yAxis: {
+                title: {
+                text: 'Quantity / Total'
+            }
+            },
+            series: [{
+            name: 'Phones',
+            data: phones
+            }, {
+            name: 'Laptops',
+            data: laptops
+            }]
+        });
+        });
+      </script>
+    <?php } ?>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" /></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" /></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" /></script>

@@ -33,11 +33,13 @@ Route::get('add_supplier', 'SupplierController@create')->name('add_supplier');
 Route::resource('inventories', 'InventoryController')->middleware('auth');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->middleware('auth');
 
-Route::get('add_item', 'InventoryController@create')->name('add_item');
+Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
 Route::get('item/{id}', 'InventoryController@edit');
-Route::get('print_item/{id}', 'InventoryController@show')->name('print_item');
-Route::get('reports', 'InventoryController@reports')->name('reports');
-Route::post('product_search','InventoryController@product_search')->name('product_search');
+Route::get('print_item/{id}', 'InventoryController@show')->name('print_item')->middleware('auth');
+Route::get('reports', 'InventoryController@reports')->name('reports')->middleware('auth');
+Route::post('product_search','InventoryController@product_search')->name('product_search')->middleware('auth');
+Route::post('fixItems','InventoryController@fixItems')->name('fixItems')->middleware('auth');
+
 
 // Item Requests
 Route::get('requests', 'InventoryController@requests')->name('requests');

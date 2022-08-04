@@ -112,6 +112,20 @@
                         <hr>
 
                         <div class="input-field">
+                            <select name="state" id="state" materialize="material_select">
+                                
+                                <option disabled selected>State</option>
+                                <option value="FCT">FCT</option>
+                                <option value="RIVERS">RIVERS</option>
+                                <option value="NASARAWA">NASARAWA</option>
+                                <option value="KATSINA">KATSINA</option>                               
+                                
+                            </select>
+                            <label for="facility">Select State</label>
+                        </div>
+
+
+                        <div class="input-field">
                             <select name="facility" id="facility" materialize="material_select">
                                 <option value="" disabled selected>Facility</option>
                                 @foreach ($facilities as $facility)                                            

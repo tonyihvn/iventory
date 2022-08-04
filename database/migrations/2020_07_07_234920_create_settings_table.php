@@ -23,6 +23,17 @@ class CreateSettingsTable extends Migration
             $table->string('copyright')->nullable();
             $table->timestamps();
         });
+
+        DB::table('settings')->insert(
+            array(
+                'organization_name' => 'IHVN SI',
+                'description' => 'Public Health Institution',
+                'logo' => 'ihvnlogo.png',
+                'address' => 'Jabi, Abuja',
+                'phone_number' => '234803000000',
+                'copyright' => 'IHVN SI'
+            )
+        );
     }
 
     /**

@@ -16,7 +16,7 @@
                         </div>
 
                         <div class="input-field">
-                                <input id="facility_no" type="text" class="validate" name="facility_no" required>
+                                <input id="facility_no" type="text" class="validate" name="facility_no">
                                 <label for="facility_no">Facility Datim Number</label>
                         </div>
 
@@ -48,7 +48,7 @@
                                     <option value="Kogi">Kogi</option>
                                     <option value="Kwara">Kwara</option>
                                     <option value="Lagos">Lagos</option>
-                                    <option value="Nassarawa">Nassarawa</option>
+                                    <option value="Nasarawa">Nasarawa</option>
                                     <option value="Niger">Niger</option>
                                     <option value="Ogun">Ogun</option>
                                     <option value="Ondo">Ondo</option>
@@ -78,22 +78,22 @@
                         </div>
 
                         <div class="input-field">
-                                <input id="town" type="text" class="validate" name="town" required>
+                                <input id="town" type="text" class="validate" name="town">
                                 <label for="town">Town/District</label>
                         </div>
 
                         <div class="input-field">
-                                <input id="address" type="text" class="validate" name="address" required>
+                                <input id="address" type="text" class="validate" name="address">
                                 <label for="address">Address</label>
                         </div>
 
                         <div class="input-field">
-                                <input id="phone_number" type="text" class="validate" name="phone_number" required>
+                                <input id="phone_number" type="text" class="validate" name="phone_number">
                                 <label for="phone_number">Phone Number</label>
                         </div>
 
                         <div class="input-field">
-                                <input id="contact_person" type="text" class="validate" name="contact_person" required>
+                                <input id="contact_person" type="text" class="validate" name="contact_person">
                                 <label for="contact_person">Contact Person</label>
                         </div>
 

@@ -42,7 +42,7 @@
                                         </li>
                                                         
                                         <li>
-                                                <a href="category/{{$ca->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Category Inventory" target="_blank"><i class="material-icons">list</i></a>         
+                                                <a href="inventorycategory/{{$ca->category_name}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Category Inventory" target="_blank"><i class="material-icons">list</i></a>         
                                         </li>
 
                                         

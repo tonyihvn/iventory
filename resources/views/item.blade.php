@@ -121,6 +121,20 @@
                         <h5>Facility / User Location</h5>
                         <hr>
 
+
+                        <div class="input-field">
+                            <select name="state" id="state" materialize="material_select">
+                                <option value="{{$item->state}}" selected>{{$item->state}}</option>
+                             
+                                <option value="FCT">FCT</option>
+                                <option value="RIVERS">RIVERS</option>
+                                <option value="NASARAWA">NASARAWA</option>
+                                <option value="KATSINA">KATSINA</option>                               
+                                
+                            </select>
+                            <label for="facility">Select State</label>
+                        </div>
+
                         <div class="input-field">
                             <select name="facility" class="initialized">
                                 <option selected value='{{$item->facility_id}}'>{{$item->facilities->facility_name}}</option>

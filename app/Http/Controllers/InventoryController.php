@@ -28,28 +28,35 @@ class InventoryController extends Controller
     public function index()
     {
         // $inventories = inventory::with(['facilities'])->orderBy('item_name', 'asc')->paginate(100);
-        
+
+        $facilities = facilities::select('id','facility_name')->get();
+        //$departments = department::select('id','department_name')->get();
+        //$units = unit::select('id','unit_name')->get();
+        //$users = User::select('id','name','facility','department','unit')->get();
+        $categories = category::select('id','category_name')->get();
+
         if(auth()->user()->role=="Admin"){
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->orderBy('item_name', 'asc')->get();
-            // $all_items = inventory::select('id','item_name', 'serial_no', 'facility_id', 'user_id')->get();    
+            // $all_items = inventory::select('id','item_name', 'serial_no', 'facility_id', 'user_id')->get();
         }else{
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
-            // $all_items = inventory::select('item_name', 'serial_no', 'facility_id', 'user_id')->where('user_id',auth()->user()->id)->get();    
+            // $all_items = inventory::select('item_name', 'serial_no', 'facility_id', 'user_id')->where('user_id',auth()->user()->id)->get();
         }
-        return view('inventories', compact('inventories'));
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories]);
     }
 
     public function categoryInventory($category)
     {
-        
+        $facilities = facilities::select('id','facility_name')->get();
+
+        $categories = category::select('id','category_name')->get();
+
         if(auth()->user()->role=="Admin"){
             $inventories = inventory::where('category',$category)->orderBy('item_name', 'asc')->get();
-            $all_items = inventory::select('id','item_name', 'serial_no', 'facility_id', 'user_id')->get();    
         }else{
             $inventories = inventory::where('category',$category)->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
-            $all_items = inventory::select('item_name', 'serial_no', 'facility_id', 'user_id')->where('user_id',auth()->user()->id)->get();    
         }
-        return view('inventories', compact('inventories'),['all_items'=>$all_items]);
+        return view('inventories', compact('inventories'),['category'=>$category,'facilities'=>$facilities,'categories'=>$categories]);
     }
 
     /**
@@ -59,7 +66,7 @@ class InventoryController extends Controller
      */
     public function create()
     {
-        // $ihvn_no = "IHVN".substr(md5(uniqid(mt_rand(), true).microtime(true)),0, 8); 
+        // $ihvn_no = "IHVN".substr(md5(uniqid(mt_rand(), true).microtime(true)),0, 8);
         $facilities = facilities::select('id','facility_name')->get();
         $departments = department::select('id','department_name')->get();
         $units = unit::select('id','unit_name')->get();
@@ -80,7 +87,7 @@ class InventoryController extends Controller
         $this->validate($request, [
             'item_name' => 'required|min:3'
         ]);
-        
+
 
         if($request->hasFile('file'))
         {
@@ -108,6 +115,7 @@ class InventoryController extends Controller
             'user_id'=>$request->user,
             'quantity'=>$request->quantity,
             'status'=>$request->status,
+            'state'=>$request->state,
             'department_id'=>$request->department,
             'unit_id'=>$request->unit,
             'added_by'=>$request->added_by,
@@ -125,41 +133,41 @@ class InventoryController extends Controller
                 foreach ($files as $key => $file) {
                     $filename = $files[$key]->getClientOriginalName();
                    //  $file->store('users/' . $this->user->id . '/messages');
-                    
+
                    $file->move('uploads/'.$itemid, $filename);
 
                    files::create([
                     'filename'=>$filename,
-                    'itemid'=>$itemid                
+                    'itemid'=>$itemid
                     ]);
                 }
             }else{
-                
+
                 foreach ($files as $key => $file) {
                     $filename = $files[$key]->getClientOriginalName();
                    //  $file->store('users/' . $this->user->id . '/messages');
-                    
+
                    $file->move('uploads/'.$itemid, $filename);
-                    
+
                    files::create([
                     'filename'=>$filename,
-                    'itemid'=>$itemid                
+                    'itemid'=>$itemid
                     ]);
                 }
             }
 
-            
+
         }
-        
+
         $i = 0;
         if(isset($request->property)){
             foreach ($request->property as $pp){
             // RECORD SPECS
-            
+
                 inventoryspec::create([
                     'property'=>$pp,
                     'value'=>$request->value[$i],
-                    'itemid'=>$itemid                
+                    'itemid'=>$itemid
                     ]);
                     $i++;
             }
@@ -169,10 +177,10 @@ class InventoryController extends Controller
         audit::create([
             'action'=>"Add new inventory item ".$request->facility_name,
             'description'=>'A new item was created',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
         session()->flash('message','The New Item : '.$request->facility_name.' has been added successfully!');
-        
+
         return redirect()->back();
     }
 
@@ -197,13 +205,13 @@ class InventoryController extends Controller
     public function edit(inventory $inventory, $id)
     {
         $item = inventory::where('id','=',$id)->with('inventoryspec')->first();
-        
+
         $facilities = facilities::select('id','facility_name')->get();
         $departments = department::select('id','department_name')->get();
         $units = unit::select('id','unit_name')->get();
         $users = User::select('id','name','facility','department','unit')->get();
         $categories = category::select('id','category_name')->get();
-        
+
 
         return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities]);
     }
@@ -230,35 +238,80 @@ class InventoryController extends Controller
             'user_id'=>$request->user,
             'quantity'=>$request->quantity,
             'status'=>$request->status,
+            'state'=>$request->state,
             'department_id'=>$request->department,
             'unit_id'=>$request->unit,
             'facility_id'=>$request->facility,
             'internal_location'=>$request->internal_location,
             'remarks'=>$request->remarks
         ]);
-        
+
         // Remove Inventory Specs and Recreate
         inventoryspec::where('itemid',$request->id)->delete();
+        if(isset($request->property)){
+            $i = 0;
 
-        $i = 0;
-        foreach ($request->property as $pp){
-            // RECORD SALES
-            inventoryspec::create([
-                'property'=>$pp,
-                'value'=>$request->value[$i],
-                'itemid'=>$request->id                
-                ]);
-            $i++;
+            foreach ($request->property as $pp){
+                // RECORD SALES
+                inventoryspec::create([
+                    'property'=>$pp,
+                    'value'=>$request->value[$i],
+                    'itemid'=>$request->id
+                    ]);
+                $i++;
+            }
         }
 
         audit::create([
             'action'=>"Updated Item ".$request->item_name,
             'description'=>'An item was updated in the inventory',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
 
         session()->flash('message','The Item : '.$request->facility_name.' has been updated successfully!');
-        
+
+        return redirect()->back();
+    }
+
+    public function fixItems(Request $request)
+    {
+
+        if(isset($request->facility)){
+            $i = 0;
+
+
+            foreach ($request->tid as $itemid){
+
+                $it = inventory::where('id',$itemid)->first();
+                // RECORD SALES
+                $it->update([
+                    'facility_id'=>$request->facility
+                    ]);
+                $i++;
+            }
+        }
+
+        if(isset($request->category)){
+            $i = 0;
+
+            foreach ($request->tid as $itemid){
+                $it = inventory::where('id',$itemid)->first();
+                // RECORD SALES
+                $it->update([
+                    'category'=>$category
+                    ]);
+                $i++;
+            }
+        }
+
+        audit::create([
+            'action'=>"Updated Items ".var_dump($request->tid),
+            'description'=>'An item was updated in the inventory',
+            'doneby'=>"Admin" // Auth::user()->id
+        ]);
+
+        session()->flash('message','The Item : '.var_dump($request->tid).' has been updated successfully!');
+
         return redirect()->back();
     }
 
@@ -275,9 +328,9 @@ class InventoryController extends Controller
         audit::create([
             'action'=>"Deleted Item ".$request->id,
             'description'=>'An Item was deleted',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
- 
+
         session()->flash('message','The the selected item has been successfully deleted.');
 
         return redirect()->back();
@@ -290,9 +343,9 @@ class InventoryController extends Controller
         audit::create([
             'action'=>"Deleted Request Item ".$request->id,
             'description'=>'A Request Item was deleted',
-            'doneby'=>Auth::user()->id           
+            'doneby'=>Auth::user()->id
         ]);
- 
+
         session()->flash('message','The the selected request  item has been successfully deleted.');
 
         return redirect()->route('requests');
@@ -320,7 +373,7 @@ class InventoryController extends Controller
 
     public function request($id)
     {
-        
+
         $item = requests::where('id', $id)->first();
         return view('edit_request',compact('item'));
     }
@@ -340,7 +393,7 @@ class InventoryController extends Controller
             'comments'=>'',
             'remarks'=>'',
         ]);
-        
+
         session()->flash('message','Your Item request has been sent successfully!');
         return redirect()->back();
 
@@ -354,26 +407,26 @@ class InventoryController extends Controller
         $requested = requests::where('id',$request->id)->first();
 
         $requested->update([
-            
-            'request_status'=>$request->request_status,            
+
+            'request_status'=>$request->request_status,
             'remarks'=>$request->remarks
         ]);
-        
+
         session()->flash('message','The request has been updated successfully!');
         return redirect()->back();
 
     }
 
     public function product_search(Request $request){
-        
+
         $item = inventory::where('id','=',$request->keyword)->with('inventoryspec')->first();
-        
+
         $facilities = facilities::select('id','facility_name')->get();
         $departments = department::select('id','department_name')->get();
         $units = unit::select('id','unit_name')->get();
         $users = User::select('id','name','facility','department','unit')->get();
         $categories = category::select('id','category_name')->get();
-        
+
 
         return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities]);
 

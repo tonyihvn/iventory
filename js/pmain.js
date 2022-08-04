@@ -74,18 +74,24 @@ $(document).ready(function(){
 
     // TABLES WITH FILTERS
     $('#products thead tr').clone(true).appendTo( '#products thead' );
-    $('#products thead tr:eq(1) th').each( function (i) {
+    $('#products thead tr:eq(1) th').each( function (i) {        
+            
         var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
+
+        // var title = titl.replace(/ +?/g, '');        
+
+        if(i==0 || title!='Actions'){
+            $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
         
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
+            $( 'input', this ).on( 'keyup change', function () {
+                if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        }
     } );
 
     // $('.print_table:eq(1)').hide();
@@ -158,6 +164,20 @@ $(document).ready(function(){
             $("#search_product").focus();
         }
     });
+
+    // CREATE SELECT ALL ITEMS
+    $('#select-all').click(function(event) {   
+        if(this.checked) {
+            // Iterate each checkbox
+            $('.iselect').each(function() {
+                this.checked = true;                        
+            });
+        } else {
+            $('.iselect').each(function() {
+                this.checked = false;                       
+            });
+        }
+    }); 
 
     // PREVENT SUBMIT ON ENTER
     $(window).keydown(function(event){

@@ -18,8 +18,9 @@ An integrated inventory management and tracking systems for IHVN:
 More details Comming Soon.
 
 ## Project Team
-- Mr Steve Jobs (Lead)
-- Mr Bright Ibezim
-- Mr Williams Nwogbo
+- Mr Bright Ibezim (Lead)
+- Mr Tayo Oyeleka
+- Mr Damilare Adebawo
+- Mr Innocent Ogesiano
 - Mr Tayo Raimi
 - Mr Anthony Nwokoma
