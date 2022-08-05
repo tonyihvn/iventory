@@ -30,13 +30,14 @@ class InventoryController extends Controller
         // $inventories = inventory::with(['facilities'])->orderBy('item_name', 'asc')->paginate(100);
 
         $facilities = facilities::select('id','facility_name')->get();
-        //$departments = department::select('id','department_name')->get();
-        //$units = unit::select('id','unit_name')->get();
-        //$users = User::select('id','name','facility','department','unit')->get();
+
         $categories = category::select('id','category_name')->get();
 
         if(auth()->user()->role=="Admin"){
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->orderBy('item_name', 'asc')->get();
+            // $all_items = inventory::select('id','item_name', 'serial_no', 'facility_id', 'user_id')->get();
+        }else if(auth()->user()->role=="Manager"){
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
             // $all_items = inventory::select('id','item_name', 'serial_no', 'facility_id', 'user_id')->get();
         }else{
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
@@ -53,6 +54,8 @@ class InventoryController extends Controller
 
         if(auth()->user()->role=="Admin"){
             $inventories = inventory::where('category',$category)->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Manager"){
+            $inventories = inventory::where('category',$category)->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
         }else{
             $inventories = inventory::where('category',$category)->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
@@ -298,7 +301,7 @@ class InventoryController extends Controller
                 $it = inventory::where('id',$itemid)->first();
                 // RECORD SALES
                 $it->update([
-                    'category'=>$category
+                    'category'=>$request->category
                     ]);
                 $i++;
             }
@@ -362,13 +365,17 @@ class InventoryController extends Controller
 
     public function requests()
     {
+        $facilities = facilities::select('id','facility_name')->get();
+
         if(Auth::user()->role=="Admin"){
             $requests = requests::with('user')->paginate(50);
+        }else if(Auth::user()->role=="Manager"){
+            $requests = requests::with('user')->where('state',auth()->user()->state)->paginate(50);
         }else{
-            $requests = requests::where('requested_by', auth()->user()->id)->paginate(50)->with('users');
+            $requests = requests::where('user_id', auth()->user()->id)->paginate(50)->with('users');
         }
         $users = User::select('id','name','facility','department','unit')->get();
-        return view('requests',compact('requests'))->with(['users'=>$users]);
+        return view('requests',compact('requests'))->with(['users'=>$users,'facilities'=>$facilities]);
     }
 
     public function request($id)
@@ -388,13 +395,20 @@ class InventoryController extends Controller
             'quantity_requested'=>$request->quantity_requested,
             'user_id'=>$request->user_id,
             'location'=>$request->location,
+            'state'=>$request->state,
             'request_status'=>'Sent',
             'request_reason'=>$request->request_reason,
-            'comments'=>'',
+            'comments'=>$request->comments,
             'remarks'=>'',
         ]);
 
-        session()->flash('message','Your Item request has been sent successfully!');
+        audit::create([
+            'action'=>$request->item_name." Request From ".$request->state,
+            'description'=>'A Request Item was deleted',
+            'doneby'=>Auth::user()->id
+        ]);
+
+        session()->flash('message','Your '.$request->item_name.' request has been sent successfully!');
         return redirect()->back();
 
     }

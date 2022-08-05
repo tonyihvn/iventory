@@ -19,6 +19,7 @@ class CreateRequestsTable extends Migration
             $table->string('quantity_requested')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('location')->nullable();
+            $table->string('state')->nullable();
             $table->string('request_status')->nullable();
             $table->text('request_reason')->nullable();
             $table->string('comments')->nullable();

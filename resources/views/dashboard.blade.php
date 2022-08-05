@@ -1,5 +1,7 @@
 @extends('template')
-
+@php
+    $dashboard = '';
+@endphp
 @section('content')
 <style>
 
@@ -27,7 +29,7 @@
                 <a href="/inventories" class="btn btn-large green pulse"><i class="material-icons">remove_red_eye</i>Inventories</a>
             </div>
             <hr>
-            
+
             <div style="padding: 35px;" align="center" class="card">
                 <div class="row">
                     <div class="left card-title">
@@ -36,7 +38,7 @@
                 </div>
 
                 <div class="row">
-                    <div id="basic-area" class="card-panel"></div>                
+                    <div id="basic-area" class="card-panel"></div>
                 </div>
             </div>
 
@@ -53,27 +55,27 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Category</th>
-                                    <th>Quantity / Items</th>  
+                                    <th>Quantity / Items</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($allcats as $cat)                 
-                                
+                                @foreach ($allcats as $cat)
+
                                 <tr>
                                     <td><a href="/inventorycategory/{{$cat->category}}/">{{$cat->category}}</a></td>
                                     <td>{{$cat->quantity}}</td>
-                                    
-                                  
+
+
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
-                                <tr>                    
+                                <tr>
                                     <th>Category</th>
-                                    <th>Quantity / Items</th>  
+                                    <th>Quantity / Items</th>
                                 </tr>
                             </tfoot>
-                        </table>     
+                        </table>
                     </div>
                 </div>
 
@@ -82,9 +84,9 @@
                         <div class="left card-title">
                         <b>Latest Activity</b>
                         </div>
-                        
+
                             @if ($audits!=NULL)
-                              
+
                             <table id="audits" class="table striped display responsive-table" style="width:100%; font-size:0.7em !important;">
                                 <thead class="thead-dark">
                                     <tr>
@@ -92,25 +94,25 @@
                                         <th>Event/Action</th>
                                         <th>Description</th>
                                         <th>User</th>
-                                        
-                                       
+
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($audits as $au)                 
-                                    
+                                    @foreach ($audits as $au)
+
                                     <tr>
                                         <td>{{$au->created_at}}</td>
                                         <td>{{$au->action}}</td>
                                         <td>{{$au->description}}</td>
                                         <td>{{$au->doneby}}</td>
-                                        
-                                      
+
+
                                     </tr>
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    <tr>                    
+                                    <tr>
                                         <th>Datetime</th>
                                         <th>Event/Action</th>
                                         <th>Description</th>
@@ -122,15 +124,15 @@
                             @else
                                 <blockquote>No Audit trails found in the database.</blockquote>
                             @endif
-                    
+
                     </div>
 
                     <div class="row">
-                                       
+
                     </div>
                 </div>
             </div>
-        
+
         </div>
-    </main>    
+    </main>
 @endsection

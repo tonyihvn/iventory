@@ -1,8 +1,8 @@
 <head>
   <title>IHVN Inventory Management System - I-ventory</title>
-  <link rel="stylesheet" href="{{asset('/css/materialize.min.css')}}">    
+  <link rel="stylesheet" href="{{asset('/css/materialize.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/material-icons.css')}}">
-    <link rel="stylesheet" href="{{asset('/css/animate.min.css')}}">    
+    <link rel="stylesheet" href="{{asset('/css/animate.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/select2.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/select2.css')}}">
@@ -25,15 +25,15 @@
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
       <a href="/" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
-      
+
       <ul class="right hide-on-med-and-down">
-      
+
         <li><a href="/" >Dashboard</a></li>
         <li><a href="/edit_settings/1" >Settings</a></li>
         <li><a href="/help" >Help</a></li>
         <li>
-          
-            
+
+
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown">Welcome @auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown" class="dropdown-content">
                     <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
@@ -41,20 +41,20 @@
                     <li><a href="#lockscreenModal" class="modal-trigger" onclick="lockScreen('{{auth()->user()->name}}')"><i class="material-icons">lock</i>Lock</a></li>
                     <li><a href="/logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
                 </ul>
-            
+
         </li>
       </ul>
 
-      
-      
+
+
       <ul class="side-nav teal darken-2" id="mobile-demo">
       <li class="teal center"><a href="#"><i class="material-icons">menu</i>I-VENTORY </a></li>
-      <li><a class="collapsible-header waves-effect waves-blue" href="/"><i class="material-icons">dashboard</i>DASHBOARD</a></li>        
-        
+      <li><a class="collapsible-header waves-effect waves-blue" href="/"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+
       @if (auth()->user()->role=='Admin')
         <li class="white">
           <ul class="collapsible collapsible-accordion">
-            
+
                 <li>
                   <a class="collapsible-header waves-effect waves-blue"><i class="material-icons">list</i>Inventory Management<i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                   <div class="collapsible-body">
@@ -65,7 +65,7 @@
                       <li><a class="waves-effect waves-blue" href="/categories"><i class="material-icons">swap_horiz</i>Categories<span class="new badge right yellow darken-3"></span></a></li>
                       <li><a class="waves-effect waves-blue" href="/damaged"><i class="material-icons">fullscreen</i>Damaged<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
                       <li><a class="waves-effect waves-blue" href="/lost"><i class="material-icons">swap_horiz</i>Lost<span class="new badge right yellow darken-3"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/archived"><i class="material-icons">swap_horiz</i>Archived<span class="new badge right yellow darken-3"></span></a></li>                
+                      <li><a class="waves-effect waves-blue" href="/archived"><i class="material-icons">swap_horiz</i>Archived<span class="new badge right yellow darken-3"></span></a></li>
                       <li><a class="waves-effect waves-blue" href="/requests"><i class="material-icons">swap_horiz</i>Item Request</a></li>
 
                     </ul>
@@ -73,15 +73,18 @@
                 </li>
               </ul>
             </li>
-         
-      @elseif(auth()->user()->role=='Staff')
+
+      @elseif(auth()->user()->role=='Manager')
+        <li><a class="waves-effect waves-blue" href="/inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
+        <li><a class="waves-effect waves-blue" href="/add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
+        <li><a class="waves-effect waves-blue" href="/movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
 
         <li class="white"><a href="/home">My Inventories</a></li>
         <li class="white"><a href="/requests">Item Request</a></li>
 
       @endif
-        <li class="white"><div class="divider"></div></li> 
-      
+        <li class="white"><div class="divider"></div></li>
+
       @if (auth()->user()->role=='Admin')
         <li class="white">
           <ul class="collapsible collapsible-accordion">
@@ -92,22 +95,23 @@
                   <li><a class="waves-effect waves-blue" href="/users"><i class="material-icons">fullscreen</i>Users</a></li>
                   <li><a class="waves-effect waves-blue" href="/facilities"><i class="material-icons">swap_horiz</i>Facilities</a></li>
                   <li><a class="waves-effect waves-blue" href="/departments"><i class="material-icons">fullscreen</i>Departments</a></li>
-                  <li><a class="waves-effect waves-blue" href="/units"><i class="material-icons">swap_horiz</i>Units</a></li>     
-                  <li><a class="waves-effect waves-blue" href="/audits"><i class="material-icons">swap_horiz</i>Audit Trail</a></li>      
+                  <li><a class="waves-effect waves-blue" href="/units"><i class="material-icons">swap_horiz</i>Units</a></li>
+                  <li><a class="waves-effect waves-blue" href="/audits"><i class="material-icons">swap_horiz</i>Audit Trail</a></li>
                 </ul>
               </div>
             </li>
           </ul>
         </li>
-      
-        <li class="white"><div class="divider"></div></li>      
-        
-        <li class="white"><a class="waves-effect waves-blue" href="/reports"><i class="material-icons">swap_horiz</i>Inventory Report</a></li>                  
+
+        <li class="white"><div class="divider"></div></li>
+
+        <li class="white"><a class="waves-effect waves-blue" href="/reports"><i class="material-icons">swap_horiz</i>Inventory Report</a></li>
+        <li class="white"><a href="/edit_settings/1"><i class="material-icons">settings</i>Settings</a></li>
         <li class="white"><div class="divider"></div></li>
       @endif
-        <li class="white"><a href="/edit_settings/1"><i class="material-icons">settings</i>Settings</a></li>
+
         <li class="white"><a href="/help"><i class="material-icons">help</i>Help</a></li>
-        <li class="green">  
+        <li class="green">
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown2">@auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown2" class="dropdown-content">
                     <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
@@ -116,12 +120,12 @@
                 <li><a href="#lockscreenModal" class="lockscreen modal-trigger" data-username="{{auth()->user()->name}}"><i class="material-icons">lock</i>Lock</a></li>
                     <li><a href="/logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
                 </ul>
-            
-        </li>          
+
+        </li>
       </ul>
 
-      
-      
+
+
     </div>
   </nav>
 
@@ -151,17 +155,17 @@
           <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="/movements"><i class="material-icons">show_chart</i></a>
           </li>
 
-          <li> 
+          <li>
           <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="/suppliers"><i class="material-icons">local_shipping
             </i></a>
           </li>
 
           <li>
-          <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="/users"><i class="material-icons">people</i></a>          
+          <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="/users"><i class="material-icons">people</i></a>
           </li>
 
           <li>
-          <a class="btn-floating blue btn-large tooltipped" data-position="top" data-tooltip="Add New Item" href="/add_item"><i class="material-icons">shopping_cart</i></a>          
+          <a class="btn-floating blue btn-large tooltipped" data-position="top" data-tooltip="Add New Item" href="/add_item"><i class="material-icons">shopping_cart</i></a>
           </li>
       </ul>
   </div>
@@ -226,7 +230,7 @@
       Please enter your password to continue.
       </div>
   </div>
-    
+
 </body>
     <script src="{{asset('/js/jquery-3.5.1.js')}}"></script>
     <!-- <script src="{{asset('/js/lga.js')}}"></script> -->
@@ -246,15 +250,16 @@
         $(function () {
         var laptops = <?php echo $Laptops ?? ''; ?>;
         var phones = <?php echo $Phones ?? ''; ?>;
+        var biometrics = <?php echo $Biometrics ?? ''; ?>;
         $('#basic-area').highcharts({
             chart: {
             type: 'column'
             },
             title: {
-            text: 'Laptop Computers and Phones Distribution Accross Facilities'
+            text: 'Gadget/Equipment Distribution Accross States'
             },
             xAxis: {
-            categories: ['FCT','Nasarawa','Katsina','Rivers']
+            categories: ['FCT','KATSINA','NASARAWA','RIVERS']
             },
             yAxis: {
                 title: {
@@ -267,6 +272,10 @@
             }, {
             name: 'Laptops',
             data: laptops
+            },
+            {
+            name: 'Finger Print Scanners',
+            data: biometrics
             }]
         });
         });

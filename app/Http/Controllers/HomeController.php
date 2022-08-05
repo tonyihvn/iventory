@@ -34,40 +34,55 @@ class HomeController extends Controller
                  ->groupBy('browser')
                  ->get();
         */
-        $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
-        ->groupBy('category')
-        ->get();
 
-        $audits = audit::orderBy('created_at','desc')->paginate(10);
+        if(auth()->user()->role=='Admin'){
+            $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
+            ->groupBy('category')
+            ->get();
 
-        $laptopscount = inventory ::select(DB::raw("count(*) as count"))
-        ->where('category','Laptops')        
-        ->groupBy(DB::raw("facility_id"))
-        ->orderBy("facility_id")
-        ->get()->toArray();
+            $audits = audit::orderBy('created_at','desc')->paginate(10);
 
-        $laptops = array_column($laptopscount, 'count');
+            $laptopscount = inventory ::select(DB::raw("count(*) as count"))
+            ->where('category','Laptops')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
 
-        $phonescount = inventory ::select(DB::raw("count(*) as count")) 
-        ->where('category','Phones')        
-        ->groupBy(DB::raw("facility_id"))
-        ->orderBy("facility_id")
-        ->get()->toArray();
+            $laptops = array_column($laptopscount, 'count');
 
-        $phones = array_column($phonescount, 'count');
+            $phonescount = inventory ::select(DB::raw("count(*) as count"))
+            ->where('category','Phones')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
 
-        // dd($laptops);
+            $phones = array_column($phonescount, 'count');
 
-        return view('dashboard')
-        ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
-        ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
-        ->with(['allcats'=>$allcats,'audits'=>$audits]);
+            $biometricscount = inventory ::select(DB::raw("count(*) as count"))
+            ->where('category','Biometrics')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
+
+            $biometrics = array_column($biometricscount, 'count');
+
+            // dd($laptops);
+
+            return view('dashboard')
+            ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
+            ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
+            ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
+            ->with(['allcats'=>$allcats,'audits'=>$audits]);
+        }else{
+            return redirect()->route('inventory');
+        }
 
     }
-
+    /*
     public function user_dashboard()
     {
         $inventories = inventory::where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->paginate(100);
         return view('user_dashboard', compact('inventories'));
     }
+    */
 }

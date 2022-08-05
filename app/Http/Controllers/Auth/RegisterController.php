@@ -8,6 +8,9 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\facilities;
+use App\department;
+use App\unit;
 
 class RegisterController extends Controller
 {
@@ -74,7 +77,17 @@ class RegisterController extends Controller
             'department' => $data['department'],
             'facility' => $data['facility'],
             'role' => $data['role']
-            
+
         ]);
     }
+
+    public function showRegistrationForm()
+    {
+        $facilities=facilities::select('id','facility_name')->orderBy('facility_name','asc')->get();
+        $units=unit::select('id','unit_name')->get();
+        $departments=department::select('id','department_name')->get();
+
+        return view('auth.register', compact('facilities','units','departments'));
+    }
+
 }
