@@ -27,7 +27,12 @@
       <a href="/" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
 
       <ul class="right hide-on-med-and-down">
-
+        <li class="input-field">
+            <form action="product_search" method="POST" style="position: relative;" id="searchform">
+                @csrf
+                <input type="text" placeholder="Search Inventory" class="searchbox">
+            </form>
+        </li>
         <li><a href="/" >Dashboard</a></li>
         <li><a href="/edit_settings/1" >Settings</a></li>
         <li><a href="/help" >Help</a></li>

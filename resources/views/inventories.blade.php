@@ -96,7 +96,7 @@
                                                     </form>
                                             </li>
                                             <li>
-                                                <a href="/print_item/{{$inv->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
+                                                <a href="/print_item/{{$inv->id}}" target="_blank" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
                                             </li>
                                             <li>
                                                     <a href="/item/{{$inv->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit Item"><i class="material-icons">create</i></a>

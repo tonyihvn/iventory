@@ -37,8 +37,8 @@
                                         <td colspan="2">Specifications / Properties: </td>
 
                                     </tr>
-                                    <tr>
-                                        <th>Property</th>
+                                    <tr scope='row'>
+                                        <th style="text-align: left !important;">Property</th>
                                         <th>Value/Description</th>
                                     </tr>
                                 </thead>
@@ -46,7 +46,7 @@
                                 @foreach($item->inventoryspec as $key => $is)
 
                                 <tr scope='row' class='row{{$key}}'>
-                                    <td class='input-field'>{{$is->property}}</td>
+                                    <td class='input-field' style="font-weight: bold;">{{$is->property}}</td>
                                     <td class='input-field'>{{$is->value}}</td>
 
                                 </tr>
@@ -60,17 +60,17 @@
                     </tr>
 
                     <tr>
-                        <td width="40%">Date Purchased: {{$item->date_purchased}}</td>
+                        <td width="40%" style="font-weight: bold;">Date Purchased: {{$item->date_purchased}}</td>
                         <td>Quantity Purchased: {{$item->quantity_purchased}}</td>
                     </tr>
 
                     <tr>
-                        <td>Supplier:</td>
+                        <td style="font-weight: bold;">Supplier:</td>
                         <td>{{$item->supplier}}</td>
                     </tr>
 
                     <tr>
-                        <td>Physical Condition:</td>
+                        <td style="font-weight: bold;">Physical Condition:</td>
                         <td>{{$item->status}}</td>
                     </tr>
 
@@ -80,27 +80,27 @@
                     </tr>
 
                     <tr>
-                        <td>Facility: </td>
+                        <td style="font-weight: bold;">Facility: </td>
                         <td>{{$item->facilities->facility_name}}</td>
                     </tr>
 
                     <tr>
-                        <td>Department: </td>
+                        <td style="font-weight: bold;">Department: </td>
                         <td>{{$item->department->department_name}}</td>
                     </tr>
 
                     <tr>
-                        <td>Unit: </td>
+                        <td style="font-weight: bold;">Unit: </td>
                         <td>{{$item->unit->unit_name}}</td>
                     </tr>
 
                     <tr>
-                        <td>User: {{$item->user->user_id}}</td>
+                        <td style="font-weight: bold;">User: {{$item->user->user_id}}</td>
                         <td>Added By: {{ \App\User::where('id',$item->added_by)->first()->name}}</td>
                     </tr>
 
                     <tr>
-                        <td>Remarks: </td>
+                        <td style="font-weight: bold;">Remarks: </td>
                         <td>{{$item->remarks}}</td>
                     </tr>
                 </table>

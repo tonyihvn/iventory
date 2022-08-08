@@ -56,6 +56,7 @@ Route::post('update_request', 'InventoryController@update_request')->name('updat
 Route::resource('facilities', 'FacilitiesController')->middleware('role:Admin');
 Route::get('add_facility', 'FacilitiesController@create')->name('add_facility')->middleware('role:Admin');
 Route::get('facility/{id}', 'FacilitiesController@edit')->middleware('role:Admin');
+Route::get('facilityitems/{fid}', 'InventoryController@facilityItems')->middleware('role:Admin');
 
 // Movements
 Route::resource('movements', 'MovementController')->middleware('role:Admin');

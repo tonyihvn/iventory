@@ -62,6 +62,25 @@ class InventoryController extends Controller
         return view('inventories', compact('inventories'),['category'=>$category,'facilities'=>$facilities,'categories'=>$categories]);
     }
 
+    public function facilityItems($fid)
+    {
+        $facilities = facilities::select('id','facility_name')->get();
+
+        $categories = category::select('id','category_name')->get();
+
+        $catg = facilities::select('facility_name')->where('id',$fid)->first()->facility_name;
+        $category = $catg." Inventory";
+
+        if(auth()->user()->role=="Admin"){
+            $inventories = inventory::where('facility_id',$fid)->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Manager"){
+            $inventories = inventory::where('facility_id',$fid)->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+        }else{
+            $inventories = inventory::where('facility_id',$fid)->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
+        }
+        return view('inventories', compact('inventories'),['category'=>$category,'facilities'=>$facilities,'categories'=>$categories]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

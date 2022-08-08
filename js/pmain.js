@@ -10,8 +10,8 @@ $(document).ready(function(){
       }
     );
     // START OPEN
-    $('.button-collapse').sideNav('hide');   
-    
+    $('.button-collapse').sideNav('hide');
+
     // CONTROL ITEM SPECS HEADING
     $(".spechead").hide();
 
@@ -19,9 +19,9 @@ $(document).ready(function(){
     $(document).on("click", ".select-wrapper", function (event) {
         event.stopPropagation();
     });
-    
+
     //INITIALIZE SELECT2
-    
+
     $('#search_product').select2({width: "100%"});
 
     $('#keyword').select2({width: "100%"});
@@ -29,9 +29,9 @@ $(document).ready(function(){
     // $('select').material_select();
 
     setTimeout(function(){$('select').material_select();},1000);
-    
-    // $('select').formSelect();    
-    
+
+    // $('select').formSelect();
+
     // INITIALIZE DATATABLES
     $('#example').DataTable( {
       "order": [[ 0, "desc" ]],
@@ -51,11 +51,11 @@ $(document).ready(function(){
         ]
     } );
 
-    $('.page-link').addClass('btn btn-small');      
+    $('.page-link').addClass('btn btn-small');
 
-    
 
-   
+
+
     var table = $('#products').DataTable( {
         orderCellsTop: true,
         fixedHeader: false,
@@ -72,17 +72,26 @@ $(document).ready(function(){
         ]
     } );
 
+    $('.searchbox').keypress(function (e) {
+
+        if (e.which == 13) {
+            alert("Hola");
+          $('#searchform').submit();
+          // return false;    //<---- Add this line
+        }
+      });
+
     // TABLES WITH FILTERS
     $('#products thead tr').clone(true).appendTo( '#products thead' );
-    $('#products thead tr:eq(1) th').each( function (i) {        
-            
+    $('#products thead tr:eq(1) th').each( function (i) {
+
         var title = $(this).text();
 
-        // var title = titl.replace(/ +?/g, '');        
+        // var title = titl.replace(/ +?/g, '');
 
         if(i==0 || title!='Actions'){
             $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
-        
+
             $( 'input', this ).on( 'keyup change', function () {
                 if ( table.column(i).search() !== this.value ) {
                     table
@@ -121,7 +130,7 @@ $(document).ready(function(){
         dom: 'Pfrtip',
     });
     */
- 
+
 
     //$('a.paginate_button').addClass('btn');
 
@@ -146,7 +155,7 @@ $(document).ready(function(){
         $("tr:eq(1)").remove();
         $('.dtsp-panesContainer').remove();
     });
-    
+
 
 
     $("#quantity").on('keyup', function (e) {
@@ -166,18 +175,18 @@ $(document).ready(function(){
     });
 
     // CREATE SELECT ALL ITEMS
-    $('#select-all').click(function(event) {   
+    $('#select-all').click(function(event) {
         if(this.checked) {
             // Iterate each checkbox
             $('.iselect').each(function() {
-                this.checked = true;                        
+                this.checked = true;
             });
         } else {
             $('.iselect').each(function() {
-                this.checked = false;                       
+                this.checked = false;
             });
         }
-    }); 
+    });
 
     // PREVENT SUBMIT ON ENTER
     $(window).keydown(function(event){
@@ -186,7 +195,7 @@ $(document).ready(function(){
         return false;
         }
     });
-    
+
 
     $("#tax").on('input', function(){
         var tax = $("#tax").val();
@@ -194,7 +203,7 @@ $(document).ready(function(){
         var total_discount = $("#total_discount").val();
         if(total_discount==""){total_discount=0}
         if(tax==""){tax=0}
-        var new_total = (parseFloat(sum)+parseFloat(tax)) - parseFloat(total_discount);  
+        var new_total = (parseFloat(sum)+parseFloat(tax)) - parseFloat(total_discount);
 
         $("#total_due").val(new_total.toFixed(2));
         reCalc();
@@ -224,13 +233,13 @@ $(document).ready(function(){
    $('.datepicker').on('mousedown',function(event){
         event.preventDefault();
     });
-    
+
     $('#sales_form').each(function(){
         this.reset();
     });
 
-   
-    
+
+
 }); // END DOCUMENT READY
 
 function delItem(id,table){
@@ -247,17 +256,17 @@ $("#item").keyup(function (e) {
     if (e.keyCode == 13) {
         var product_id = $(this).val();
         var all_products = $("#allproducts").val();
-        var all_items = $.parseJSON(all_products); 
+        var all_items = $.parseJSON(all_products);
         var product = all_items.filter( obj => obj.product_id === product_id)[0];
         addItem(product);
         reCalc();
-        $("#item").val("").focus();           
+        $("#item").val("").focus();
     }
 });
 
 
 $('#quantity_returned').on('input', function(){
-    
+
     var sp = $('#selling_price').val();
     var qs = $('#quantity_sold').val();
     var qr = $('#quantity_returned').val();
@@ -274,11 +283,11 @@ function addItem(item){
     var item_class = $(".add_item").attr("id");
       var old_class = parseFloat(item_class);
       new_class = old_class+1;
-      
+
     $(".add_item").prop('id', new_class);
 
     $("table tbody#item_list").append("<tr scope='row' class='row"+new_class+"'><td class='input-field'><input type='text' name='property[]' value='' placeholder='e.g. Color, Brand etc'></td><td class='input-field'><td class='input-field'><input type='text' name='value[]' value='' placeholder='e.g. Red, HP etc'></td><td><a href='#' class='btn-floating red btn-small delpos' onClick='delRow("+new_class+")'><i class='small material-icons'>remove</i></a></td></tr>");
-    
+
   };
 
 function changeAmount(clicked){
@@ -294,12 +303,12 @@ function changeUc(clicked){
     // RECALCULATE AMOUNT OF ONE ITEM ON QUANTITY CHANGE
     var uc = $("#unit"+clicked).val();
     var qty = $("#qty"+clicked).val();
-    
+
     var new_amount = parseFloat(qty)*parseFloat(uc);
     $("#amount"+clicked).val(new_amount.toFixed(2));
     reCalc();
 }
-  
+
 function reCalc(){
     // RECALCULATE TOTAL AMOUNT
     var sum = 0;
@@ -307,7 +316,7 @@ function reCalc(){
         sum += +$(this).val();
     });
     $("#total_due").val(sum.toFixed(2));
-    
+
 
     // RECALCULATE TOTAL DISCOUNT
     var total_discount = 0;
@@ -327,7 +336,7 @@ function reCalc(){
 
 }
 
-function delRow(rownum){    
+function delRow(rownum){
     $(".row"+rownum).remove();
     reCalc();
 };
@@ -353,7 +362,7 @@ function printtag(tagid) {
 
     var hashid = "#"+ tagid;
     var tagname =  $(hashid).prop("tagName").toLowerCase() ;
-    var attributes = ""; 
+    var attributes = "";
     var attrs = document.getElementById(tagid).attributes;
       $.each(attrs,function(i,elem){
         attributes +=  " "+  elem.name+" ='"+elem.value+"' " ;
@@ -378,7 +387,7 @@ function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); }
 
 function lockScreen(name) {
     $("#username").html('Hi '+name+'!');
-    $("#notuser").html('Not '+name+'? Login');  
+    $("#notuser").html('Not '+name+'? Login');
     $("#enter_password").toggle();
     // To disable f5
         /* jQuery < 1.7 */

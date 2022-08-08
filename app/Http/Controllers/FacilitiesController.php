@@ -16,9 +16,8 @@ class FacilitiesController extends Controller
      */
     public function index()
     {
-        $facilities = facilities::orderBy('facility_name', 'asc')->paginate(50);
-        $all_facilities = facilities::select('id','facility_name', 'town', 'lga', 'state')->get();
-        return view('facilities',compact('facilities'), ['all_facilities'=>$all_facilities]);
+        $facilities = facilities::orderBy('facility_name', 'asc')->get();
+        return view('facilities',compact('facilities'));
     }
 
     /**
@@ -57,10 +56,10 @@ class FacilitiesController extends Controller
         audit::create([
             'action'=>"Created New Facility ".$request->facility_name,
             'description'=>'A new user facility was created',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
         session()->flash('message','The New Facility: '.$request->facility_name.' has been added successfully!');
-        
+
         return redirect()->back();
     }
 
@@ -83,8 +82,8 @@ class FacilitiesController extends Controller
      */
     public function edit($id)
     {
-        $facility = facilities::where('id','=',$id)->first();      
-      
+        $facility = facilities::where('id','=',$id)->first();
+
         return view('facility', ['facility'=>$facility]);
     }
 
@@ -97,7 +96,7 @@ class FacilitiesController extends Controller
      */
     public function update(Request $request, facilities $facilities)
     {
-       
+
         $facility = facilities::where('id','=', $request->id);
         $facility->update([
             'facility_name'=>$request->facility_name,
@@ -107,18 +106,18 @@ class FacilitiesController extends Controller
             'town'=>$request->town,
             'address'=>$request->address,
             'phone_number'=>$request->phone_number,
-            'contact_person'=>$request->contact_person         
-            
+            'contact_person'=>$request->contact_person
+
         ]);
 
         audit::create([
             'action'=>"Updated Facility ".$request->facility_name,
             'description'=>'A facility was updated',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
 
         session()->flash('message','The Facility: '.$request->facility_name.' has been updated successfully!');
-        
+
         return redirect()->back();
     }
 
@@ -135,9 +134,9 @@ class FacilitiesController extends Controller
         audit::create([
             'action'=>"Deleted Facility ".$request->id,
             'description'=>'A facility was deleted',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
- 
+
         session()->flash('message','The the selected facility has been successfully deleted.');
 
         return redirect()->back();
