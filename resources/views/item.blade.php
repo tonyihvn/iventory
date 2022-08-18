@@ -9,13 +9,13 @@
             </div>
                 <h3 class="card-header text-center" style="text-align:center;">View / Update Item</h3>
 
-                
+
                     <form method="POST" action="{{route('inventories.update', $item->id)}}">
                         @csrf
                         <input name="_method" type="hidden" value="PUT">
 
                         <input type="hidden" name="id" value="{{$item->id}}">
-                        <div class="row">                        
+                        <div class="row">
                             <div class="input-field col s6">
                                     <input id="item_name" type="text" class="validate" name="item_name" value="{{$item->item_name}}" required autofocus>
                                     <label for="item_name">Item Name</label>
@@ -29,7 +29,7 @@
 
                         <div class="row">
                             <div class="input-field col s6">
-                                <input id="ihvn_no" type="text" class="validate"  value="{{$item->ihvn_no}}" name="ihvn_no" readonly>
+                                <input id="ihvn_no" type="text" class="validate"  value="{{$item->ihvn_no}}" name="ihvn_no">
                                     <label for="ihvn_no">IHVN Number</label>
                             </div>
                             <div class="input-field col s6">
@@ -39,16 +39,16 @@
                         </div>
 
                         <div class="input-field">
-                                <textarea id="description" class="materialize-textarea" name="description">{{$item->description}}</textarea>                         
+                                <textarea id="description" class="materialize-textarea" name="description">{{$item->description}}</textarea>
                                 <label for="description" >Description</label>
                         </div>
                         <div class="row">
                             <div class="input-field col s6">
                                     <select name="category" class="initialized">
-                                        <option value='{{$item->category}}'>{{$item->category}}</option>       
-                                        @foreach ($categories as $ca)                                            
+                                        <option value='{{$item->category}}'>{{$item->category}}</option>
+                                        @foreach ($categories as $ca)
                                             <option value='{{$ca->category_name}}'>{{$ca->category_name}}</option>
-                                        @endforeach                                 
+                                        @endforeach
                                     </select>
                                     <label>Item Category</label>
                             </div>
@@ -81,33 +81,33 @@
 
                         <div class="input-field">
                                     <select name="status" class="initialized">
-                                        <option value='Operational'>Operational</option>       
+                                        <option value='Operational'>Operational</option>
                                         <option value='Damaged'>Damaged</option>
                                         <option value='Lost'>Lost</option>
                                         <option value='Archived'>Archived</option>
                                     </select>
                                 <label for="status">Physical Condition/Status</label>
                         </div>
-                        
+
                         @if ($item->inventoryspec!=NULL)
                         <table class="table">
                             <thead>
                                 <tr class="spechead">
                                     <th>Property</th>
-                                    <th>Value/Description</th>  
-                                    <th></th>                                  
+                                    <th>Value/Description</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="item_list">
                             @foreach($item->inventoryspec as $key => $is)
-                           
+
                             <tr scope='row' class='row{{$key}}'>
                                 <td class='input-field'><input type='text' name='property[]' value='{{$is->property}}' placeholder='e.g. Color, Brand etc'></td><td class='input-field'><td class='input-field'><input type='text' name='value[]' value='{{$is->value}}' placeholder='e.g. Red, HP etc'></td>
                                 <td><a href='#' class='btn-floating red btn-small delpos' onClick='delRow({{$key}})'><i class='small material-icons'>remove</i></a></td>
                             </tr>
-                            
-                            @endforeach                              
-                                
+
+                            @endforeach
+
                             </tbody>
                         </table>
                         @endif
@@ -125,12 +125,12 @@
                         <div class="input-field">
                             <select name="state" id="state" materialize="material_select">
                                 <option value="{{$item->state}}" selected>{{$item->state}}</option>
-                             
+
                                 <option value="FCT">FCT</option>
                                 <option value="RIVERS">RIVERS</option>
                                 <option value="NASARAWA">NASARAWA</option>
-                                <option value="KATSINA">KATSINA</option>                               
-                                
+                                <option value="KATSINA">KATSINA</option>
+
                             </select>
                             <label for="facility">Select State</label>
                         </div>
@@ -138,7 +138,7 @@
                         <div class="input-field">
                             <select name="facility" class="initialized">
                                 <option selected value='{{$item->facility_id}}'>{{$item->facilities->facility_name}}</option>
-                                @foreach ($facilities as $facility)                                            
+                                @foreach ($facilities as $facility)
                                 <option value='{{$facility->id}}'>{{$facility->facility_name}}</option>
                                 @endforeach
                             </select>
@@ -148,7 +148,7 @@
                         <div class="input-field">
                             <select name="department" class="initialized">
                                 <option selected value='{{$item->department_id}}'>{{$item->department->department_name}}</option>
-                                @foreach ($departments as $department)                                            
+                                @foreach ($departments as $department)
                                 <option value='{{$department->id}}'>{{$department->department_name}}</option>
                                 @endforeach
                             </select>
@@ -158,7 +158,7 @@
                         <div class="input-field">
                             <select name="unit" class="initialized">
                                 <option selected value='{{$item->unit_id}}'>{{$item->unit->unit_name}}</option>
-                                @foreach ($units as $unit)                                            
+                                @foreach ($units as $unit)
                                 <option value='{{$unit->id}}'>{{$unit->unit_name}}</option>
                                 @endforeach
                             </select>
@@ -168,7 +168,7 @@
                             <div class="input-field col s6">
                                 <select name="user" class="initialized">
                                     <option selected value='{{$item->user->id}}'>{{$item->user->name}}</option>
-                                    @foreach ($users as $user)                                            
+                                    @foreach ($users as $user)
                                     <option value='{{$user->id}}'>{{$user->name}}</option>
                                     @endforeach
                                 </select>
@@ -182,8 +182,8 @@
                                     @endauth
                                     @guest
                                         <option value="1" selected>Added By</option>
-                                    @endguest                               
-                                    
+                                    @endguest
+
                                 </select>
                                 <label>Modified By</label>
                             </div>
@@ -192,17 +192,17 @@
                                 <input id="remarks" type="text" class="validate" name="remarks" value="{{$item->remarks}}">
                                 <label for="remarks">Remarks</label>
                         </div>
-                        
+
                         <div class="input-field text-right right" style="margin-bottom:20px;">
-                            
+
                                 <button type="submit" class="btn">
                                     Update Item
-                                </button>                               
-                        
+                                </button>
+
                         </div>
                     </form>
-                
-            
+
+
         </div>
     </div>
 </div>
