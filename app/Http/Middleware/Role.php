@@ -14,6 +14,28 @@ class Role
      * @param  \Closure  $next
      * @return mixed
      */
+
+    public function handle($request, Closure $next, ... $roles)
+    {
+
+        if (!Auth::check()) // I included this check because you have it, but it really should be part of your 'auth' middleware, most likely added as part of a route group.
+            return redirect('login');
+
+        $user = Auth::user();
+
+        if(empty($roles)) $roles = ['User'];
+
+        foreach($roles as $role) {
+            // Check if user has the role This check will depend on how your roles are set up
+            if($user->role === $role)
+                return $next($request);
+        }
+        return redirect()->back()->with(['message'=>'You don\'t have the permission to visit the clicked link']);
+        // return redirect('/');
+
+
+    }
+    /*
     public function handle($request, Closure $next, ...$roles)
     {
         if (!Auth::check()) // I included this check because you have it, but it really should be part of your 'auth' middleware, most likely added as part of a route group.
@@ -21,20 +43,21 @@ class Role
 
         $user = Auth::user();
 
-        if($user->isAdmin())
+        if($user->isAdmin()){
             return $next($request);
-
+        }
         foreach($roles as $role) {
             // Check if user has the role This check will depend on how your roles are set up
-            if($user->hasRole($role))                
+            if($user->hasRole($role)){
                 return $next($request);
-            /* }else{
+            }else{
                 session()->flash('error','You don\'t have permission to access this resource / page');
                 return redirect()->back();
             }
-            */
+
         }
 
         return redirect('home');
     }
+    */
 }

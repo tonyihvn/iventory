@@ -76,6 +76,7 @@ class RegisterController extends Controller
             'unit' => $data['unit'],
             'department' => $data['department'],
             'facility' => $data['facility'],
+            'state' => $data['state'],
             'role' => $data['role']
 
         ]);

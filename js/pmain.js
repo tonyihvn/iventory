@@ -288,7 +288,7 @@ function addItem(item){
 
     $("table tbody#item_list").append("<tr scope='row' class='row"+new_class+"'><td class='input-field'><input type='text' name='property[]' value='' placeholder='e.g. Color, Brand etc'></td><td class='input-field'><td class='input-field'><input type='text' name='value[]' value='' placeholder='e.g. Red, HP etc'></td><td><a href='#' class='btn-floating red btn-small delpos' onClick='delRow("+new_class+")'><i class='small material-icons'>remove</i></a></td></tr>");
 
-  };
+};
 
 function changeAmount(clicked){
     // RECALCULATE AMOUNT OF ONE ITEM ON QUANTITY CHANGE
@@ -388,22 +388,18 @@ function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); }
 function lockScreen(name) {
     $("#username").html('Hi '+name+'!');
     $("#notuser").html('Not '+name+'? Login');
-    $("#enter_password").toggle();
+    // $("#enter_password").toggle();
     // To disable f5
         /* jQuery < 1.7 */
     $(document).bind("keydown", disableF5);
     /* OR jQuery >= 1.7 */
     $(document).on("keydown", disableF5);
 
-    $( "#lockscreenModal" ).dialog({ closeOnEscape: false });
+    // $( "#lockscreenModal" ).dialog({ closeOnEscape: false });
 }
 
-function storeLock(){
-    var locker = $("#password").val();
-    Cookies.set('locker',locker);
-    alert("Test");
-}
 
-function showForm(){
-    $("#enter_password").toggle();
+
+function closeModal(){
+    $( "#lockscreenModal" ).modal("close");
 }

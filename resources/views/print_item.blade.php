@@ -95,7 +95,7 @@
                     </tr>
 
                     <tr>
-                        <td style="font-weight: bold;">User: {{$item->user->user_id}}</td>
+                        <td style="font-weight: bold;">User: {{ \App\User::where('id',$item->user_id)->first()->name}}</td>
                         <td>Added By: {{ \App\User::where('id',$item->added_by)->first()->name}}</td>
                     </tr>
 

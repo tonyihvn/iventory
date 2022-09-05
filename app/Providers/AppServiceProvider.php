@@ -30,7 +30,9 @@ class AppServiceProvider extends ServiceProvider
 
         view()->composer('*',function($view) {
             $site_settings = settings::first();
-            $view->with('site_settings', $site_settings); 
+            $view->with('site_settings', $site_settings);
         });
+
+
     }
 }

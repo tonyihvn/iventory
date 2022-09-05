@@ -13,7 +13,7 @@
           <form action="{{route('fixItems')}}" method="POST">
                 @csrf
                 <div class="row">
-                    <div class="input-field col s1 offset-l2">
+                    <div class="input-field col s1 offset-l1">
                         <label>With Selected:</label>
                     </div>
                     <div class="input-field col s3">
@@ -27,7 +27,7 @@
 
                     </div>
 
-                    <div class="input-field col s3">
+                    <div class="input-field col s2">
                         <select name="category">
                             <option value='' disabled selected>Change Category</option>
                             @foreach ($categories as $ca)
@@ -35,6 +35,19 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="input-field col s2">
+                        <select name="status">
+                            <option value='' disabled selected>Change Status</option>
+                            <option value="Operational">Operational</option>
+                            <option value="Not Operational">Not Operational</option>
+                            <option value="Lost">Lost</option>
+                            <option value="Archieved">Archived  </option>
+                            <option value="Need Repairs">Need Repairs</option>
+                        </select>
+                    </div>
+
+
 
                     <div class="input-field text-right col s2">
 
@@ -87,14 +100,15 @@
                                             <i class="small material-icons">menu</i>
                                         </a>
                                         <ul style="top: 0px !important">
-
-                                            <li>
-                                                    <form method="POST" action="{{route('inventories.destroy',$inv->id)}}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    <button onclick="return confirm('Are you sure you want to delete this item?')" class="btn-floating btn-small waves-effect red waves-light tooltipped" data-position="top" data-tooltip="Delete this Item"><i class="material-icons">delete</i></button>
-                                                    </form>
-                                            </li>
+                                            @if (Auth()->user()->role=="Admin")
+                                                <li>
+                                                        <form method="POST" action="{{route('inventories.destroy',$inv->id)}}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        <button onclick="return confirm('Are you sure you want to delete this item?')" class="btn-floating btn-small waves-effect red waves-light tooltipped" data-position="top" data-tooltip="Delete this Item"><i class="material-icons">delete</i></button>
+                                                        </form>
+                                                </li>
+                                            @endif
                                             <li>
                                                 <a href="/print_item/{{$inv->id}}" target="_blank" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
                                             </li>

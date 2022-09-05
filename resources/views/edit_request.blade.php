@@ -19,7 +19,7 @@
 
                     <tr>
                         <td><b>Date Requested: </b>{{$item->created_at}}</td>
-                        <td>Location To Be Used: {{$item->location}}</td>
+                        <td>Location To Be Used: {{ \App\facilities::where('id',$item->location)->first()->facility_name}}</td>
                     </tr>
 
                     <tr>

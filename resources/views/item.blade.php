@@ -43,7 +43,7 @@
                                 <label for="description" >Description</label>
                         </div>
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                     <select name="category" class="initialized">
                                         <option value='{{$item->category}}'>{{$item->category}}</option>
                                         @foreach ($categories as $ca)
@@ -53,7 +53,7 @@
                                     <label>Item Category</label>
                             </div>
 
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                     <input name="type" id="type" list="type" type="text"  value="{{$item->type}}" class="validate">
                                     <datalist id="type">
                                             <option>Wooden</option>
@@ -61,33 +61,40 @@
                                     </datalist>
                                     <label for="type">Type (of material,... etc)</label>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                    <input id="date_purchased" type="date" class="datepicker" name="date_purchased" value="{{$item->date_purchased}}">
-                                    <label for="date_purchased">Date Purchased</label>
-                            </div>
 
-                            <div class="input-field col s6">
-                                    <input id="quantity" type="text" class="validate" name="quantity" value="{{$item->quantity}}">
-                                    <label for="quantity">Quantity Purchased</label>
-                            </div>
-                        </div>
-
-                        <div class="input-field">
-                                <input id="supplier" type="text" class="validate" name="supplier" value="{{$item->supplier}}">
-                                <label for="supplier">Supplier</label>
-                        </div>
-
-                        <div class="input-field">
-                                    <select name="status" class="initialized">
-                                        <option value='Operational'>Operational</option>
-                                        <option value='Damaged'>Damaged</option>
-                                        <option value='Lost'>Lost</option>
-                                        <option value='Archived'>Archived</option>
-                                    </select>
+                            <div class="input-field col s4">
+                                <select name="status" class="initialized">
+                                    <option value="Operational">Operational</option>
+                                    <option value="Not Operational">Not Operational</option>
+                                    <option value="Lost">Lost</option>
+                                    <option value="Archieved">Archived  </option>
+                                    <option value="Need Repairs">Need Repairs</option>
+                                </select>
                                 <label for="status">Physical Condition/Status</label>
+                            </div>
                         </div>
+
+                        @if (Auth()->user()->role=="Admin")
+                            <div class="row">
+                                <div class="input-field col s4">
+                                        <input id="date_purchased" type="date" class="datepicker" name="date_purchased" value="{{$item->date_purchased}}">
+                                        <label for="date_purchased">Date Purchased</label>
+                                </div>
+
+                                <div class="input-field col s4">
+                                        <input id="quantity" type="text" class="validate" name="quantity" value="{{$item->quantity}}">
+                                        <label for="quantity">Quantity Purchased</label>
+                                </div>
+
+                                <div class="input-field col s8">
+                                    <input id="supplier" type="text" class="validate" name="supplier" value="{{$item->supplier}}">
+                                    <label for="supplier">Supplier</label>
+                                </div>
+
+
+                            </div>
+                        @endif
+
 
                         @if ($item->inventoryspec!=NULL)
                         <table class="table">

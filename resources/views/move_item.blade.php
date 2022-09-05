@@ -49,7 +49,6 @@
                                 <select name="to_user" class="initialized">
                                     <option selected value='{{$item->user->id}}'>{{$item->user->name}}</option>
                                     @foreach ($users as $user)
-                                    <option value="2">Not Applicable</option>
                                     <option value='{{$user->id}}'>{{$user->name}}</option>
                                     @endforeach
                                 </select>

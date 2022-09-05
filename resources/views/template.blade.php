@@ -34,7 +34,11 @@
             </form>
         </li>
         <li><a href="/" >Dashboard</a></li>
-        <li><a href="/edit_settings/1" >Settings</a></li>
+        @auth
+            @if (Auth()->user()->role=="Admin")
+                <li><a href="/edit_settings/1" >Settings</a></li>
+            @endif
+        @endauth
         <li><a href="/help" >Help</a></li>
         <li>
 
@@ -83,9 +87,14 @@
         <li><a class="waves-effect waves-blue" href="/inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
         <li><a class="waves-effect waves-blue" href="/add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
         <li><a class="waves-effect waves-blue" href="/movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
+        <li><a class="waves-effect waves-blue" href="/facilities"><i class="material-icons">swap_horiz</i>Facilities</a></li>
+        <li><a class="waves-effect waves-blue" href="/departments"><i class="material-icons">fullscreen</i>Departments</a></li>
+        <li><a class="waves-effect waves-blue" href="/units"><i class="material-icons">swap_horiz</i>Units</a></li>
+
 
         <li class="white"><a href="/home">My Inventories</a></li>
         <li class="white"><a href="/requests">Item Request</a></li>
+        <li class="white"><a href="/users">State Users</a></li>
 
       @endif
         <li class="white"><div class="divider"></div></li>
@@ -215,34 +224,21 @@
           <i class="material-icons large">lock</i>
           <h6 id="username"></h6>
           <p class="center">
-            <a href="#" id="unlock" class="btn btn-large" onclick="showForm()">Click Here to Unlock Screen</a><hr>
-            <div class="input-field" id="enter_password">
-                    <input id="password" type="password" class="validate initialized @error('password') is-invalid @enderror" name="password" required>
-
-                    @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                <label for="password">Enter Password</label>
-            </div>
+            <a href="#" id="unlock" class="btn btn-large" onclick="closeModal()">Click Here to Unlock Screen</a><hr>
 
             <a href="/logout" id="notuser">Logout</a>
           </p>
         </div>
       </div>
-      <div class="modal-footer right">
-      Please enter your password to continue.
-      </div>
+
   </div>
 
 </body>
     <script src="{{asset('/js/jquery-3.5.1.js')}}"></script>
-    <!-- <script src="{{asset('/js/lga.js')}}"></script> -->
+
     <script src="{{asset('/js/pmain.js')}}"></script>
     <script src="{{asset('/js/materialize.min.js')}}"></script>
-    <!--<script src="/js/material2.min.css"></script>-->
-    <!--<script src="{{asset('/js/sweetalert2.all.min.js')}}"></script>-->
+
     <script src="{{asset('/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('/js/dataTables.fixedHeader.min.js')}}"></script>
     <script src="{{asset('/js/select2.min.js')}}"></script>
@@ -287,11 +283,11 @@
       </script>
     <?php } ?>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" /></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" /></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" /></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" /></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" /></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" /></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" /></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" /></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" /></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" /></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" /></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" /></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" /></script>
 
 </html>

@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Welcome and Home Pages
-Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin');
+Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager');
 
-Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Admin');
+Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager');
 
 Route::get('/home', 'HomeController@user_dashboard')->name('home')->middleware('auth');
 
@@ -53,21 +53,21 @@ Route::post('request_destroy','InventoryController@request_destroy')->name('requ
 Route::post('update_request', 'InventoryController@update_request')->name('update_request')->middleware('auth');
 
 // Facilities
-Route::resource('facilities', 'FacilitiesController')->middleware('role:Admin');
-Route::get('add_facility', 'FacilitiesController@create')->name('add_facility')->middleware('role:Admin');
-Route::get('facility/{id}', 'FacilitiesController@edit')->middleware('role:Admin');
-Route::get('facilityitems/{fid}', 'InventoryController@facilityItems')->middleware('role:Admin');
+Route::resource('facilities', 'FacilitiesController')->middleware('role:Admin,Manager');
+Route::get('add_facility', 'FacilitiesController@create')->name('add_facility')->middleware('role:Admin,Manager');
+Route::get('facility/{id}', 'FacilitiesController@edit')->middleware('role:Admin,Manager');
+Route::get('facilityitems/{fid}', 'InventoryController@facilityItems')->middleware('role:Admin,Manager');
 
 // Movements
-Route::resource('movements', 'MovementController')->middleware('role:Admin');
-Route::get('move_item/{id}', 'MovementController@edit')->name('move_item')->middleware('role:Admin');
+Route::resource('movements', 'MovementController')->middleware('role:Admin,Manager');
+Route::get('move_item/{id}', 'MovementController@edit')->name('move_item')->middleware('role:Admin,Manager');
 
 // Audits
 Route::resource('audits', 'AuditController')->middleware('role:Admin');
 
 // Departments
 Route::resource('departments', 'DepartmentController')->middleware('auth');
-Route::get('add_department', 'DepartmentController@create')->name('add_department')->middleware('role:Admin');
+Route::get('add_department', 'DepartmentController@create')->name('add_department')->middleware('role:Admin,Manager');
 
 // Categories
 Route::resource('categories', 'CategoryController')->middleware('auth');
@@ -75,7 +75,7 @@ Route::resource('categories', 'CategoryController')->middleware('auth');
 
 // Units
 Route::resource('units', 'UnitController')->middleware('auth');
-Route::get('add_unit', 'UnitController@create')->name('add_unit')->middleware('role:Admin');
+Route::get('add_unit', 'UnitController@create')->name('add_unit')->middleware('role:Admin,Manager');
 
 // ACCESS AND AUTHENTICATIONS
 Auth::routes();
@@ -84,15 +84,15 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('users', function(){
     return View('users');
-})->middleware('role:Admin');
+})->middleware('role:Admin,Manager');
 
 Route::get('edit_user/{id}', function(){
     return View('edit_user');
 })->middleware('role:Admin');
 
-Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin');
+Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager');
 Route::post('deleteUser', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
-Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin');
+Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager');
 
 // HELP LINK
 Route::get('help', function(){

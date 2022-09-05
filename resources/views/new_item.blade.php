@@ -9,25 +9,32 @@
 
                     <form method="POST" action="{{ route('inventories.store') }}" enctype="multipart/form-data">
                         @csrf
+                        <small style="color: green; text-align: center;"><i>For multiple device entry seperate IHVN Tag No, Serial Number, Device ID by commas</i></small>
+
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                     <input id="item_name" type="text" class="validate" name="item_name" required autofocus>
                                     <label for="item_name">Item Name</label>
                             </div>
 
+                            <div class="input-field col s2">
+                                <input id="quantity_added" type="number" min="1" class="validate" name="quantity_added" value="1" required>
+                                <label for="quantity_added">Quantity</label>
+                            </div>
+
                             <div class="input-field col s6">
                                     <input id="serial_no" type="text" class="validate" name="serial_no">
-                                    <label for="serial_no">Device ID</label>
+                                    <label for="serial_no">Device ID(s)</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s6">
-                                <input id="ihvn_no" type="text" class="validate" value="" name="ihvn_no">
-                                    <label for="ihvn_no">IHVN Tag Number</label>
+                                <input id="ihvn_no" type="text" class="validate" value="" name="ihvn_no" required>
+                                    <label for="ihvn_no">IHVN Tag Number(s)</label>
                             </div>
                             <div class="input-field col s6">
                                 <input id="tag_no" type="text" class="validate" name="tag_no">
-                                <label for="tag_no">Serial Number</label>
+                                <label for="tag_no">Serial Number(s)</label>
                             </div>
                         </div>
 
@@ -47,7 +54,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                     <select name="category" id="category" materialize="material_select">
                                         <option value="" disabled>Select Category</option>
                                         @foreach ($categories as $ca)
@@ -57,7 +64,7 @@
                                     <label for="category">Item Category</label>
                             </div>
 
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                     <input name="type" id="type" list="type" type="text" class="validate">
                                     <datalist id="type">
                                             <option>Wooden</option>
@@ -65,28 +72,39 @@
                                     </datalist>
                                     <label for="type">Type (of material,... etc)</label>
                             </div>
+                            <div class="input-field col s4">
+                                <select name="status">
+                                    <option value='' disabled selected>Change Status</option>
+                                    <option value="Operational">Operational</option>
+                                    <option value="Not Operational">Not Operational</option>
+                                    <option value="Lost">Lost</option>
+                                    <option value="Archieved">Archived  </option>
+                                    <option value="Need Repairs">Need Repairs</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="input-field col s6">
-                                    <input id="date_purchased" type="date" class="datepicker" name="date_purchased">
-                                    <label for="date_purchased">Date Purchased</label>
+                        @if (Auth()->user()->role=="Admin")
+
+                            <div class="row">
+                                <div class="input-field col s4">
+                                        <input id="date_purchased" type="date" class="datepicker" name="date_purchased">
+                                        <label for="date_purchased">Date Purchased</label>
+                                </div>
+
+                                <div class="input-field col s4">
+                                        <input id="quantity" type="text" class="validate" name="quantity">
+                                        <label for="quantity">Quantity Purchased</label>
+                                </div>
+
+                                <div class="input-field col s4">
+                                    <input id="supplier" type="text" class="validate" name="supplier">
+                                    <label for="supplier">Supplier</label>
+                                </div>
                             </div>
 
-                            <div class="input-field col s6">
-                                    <input id="quantity" type="text" class="validate" name="quantity">
-                                    <label for="quantity">Quantity Purchased</label>
-                            </div>
-                        </div>
 
-                        <div class="input-field">
-                                <input id="supplier" type="text" class="validate" name="supplier">
-                                <label for="supplier">Supplier</label>
-                        </div>
+                        @endif
 
-                        <div class="input-field">
-                                <input id="status" type="text" class="validate" name="status">
-                                <label for="status">Physical Condition/Status</label>
-                        </div>
 
 
                         <table class="table">
@@ -114,7 +132,7 @@
                         <div class="input-field">
                             <select name="state" id="state" materialize="material_select">
 
-                                <option disabled selected>State</option>
+                                <option value="{{Auth()->user()->state}}" selected>State</option>
                                 <option value="FCT">FCT</option>
                                 <option value="RIVERS">RIVERS</option>
                                 <option value="NASARAWA">NASARAWA</option>
@@ -157,7 +175,7 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <select name="user" id="user" materialize="material_select">
-                                    <option value="" disabled selected>Assigned To</option>
+                                    <option value="{{Auth()->user()->id}}" disabled selected>Assigned To</option>
                                     @foreach ($users as $user)
                                     <option value='{{$user->id}}'>{{$user->name}}</option>
                                     @endforeach
@@ -181,7 +199,7 @@
 
                         <div class="input-field">
                                 <input id="internal_location" type="text" class="validate" name="internal_location">
-                                <label for="internal_location">Internal Location</label>
+                                <label for="internal_location">Internal Location - e.g ICT Room, SI Store 4th Floor</label>
                         </div>
 
                         <div class="input-field">
