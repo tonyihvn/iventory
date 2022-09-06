@@ -16,7 +16,11 @@ class FacilitiesController extends Controller
      */
     public function index()
     {
-        $facilities = facilities::orderBy('facility_name', 'asc')->get();
+        if(auth()->user()->role=="Admin"){
+            $facilities = facilities::orderBy('facility_name', 'asc')->get();
+        }else{
+            $facilities = facilities::orderBy('facility_name', 'asc')->where('state',auth()->user()->state)->get();
+        }
         return view('facilities',compact('facilities'));
     }
 

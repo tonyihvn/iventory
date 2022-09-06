@@ -175,10 +175,13 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <select name="user" id="user" materialize="material_select">
-                                    <option value="{{Auth()->user()->id}}" disabled selected>Assigned To</option>
-                                    @foreach ($users as $user)
-                                    <option value='{{$user->id}}'>{{$user->name}}</option>
-                                    @endforeach
+                                    <option value="{{Auth()->user()->id}}" selected>{{Auth()->user()->name}}</option>
+                                    @if (Auth()->user()->role!="User")
+                                        @foreach ($users as $user)
+                                            <option value='{{$user->id}}'>{{$user->name}}</option>
+                                        @endforeach
+                                    @endif
+
                                 </select>
                                 <label>Select User</label>
                             </div>

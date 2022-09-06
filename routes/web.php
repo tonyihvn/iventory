@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Welcome and Home Pages
-Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager');
+Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,User');
 
 Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager');
 

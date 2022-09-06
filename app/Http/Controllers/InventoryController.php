@@ -240,7 +240,7 @@ class InventoryController extends Controller
 
 
         audit::create([
-            'action'=>"Added new inventory item",
+            'action'=>"Added new inventory item". $itemid,
             'description'=>'A new item was created',
             'doneby'=>Auth()->user()->id
         ]);
@@ -406,7 +406,7 @@ class InventoryController extends Controller
         audit::create([
             'action'=>"Deleted Item ".$request->id,
             'description'=>'An Item was deleted',
-            'doneby'=>"Admin" // Auth::user()->id
+            'doneby'=>Auth()->user()->id
         ]);
 
         session()->flash('message','The the selected item has been successfully deleted.');
@@ -480,7 +480,7 @@ class InventoryController extends Controller
         audit::create([
             'action'=>$request->item_name." Request From ".$request->state,
             'description'=>'A Request Item was deleted',
-            'doneby'=>Auth::user()->id
+            'doneby'=>Auth()->user()->id
         ]);
 
         session()->flash('message','Your '.$request->item_name.' request has been sent successfully!');

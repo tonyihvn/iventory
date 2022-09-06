@@ -153,6 +153,7 @@
 </main>
 
 <!-- Gitter Chat Link -->
+@if(Auth()->user()->role!="User")
   <div class="fixed-action-btn click-to-toggle hide_on_print" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large pink waves-effect waves-light">
           <i class="large material-icons">apps</i>
@@ -166,23 +167,25 @@
               <a class="btn-floating tooltipped" data-position="top" data-tooltip="Facilities" href="/facilities"><i class="material-icons" title>house</i></a>
           </li>
           <li>
-          <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="/movements"><i class="material-icons">show_chart</i></a>
+          <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="/movements"><i class="material-icons">repeat</i></a>
           </li>
+            @if (Auth()->user()->role=="Admin")
 
-          <li>
-          <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="/suppliers"><i class="material-icons">local_shipping
-            </i></a>
-          </li>
-
+                <li>
+                <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="/suppliers"><i class="material-icons">local_shipping
+                    </i></a>
+                </li>
+            @endif
           <li>
           <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="/users"><i class="material-icons">people</i></a>
           </li>
 
           <li>
-          <a class="btn-floating blue btn-large tooltipped" data-position="top" data-tooltip="Add New Item" href="/add_item"><i class="material-icons">shopping_cart</i></a>
+          <a class="btn-floating blue btn-large tooltipped" data-position="top" data-tooltip="Add New Item" href="/add_item"><i class="material-icons">add</i></a>
           </li>
       </ul>
   </div>
+@endif
 
   <footer class="page-footer teal darken-2">
     <div class="container">

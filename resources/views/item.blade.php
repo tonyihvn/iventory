@@ -175,9 +175,11 @@
                             <div class="input-field col s6">
                                 <select name="user" class="initialized">
                                     <option selected value='{{$item->user->id}}'>{{$item->user->name}}</option>
-                                    @foreach ($users as $user)
-                                    <option value='{{$user->id}}'>{{$user->name}}</option>
-                                    @endforeach
+                                    @if (Auth()->user()->role!="User")
+                                        @foreach ($users as $user)
+                                            <option value='{{$user->id}}'>{{$user->name}}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                                 <label>Select User</label>
                             </div>

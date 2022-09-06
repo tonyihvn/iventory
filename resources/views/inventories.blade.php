@@ -4,7 +4,14 @@
 
     <div class = "row" style="width:98% !important; margin:auto;" id="printable" data-logo="{{$site_settings->logo}}">
 
-        <h4 class=" center">List of {{ auth()->user()->role!='Admin' ? auth()->user()->state : '' }} {{ isset($category) ? $category : 'inventories' }}</h4>
+        <h4 class=" center">
+            @if (auth()->user()->role=='User')
+                My Inventories
+            @else
+                {{ auth()->user()->role!='Admin' ? auth()->user()->state : '' }} {{ isset($category) ? $category : 'inventories' }}
+            @endif
+
+        </h4>
 
         @if ($inventories!=NULL)
           <div>
