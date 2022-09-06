@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="card col m8 offset-m2">
 
-                <div class="card-header">Update User</div>
+                <div class="card-header"><b>Update Account/Profile</b> <hr></div>
 
 
                     <form method="POST" action="{{ route('updateUser') }}">
@@ -92,8 +92,14 @@
                         <div class="input-field">
                             <select name="role" id="role">
                                 <option value="{{$user->role}}" selected>{{$user->role}}</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Manager">Manager</option>
+                                    @if (Auth()->user()->role=="Admin")
+                                        <option value="role" selected>User Role</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Manager">State Manager</option>
+                                    @endif
+                                    @if (Auth()->user()->role!="User")
+                                        <option value="Facility">Facility Manager</option>
+                                    @endif
                                 <option value="User">User</option>
                             </select>
                             <label for="role">Select Role</label>

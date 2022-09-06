@@ -40,7 +40,7 @@ Route::get('add_item', 'InventoryController@create')->name('add_item')->middlewa
 Route::get('item/{id}', 'InventoryController@edit')->middleware('auth');
 Route::get('print_item/{id}', 'InventoryController@show')->name('print_item')->middleware('auth');
 Route::get('reports', 'InventoryController@reports')->name('reports')->middleware('auth');
-Route::post('product_search','InventoryController@product_search')->name('product_search')->middleware('auth');
+Route::post('item_search','InventoryController@item_search')->name('item_search')->middleware('auth');
 Route::post('fixItems','InventoryController@fixItems')->name('fixItems')->middleware('auth');
 
 
@@ -86,9 +86,11 @@ Route::get('users', function(){
     return View('users');
 })->middleware('role:Admin,Manager');
 
+/*
 Route::get('edit_user/{id}', function(){
     return View('edit_user');
 })->middleware('role:Admin');
+*/
 
 Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager');
 Route::post('deleteUser', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');

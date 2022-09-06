@@ -7,7 +7,12 @@
             <h5 class="text-center">Users</h5>
 
             @php
-            $clients = \App\User::all();
+            if(auth()->user()->role=="Admin"){
+                $clients = \App\User::all();
+            }else{
+                $clients = \App\User::where('state',Auth()->user()->state)->get();
+            }
+
             @endphp
 
             @if ($clients!=NULL)
@@ -35,9 +40,9 @@
                         <td>{{$ca->name}}</td>
                         <td>{{$ca->email}}</td>
                         <td>{{$ca->phone_number}}</td>
-                        <td>{{$ca->unit}}</td>
-                        <td>{{$ca->department}}</td>
-                        <td>{{$ca->facility}}</td>
+                        <td>{{\App\unit::select('unit_name')->where('id',$ca->unit)->first()->unit_name}}</td>
+                        <td>{{\App\department::select('department_name')->where('id',$ca->department)->first()->department_name}}</td>
+                        <td>{{\App\facilities::select('facility_name')->where('id',$ca->facility)->first()->facility_name}}</td>
                         <td>{{$ca->state}}</td>
                         <td>{{$ca->role}}</td>
                         <td>

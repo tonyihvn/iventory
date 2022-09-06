@@ -64,11 +64,14 @@
 
                             <div class="input-field col s4">
                                 <select name="status" class="initialized">
-                                    <option value="Operational">Operational</option>
-                                    <option value="Not Operational">Not Operational</option>
-                                    <option value="Lost">Lost</option>
-                                    <option value="Archieved">Archived  </option>
-                                    <option value="Need Repairs">Need Repairs</option>
+                                    <option value="{{$item->status}}" selected>{{$item->status}}</option>
+                                    @if(Auth()->user()->role!="User")
+                                        <option value="Operational">Operational</option>
+                                        <option value="Not Operational">Not Operational</option>
+                                        <option value="Lost">Lost</option>
+                                        <option value="Archieved">Archived  </option>
+                                        <option value="Need Repairs">Need Repairs</option>
+                                    @endif
                                 </select>
                                 <label for="status">Physical Condition/Status</label>
                             </div>

@@ -36,6 +36,9 @@ class InventoryController extends Controller
         }else if(auth()->user()->role=="Manager"){
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Facility"){
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
         }else{
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
@@ -506,18 +509,23 @@ class InventoryController extends Controller
 
     }
 
-    public function product_search(Request $request){
-
-        $item = inventory::where('id','=',$request->keyword)->with('inventoryspec')->first();
-
-        $facilities = facilities::select('id','facility_name')->get();
-        $departments = department::select('id','department_name')->get();
-        $units = unit::select('id','unit_name')->get();
-        $users = User::select('id','name','facility','department','unit')->get();
+    public function item_search(Request $request){
         $categories = category::select('id','category_name')->get();
 
-
-        return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities]);
+        if(auth()->user()->role=="Admin"){
+            $facilities = facilities::select('id','facility_name')->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->orderBy('item_name', 'asc')->where('ihvn_no', 'like', '%' . $request->keyword . '%')->orWhere('item_name', 'like', '%' . $request->keyword . '%')->orWhere('serial_no', 'like', '%' . $request->keyword . '%')->get();
+        }else if(auth()->user()->role=="Manager"){
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->where('ihvn_no', 'like', '%' . $request->keyword . '%')->orWhere('item_name', 'like', '%' . $request->keyword . '%')->orWhere('serial_no', 'like', '%' . $request->keyword . '%')->get();
+        }else if(auth()->user()->role=="Facility"){
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->where('ihvn_no', 'like', '%' . $request->keyword . '%')->orWhere('item_name', 'like', '%' . $request->keyword . '%')->orWhere('serial_no', 'like', '%' . $request->keyword . '%')->get();
+        }else{
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->where('ihvn_no', 'like', '%' . $request->keyword . '%')->orWhere('item_name', 'like', '%' . $request->keyword . '%')->orWhere('serial_no', 'like', '%' . $request->keyword . '%')->get();
+        }
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories]);
 
     }
 

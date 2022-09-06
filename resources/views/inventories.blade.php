@@ -15,7 +15,7 @@
 
         @if ($inventories!=NULL)
           <div>
-              <a href="add_item" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
+              <button href="add_item" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></button>
           </div>
           <form action="{{route('fixItems')}}" method="POST">
                 @csrf
@@ -46,11 +46,13 @@
                     <div class="input-field col s2">
                         <select name="status">
                             <option value='' disabled selected>Change Status</option>
-                            <option value="Operational">Operational</option>
-                            <option value="Not Operational">Not Operational</option>
-                            <option value="Lost">Lost</option>
-                            <option value="Archieved">Archived  </option>
-                            <option value="Need Repairs">Need Repairs</option>
+                            @if(Auth()->user()->role!="User")
+                                <option value="Operational">Operational</option>
+                                <option value="Not Operational">Not Operational</option>
+                                <option value="Lost">Lost</option>
+                                <option value="Archieved">Archived  </option>
+                                <option value="Need Repairs">Need Repairs</option>
+                            @endif
                         </select>
                     </div>
 

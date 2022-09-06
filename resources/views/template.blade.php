@@ -28,9 +28,11 @@
 
       <ul class="right hide-on-med-and-down">
         <li class="input-field">
-            <form action="product_search" method="POST" style="position: relative;" id="searchform">
+            <form action="item_search" method="POST" style="position: relative;" id="searchform" class="row">
                 @csrf
-                <input type="text" placeholder="Search Inventory" class="searchbox">
+                <input type="text" placeholder="Search Inventory" class="searchbox col s8" name="keyword">
+                <button class="btn btn-small btn-floating tooltipped col s2" data-position="top" data-tooltip="Search with IHVN Tag No, Item Name, etc" style="margin-top: 10px;"><i class="material-icons" style="margin-top:-10px !important;">search</i></button>
+
             </form>
         </li>
         <li><a href="/" >Dashboard</a></li>
@@ -45,7 +47,7 @@
 
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown">Welcome @auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown" class="dropdown-content">
-                    <li><a href="#"><i class="material-icons">person</i>Profile</a></li>
+                    <li><a href="/edit_user/{{Auth()->user()->id}}"><i class="material-icons">person</i>Profile</a></li>
                     <li class="divider"></li>
                     <li><a href="#lockscreenModal" class="modal-trigger" onclick="lockScreen('{{auth()->user()->name}}')"><i class="material-icons">lock</i>Lock</a></li>
                     <li><a href="/logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
@@ -93,6 +95,7 @@
 
 
         <li class="white"><a href="/home">My Inventories</a></li>
+        <li class="white"><a href="/categories">Categories</a></li>
         <li class="white"><a href="/requests">Item Request</a></li>
         <li class="white"><a href="/users">State Users</a></li>
 
@@ -198,22 +201,23 @@
           <h6>Links</h6>
           <ul>
             <li><a href="/" class="grey-text text-lighten-3">Dashboard</a></li>
-            <li><a href="/inventories" class="grey-text text-lighten-3">Records</a></li>
-            <li><a href="/manage_users" class="grey-text text-lighten-3">Users</a></li>
+            <li><a href="/inventories" class="grey-text text-lighten-3">Inventories</a></li>
           </ul>
         </div>
         <div class="col l2 s6">
           <h6>System Managment</h6>
           <ul>
             <li><a href="/help" class="grey-text text-lighten-3">Help</a></li>
-            <li><a href="/edit_settings/1" class="grey-text text-lighten-3">Settings</a></li>
+            @if(Auth()->user()->role=="Admin")
+                <li><a href="/edit_settings/1" class="grey-text text-lighten-3">Settings</a></li>
+            @endif
             <li><a href="/help" class="grey-text text-lighten-3">Support</a></li>
           </ul>
         </div>
       </div>
     </div>
     <div class="footer-copyright  teal darken-4">
-      <div class="container">Developed by <a href="https://ihvnigeria.org">IHVN</a></div>
+      <div class="container">Developed by <a href="https://ihvnigeria.org">IHVN, HI</a></div>
     </div>
   </footer>
 
@@ -255,6 +259,10 @@
         var laptops = <?php echo $Laptops ?? ''; ?>;
         var phones = <?php echo $Phones ?? ''; ?>;
         var biometrics = <?php echo $Biometrics ?? ''; ?>;
+
+        var categoris = [<?php echo $states; ?>];
+
+
         $('#basic-area').highcharts({
             chart: {
             type: 'column'
@@ -263,7 +271,8 @@
             text: 'Gadget/Equipment Distribution Accross States'
             },
             xAxis: {
-            categories: ['FCT','KATSINA','NASARAWA','RIVERS']
+                categories: categoris
+
             },
             yAxis: {
                 title: {

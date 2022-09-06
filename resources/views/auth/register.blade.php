@@ -96,12 +96,11 @@
                             <div class="input-field col s4">
                                 <select name="role" id="role">
                                     @if (Auth()->user()->role=="Admin")
-
-
-                                    <option value="role" selected>User Role</option>
-                                    <option value="Admin">Admin</option>
-                                    <option value="Manager">Manager</option>
-                                @endif
+                                        <option value="role" selected>User Role</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Manager">State Manager</option>
+                                    @endif
+                                    <option value="Facility">Facility Manager</option>
                                     <option value="User">User</option>
                                 </select>
                                 <label for="role">Select Role</label>
