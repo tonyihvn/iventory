@@ -35,13 +35,13 @@
 
             </form>
         </li>
-        <li><a href="/" >Dashboard</a></li>
+        <li><a href="./" >Dashboard</a></li>
         @auth
             @if (Auth()->user()->role=="Admin")
                 <li><a href="./edit_settings/1" >Settings</a></li>
             @endif
         @endauth
-        <li><a href="/help" >Help</a></li>
+        <li><a href="./help" >Help</a></li>
         <li>
 
 
@@ -60,7 +60,7 @@
 
       <ul class="side-nav teal darken-2" id="mobile-demo">
       <li class="teal center"><a href="#"><i class="material-icons">menu</i>I-VENTORY </a></li>
-      <li><a class="collapsible-header waves-effect waves-blue" href="/"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+      <li><a class="collapsible-header waves-effect waves-blue" href="./"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
 
       @if (auth()->user()->role=='Admin')
         <li class="white">
@@ -70,14 +70,14 @@
                   <a class="collapsible-header waves-effect waves-blue"><i class="material-icons">list</i>Inventory Management<i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a class="waves-effect waves-blue" href="/inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/categories"><i class="material-icons">swap_horiz</i>Categories<span class="new badge right yellow darken-3"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/damaged"><i class="material-icons">fullscreen</i>Damaged<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/lost"><i class="material-icons">swap_horiz</i>Lost<span class="new badge right yellow darken-3"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/archived"><i class="material-icons">swap_horiz</i>Archived<span class="new badge right yellow darken-3"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/requests"><i class="material-icons">swap_horiz</i>Item Request</a></li>
+                      <li><a class="waves-effect waves-blue" href="./inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./categories"><i class="material-icons">swap_horiz</i>Categories<span class="new badge right yellow darken-3"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./damaged"><i class="material-icons">fullscreen</i>Damaged<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./lost"><i class="material-icons">swap_horiz</i>Lost<span class="new badge right yellow darken-3"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./archived"><i class="material-icons">swap_horiz</i>Archived<span class="new badge right yellow darken-3"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="./requests"><i class="material-icons">swap_horiz</i>Item Request</a></li>
 
                     </ul>
                   </div>
@@ -86,18 +86,18 @@
             </li>
 
       @elseif(auth()->user()->role=='Manager')
-        <li><a class="waves-effect waves-blue" href="/inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
-        <li><a class="waves-effect waves-blue" href="/add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
-        <li><a class="waves-effect waves-blue" href="/movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
-        <li><a class="waves-effect waves-blue" href="/facilities"><i class="material-icons">swap_horiz</i>Facilities</a></li>
-        <li><a class="waves-effect waves-blue" href="/departments"><i class="material-icons">fullscreen</i>Departments</a></li>
-        <li><a class="waves-effect waves-blue" href="/units"><i class="material-icons">swap_horiz</i>Units</a></li>
+        <li><a class="waves-effect waves-blue" href="./inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
+        <li><a class="waves-effect waves-blue" href="./add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
+        <li><a class="waves-effect waves-blue" href="./movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
+        <li><a class="waves-effect waves-blue" href="./facilities"><i class="material-icons">swap_horiz</i>Facilities</a></li>
+        <li><a class="waves-effect waves-blue" href="./departments"><i class="material-icons">fullscreen</i>Departments</a></li>
+        <li><a class="waves-effect waves-blue" href="./units"><i class="material-icons">swap_horiz</i>Units</a></li>
 
 
-        <li class="white"><a href="/home">My Inventories</a></li>
-        <li class="white"><a href="/categories">Categories</a></li>
-        <li class="white"><a href="/requests">Item Request</a></li>
-        <li class="white"><a href="/users">State Users</a></li>
+        <li class="white"><a href="./home">My Inventories</a></li>
+        <li class="white"><a href="./categories">Categories</a></li>
+        <li class="white"><a href="./requests">Item Request</a></li>
+        <li class="white"><a href="./users">State Users</a></li>
 
       @endif
         <li class="white"><div class="divider"></div></li>
@@ -109,11 +109,11 @@
               <a class="collapsible-header waves-effect waves-blue"><i class="material-icons">folder_open</i>System Management<i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
               <div class="collapsible-body">
                 <ul>
-                  <li><a class="waves-effect waves-blue" href="/users"><i class="material-icons">fullscreen</i>Users</a></li>
-                  <li><a class="waves-effect waves-blue" href="/facilities"><i class="material-icons">swap_horiz</i>Facilities</a></li>
-                  <li><a class="waves-effect waves-blue" href="/departments"><i class="material-icons">fullscreen</i>Departments</a></li>
-                  <li><a class="waves-effect waves-blue" href="/units"><i class="material-icons">swap_horiz</i>Units</a></li>
-                  <li><a class="waves-effect waves-blue" href="/audits"><i class="material-icons">swap_horiz</i>Audit Trail</a></li>
+                  <li><a class="waves-effect waves-blue" href="./users"><i class="material-icons">fullscreen</i>Users</a></li>
+                  <li><a class="waves-effect waves-blue" href="./facilities"><i class="material-icons">swap_horiz</i>Facilities</a></li>
+                  <li><a class="waves-effect waves-blue" href="./departments"><i class="material-icons">fullscreen</i>Departments</a></li>
+                  <li><a class="waves-effect waves-blue" href="./units"><i class="material-icons">swap_horiz</i>Units</a></li>
+                  <li><a class="waves-effect waves-blue" href="./audits"><i class="material-icons">swap_horiz</i>Audit Trail</a></li>
                 </ul>
               </div>
             </li>
@@ -122,12 +122,12 @@
 
         <li class="white"><div class="divider"></div></li>
 
-        <li class="white"><a class="waves-effect waves-blue" href="/reports"><i class="material-icons">swap_horiz</i>Inventory Report</a></li>
-        <li class="white"><a href="/edit_settings/1"><i class="material-icons">settings</i>Settings</a></li>
+        <li class="white"><a class="waves-effect waves-blue" href="./reports"><i class="material-icons">swap_horiz</i>Inventory Report</a></li>
+        <li class="white"><a href="./edit_settings/1"><i class="material-icons">settings</i>Settings</a></li>
         <li class="white"><div class="divider"></div></li>
       @endif
 
-        <li class="white"><a href="/help"><i class="material-icons">help</i>Help</a></li>
+        <li class="white"><a href="./help"><i class="material-icons">help</i>Help</a></li>
         <li class="green">
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown2">@auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown2" class="dropdown-content">
@@ -135,7 +135,7 @@
                     <li class="divider"></li>
         <a href="#" id="unlock" class="btn btn-large">Click Here to Unlock Screen</a><hr>
                 <li><a href="#lockscreenModal" class="lockscreen modal-trigger" data-username="{{auth()->user()->name}}"><i class="material-icons">lock</i>Lock</a></li>
-                    <li><a href="/logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                    <li><a href="./logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
                 </ul>
 
         </li>
@@ -164,27 +164,27 @@
 
       <ul>
           <li>
-              <a class="btn-floating tooltipped" data-position="top" data-tooltip="View All Inventory/Items" href="/inventories"><i class="material-icons" title>storage</i></a>
+              <a class="btn-floating tooltipped" data-position="top" data-tooltip="View All Inventory/Items" href="./inventories"><i class="material-icons" title>storage</i></a>
           </li>
           <li>
-              <a class="btn-floating tooltipped" data-position="top" data-tooltip="Facilities" href="/facilities"><i class="material-icons" title>house</i></a>
+              <a class="btn-floating tooltipped" data-position="top" data-tooltip="Facilities" href="./facilities"><i class="material-icons" title>house</i></a>
           </li>
           <li>
-          <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="/movements"><i class="material-icons">repeat</i></a>
+          <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="./movements"><i class="material-icons">repeat</i></a>
           </li>
             @if (Auth()->user()->role=="Admin")
 
                 <li>
-                <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="/suppliers"><i class="material-icons">local_shipping
+                <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="./suppliers"><i class="material-icons">local_shipping
                     </i></a>
                 </li>
             @endif
           <li>
-          <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="/users"><i class="material-icons">people</i></a>
+          <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="./users"><i class="material-icons">people</i></a>
           </li>
 
           <li>
-          <a class="btn-floating blue btn-large tooltipped" data-position="top" data-tooltip="Add New Item" href="/add_item"><i class="material-icons">add</i></a>
+          <a class="btn-floating blue btn-large tooltipped" data-position="top" data-tooltip="Add New Item" href="./add_item"><i class="material-icons">add</i></a>
           </li>
       </ul>
   </div>
@@ -200,18 +200,18 @@
         <div class="col l2 offset-l2 s6">
           <h6>Links</h6>
           <ul>
-            <li><a href="/" class="grey-text text-lighten-3">Dashboard</a></li>
-            <li><a href="/inventories" class="grey-text text-lighten-3">Inventories</a></li>
+            <li><a href="./" class="grey-text text-lighten-3">Dashboard</a></li>
+            <li><a href="./inventories" class="grey-text text-lighten-3">Inventories</a></li>
           </ul>
         </div>
         <div class="col l2 s6">
           <h6>System Managment</h6>
           <ul>
-            <li><a href="/help" class="grey-text text-lighten-3">Help</a></li>
+            <li><a href="./help" class="grey-text text-lighten-3">Help</a></li>
             @if(Auth()->user()->role=="Admin")
-                <li><a href="/edit_settings/1" class="grey-text text-lighten-3">Settings</a></li>
+                <li><a href="./edit_settings/1" class="grey-text text-lighten-3">Settings</a></li>
             @endif
-            <li><a href="/help" class="grey-text text-lighten-3">Support</a></li>
+            <li><a href="./help" class="grey-text text-lighten-3">Support</a></li>
           </ul>
         </div>
       </div>
@@ -224,7 +224,7 @@
   <!-- Lockscreen Modal -->
   <div id="lockscreenModal" class="modal bottom-sheet">
       <div class="modal-content center row">
-        <img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto">
+        <img src="./uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto">
         <hr>
         <div class="card col m6 offset-m3">
           <h5 class="green">Screen Locked!</h5>
@@ -233,7 +233,7 @@
           <p class="center">
             <a href="#" id="unlock" class="btn btn-large" onclick="closeModal()">Click Here to Unlock Screen</a><hr>
 
-            <a href="/logout" id="notuser">Logout</a>
+            <a href="./logout" id="notuser">Logout</a>
           </p>
         </div>
       </div>
