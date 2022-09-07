@@ -24,7 +24,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
+      <a href="dashboard" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
 
       <ul class="right hide-on-med-and-down">
         <li class="input-field">
@@ -35,7 +35,7 @@
 
             </form>
         </li>
-        <li><a href="" >Dashboard</a></li>
+        <li><a href="dashboard" >Dashboard</a></li>
         @auth
             @if (Auth()->user()->role=="Admin")
                 <li><a href="edit_settings/1" >Settings</a></li>
@@ -200,7 +200,7 @@
         <div class="col l2 offset-l2 s6">
           <h6>Links</h6>
           <ul>
-            <li><a href="" class="grey-text text-lighten-3">Dashboard</a></li>
+            <li><a href="dashboard" class="grey-text text-lighten-3">Dashboard</a></li>
             <li><a href="inventories" class="grey-text text-lighten-3">Inventories</a></li>
           </ul>
         </div>

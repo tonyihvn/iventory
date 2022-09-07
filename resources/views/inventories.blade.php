@@ -15,7 +15,7 @@
 
         @if ($inventories!=NULL)
           <div>
-              <button href="add_item" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></button>
+              <a href="add_item" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
           </div>
           <form action="{{route('fixItems')}}" method="POST">
                 @csrf
