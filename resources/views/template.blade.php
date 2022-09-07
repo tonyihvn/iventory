@@ -24,7 +24,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="dashboard" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
+      <a href="dashboard" class="brand-logo"><img src="uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
 
       <ul class="right hide-on-med-and-down">
         <li class="input-field">
