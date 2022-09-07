@@ -139,7 +139,10 @@
                                     </tr>
                                 </tfoot>
                             </table>
-                            <div class="col m6 offset-m3">{{$audits->links()}}</div>
+                                @if (Auth()->user()->role=="Admin")
+                                    <div class="col m6 offset-m3">{{$audits->links()}}</div>
+                                @endif
+
                             @else
                                 <blockquote>No Audit trails found in the database.</blockquote>
                             @endif
