@@ -7,7 +7,7 @@
 
         @if ($facilities!=NULL)
           <div>
-              <a href="add_facility" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
+              <a href="{{url('/add_facility')}}" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
           </div>
         <table id="products" class="display responsive-table" style="width:100%;;">
             <thead class="thead-dark">
@@ -52,11 +52,11 @@
 
 
                                     <li>
-                                            <a href="facility/{{$facility->id}}" class="btn-floating btn-small waves-effect green waves-light tooltipped" data-position="top" data-tooltip="View/Update this Facility"  target="_blank"><i class="material-icons" >remove_red_eye</i></a>
+                                            <a href="{{url('/facility/'.$facility->id}})}}" class="btn-floating btn-small waves-effect green waves-light tooltipped" data-position="top" data-tooltip="View/Update this Facility"  target="_blank"><i class="material-icons" >remove_red_eye</i></a>
                                     </li>
 
                                     <li>
-                                            <a href="facilityitems/{{$facility->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Facility Inventory" target="_blank"><i class="material-icons">list</i></a>
+                                            <a href="{{url('/facilityitems/'.$facility->id}})}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Facility Inventory" target="_blank"><i class="material-icons">list</i></a>
                                     </li>
 
 

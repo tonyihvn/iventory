@@ -17,7 +17,7 @@
 
             @if ($clients!=NULL)
             <div>
-                <a href="register" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
+                <a href="{{url('/register')}}" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
             </div>
             <table id="audits" class="display responsive-table" style="width:100%;;">
                 <thead class="thead-dark">
@@ -61,7 +61,7 @@
                                         </li>
 
                                         <li>
-                                                <a href="edit_user/{{$ca->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit User" target="_blank"><i class="material-icons">remove_red_eye</i></a>
+                                                <a href="{{url('/edit_user/'.$ca->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit User" target="_blank"><i class="material-icons">remove_red_eye</i></a>
                                         </li>
 
 

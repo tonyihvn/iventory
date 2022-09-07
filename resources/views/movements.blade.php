@@ -2,7 +2,7 @@
 
 @section('content')
         <div>
-              <a href="movements" class="btn btn-small btn-floating right pulse"  onclick='printtag("printable");'><i class="material-icons">printer</i></a>
+              <a href="{{url('/movements')}}" class="btn btn-small btn-floating right pulse"  onclick='printtag("printable");'><i class="material-icons">printer</i></a>
         </div>
     <div class = "row" style="width:98%; margin:auto;" id="printable" data-logo="{{$site_settings->logo}}">
         <h5 class="text-center center" style="text-align-center">Movements, Transfers and Transactions</h5>
@@ -40,7 +40,7 @@
                           <a href="#fileModal" id="viewfile" onclick="viewFile()" class="btn-floating btn-small waves-effect waves-light btn modal-trigger tooltipped" data-position="top" data-tooltip="View / Edit Item" data-src="/uploads/{{$mv->inventories_id}}/{{$mv->file}}" data-filename="{{$mv->item_name}}"><i class="material-icons">remove_red_eye</i></a>
                         @elseif(substr($mv->file, -3)=="doc" || substr($mv->file, -3)=="ocx" || substr($mv->file, -3)=="ptx" || substr($mv->file, -3)=="ppt" || substr($mv->file, -3)=="xls")
 
-                        <a href="uploads/{{$mv->inventories_id}}/{{$mv->file}}">Open File</a>
+                        <a href="{{url('/uploads/'.$mv->inventories_id.'/'.$mv->file)}}">Open File</a>
                           <!--<a href="#fileModal" id="viewfile" onclick="viewFile()" class="btn-floating btn-small waves-effect waves-light btn modal-trigger tooltipped" data-position="top" data-tooltip="View / Edit Item" data-src="https://view.officeapps.live.com/op/view.aspx?src=http://localhost/uploads/{{$mv->inventories_id}}/{{urlencode($mv->file)}}" data-filename="{{$mv->item_name}}"><i class="material-icons">remove_red_eye</i></a>
 
                           <a href="#fileModal" id="viewfile" onclick="viewFile()" class="btn-floating btn-small waves-effect waves-light btn modal-trigger tooltipped" data-position="top" data-tooltip="View / Edit Item" data-src="http://docs.google.com/gview?url=http://localhost/uploads/{{$mv->inventories_id}}/{{urlencode($mv->file)}}" data-filename="{{$mv->item_name}}"><i class="material-icons">remove_red_eye</i></a>-->
@@ -86,7 +86,7 @@
                                     </li>
 
                                     <li>
-                                            <a href="item/{{$mv->inventories_id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item History"><i class="material-icons">remove_red_eye</i></a>
+                                            <a href="{{url('/item/'.$mv->inventories_id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item History"><i class="material-icons">remove_red_eye</i></a>
                                     </li>
 
 

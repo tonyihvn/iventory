@@ -8,7 +8,7 @@
 
             @if ($clients!=NULL)
             <div>
-                <a href="/add_supplier" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
+                <a href="{{url('/add_supplier')}}" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
             </div>
             <table id="audits" class="display responsive-table" style="width:100%;;">
                 <thead class="thead-dark">
@@ -50,7 +50,7 @@
                                         </li>
 
                                         <li>
-                                                <a href="client/{{$ca->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Category Inventory" target="_blank"><i class="material-icons">list</i></a>
+                                                <a href="{{url('/client/'.$ca->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Category Inventory" target="_blank"><i class="material-icons">list</i></a>
                                         </li>
 
 

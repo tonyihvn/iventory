@@ -5,7 +5,7 @@
     <div class="row">
         <div class="card col m8 offset-m2" style="margin-top:20px; padding: 35px;">
             <div>
-              <a href="/print_item/{{$item->id}}" class="btn btn-small btn-floating right green pulse tooltipped"  data-position="top" data-tooltip="Print this Item" target="_blank"><i class="material-icons">printer</i></a>
+              <a href="{{url('//print_item/'.$item->id)}}" class="btn btn-small btn-floating right green pulse tooltipped"  data-position="top" data-tooltip="Print this Item" target="_blank"><i class="material-icons">printer</i></a>
             </div>
                 <h3 class="card-header text-center" style="text-align:center;">View / Update Item</h3>
 

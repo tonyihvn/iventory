@@ -3,7 +3,7 @@
 @section('content')
 
     <div class = "row" style="width:98%; margin:auto;">
-        <a href="requests" class="btn green right">All Requests</a>
+        <a href="{{url('/requests')}}" class="btn green right">All Requests</a>
 
         <div class="col s12 l8 offset-l2">
             <h3 class="card-header text-center" style="text-align:center;">New Item Request Form</h3>
@@ -134,7 +134,7 @@
                                         </li>
 
                                         <li>
-                                                <a href="request/{{$re->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Update Request" target="_blank"><i class="material-icons">list</i></a>
+                                                <a href="{{url('/request/'.$re->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Update Request" target="_blank"><i class="material-icons">list</i></a>
                                         </li>
 
 

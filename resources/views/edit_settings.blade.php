@@ -3,11 +3,11 @@
 <div class="container">
     <div class="row">
         <div class="card col m6 offset-m3" style="margin-top:20px;">
-            
+
                 <h3 class="card-header text-center" style="text-align:center;">Update System Settings</h3>
 
                     <div class="center">
-                        <img src="/uploads/{{$settings->logo}}" alt="No Logo Uploaded!" height="80" width="auto">
+                        <img src="{{assets('uploads/'.$settings->logo)}}" alt="No Logo Uploaded!" height="80" width="auto">
                     </div>
                     <form method="POST" action="{{route('settings.update', $settings->id)}}" enctype="multipart/form-data" >
                         @csrf
@@ -21,7 +21,7 @@
                         </div>
 
                         <div class="input-field">
-                                <textarea id="description" class="materialize-textarea" name="description">{{$settings->description}}</textarea>                         
+                                <textarea id="description" class="materialize-textarea" name="description">{{$settings->description}}</textarea>
                                 <label for="description" >Description</label>
                         </div>
 
@@ -33,8 +33,8 @@
                             <div class="file-path-wrapper">
                                 <input class="file-path validate" type="text">
                             </div>
-                        </div>                        
-                        
+                        </div>
+
 
                         <div class="input-field">
                                 <input id="address" type="text" class="validate" name="address" value="{{$settings->address}}" required>
@@ -53,15 +53,15 @@
 
 
                         <div class="input-field text-right right" style="margin-bottom:20px;">
-                            
+
                                 <button type="submit" class="btn">
                                     Update Settings
-                                </button>                               
-                        
+                                </button>
+
                         </div>
                     </form>
-                
-            
+
+
         </div>
     </div>
 </div>

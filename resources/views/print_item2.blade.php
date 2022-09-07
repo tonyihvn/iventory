@@ -107,9 +107,7 @@
                     <h5 class="text-center">Record Files {{$item_name}}</h5>
 
                     @if ($files!=NULL)
-                    <div>
-                        <a href="add_facility" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
-                    </div>
+
                     <table id="audits" class="display responsive-table" style="width:100%;;">
                         <thead class="thead-dark">
                             <tr>
@@ -133,7 +131,7 @@
                                     @elseif(substr({{$inv->file}}, -3)=="doc" || substr({{$inv->file}}, -3)=="ocx" || substr({{$inv->file}}, -3)=="ptx" || substr({{$inv->file}}, -3)=="ppt")
                                         <iframe src="https://view.officeapps.live.com/op/view.aspx?src={{urlendoe('/uploads/'.{{$inv->id}}/{{$inv->file}})}}" frameborder="0" style="width:100%;min-height:640px;"></iframe>
                                     @elseif({{$inv->file}}=="Multiple Files")
-                                        <a href="files/{{$item->id}}}">View Files</a>
+                                        <a href="{{url('/files/'.$item->id)}}}">View Files</a>
                                         @elseif(substr({{$inv->file}},-3)=="zip")
                                         @php
                                             $za = new ZipArchive();

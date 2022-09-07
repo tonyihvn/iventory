@@ -8,7 +8,7 @@
 
         @if ($inventories!=NULL)
           <div>
-              <a href="add_item" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
+              <a href="{{url('/add_item')}}" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
           </div>
           <form action="{{route('fixItems')}}" method="POST">
                 @csrf
@@ -96,14 +96,14 @@
                                                     </form>
                                             </li>
                                             <li>
-                                                <a href="print_item/{{$inv->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
+                                                <a href="{{url('/print_item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
                                             </li>
                                             <li>
-                                                    <a href="item/{{$inv->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit Item"><i class="material-icons">create</i></a>
+                                                    <a href="{{url('/item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit Item"><i class="material-icons">create</i></a>
                                             </li>
 
                                             <li>
-                                                    <a href="move_item/{{$inv->id}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Move / Transfer Item"><i class="material-icons">repeat</i></a>
+                                                    <a href="{{url('/move_item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Move / Transfer Item"><i class="material-icons">repeat</i></a>
                                             </li>
 
 

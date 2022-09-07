@@ -17,7 +17,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="dashboard" class="brand-logo" target="_blank">I-ventory</a>
+      <a href="{{url('/')}}" class="brand-logo" target="_blank">I-ventory</a>
 
       <ul class="right hide-on-med-and-down">
       <li>

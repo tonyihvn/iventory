@@ -7,9 +7,6 @@
             <h5 class="text-center">Item Categories</h5>
 
             @if ($categories!=NULL)
-            <div>
-                <a href="add_facility" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
-            </div>
             <table id="audits" class="display responsive-table" style="width:100%;;">
                 <thead class="thead-dark">
                     <tr>
@@ -42,7 +39,7 @@
                                         </li>
 
                                         <li>
-                                                <a href="inventorycategory/{{$ca->category_name}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Category Inventory" target="_blank"><i class="material-icons">list</i></a>
+                                                <a href="{{url('/inventorycategory/'.$ca->category_name)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Category Inventory" target="_blank"><i class="material-icons">list</i></a>
                                         </li>
 
 
