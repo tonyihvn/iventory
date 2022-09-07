@@ -41,7 +41,7 @@
                 <li><a href="edit_settings/1" >Settings</a></li>
             @endif
         @endauth
-        <li><a href="{{route('/help')}}" >Help</a></li>
+        <li><a href="{{url('/help')}}" >Help</a></li>
         <li>
 
 
