@@ -24,7 +24,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="/" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
+      <a href="./" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
 
       <ul class="right hide-on-med-and-down">
         <li class="input-field">
@@ -38,7 +38,7 @@
         <li><a href="/" >Dashboard</a></li>
         @auth
             @if (Auth()->user()->role=="Admin")
-                <li><a href="/edit_settings/1" >Settings</a></li>
+                <li><a href="./edit_settings/1" >Settings</a></li>
             @endif
         @endauth
         <li><a href="/help" >Help</a></li>
@@ -47,10 +47,10 @@
 
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown">Welcome @auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown" class="dropdown-content">
-                    <li><a href="/edit_user/{{Auth()->user()->id}}"><i class="material-icons">person</i>Profile</a></li>
+                    <li><a href="./edit_user/{{Auth()->user()->id}}"><i class="material-icons">person</i>Profile</a></li>
                     <li class="divider"></li>
                     <li><a href="#lockscreenModal" class="modal-trigger" onclick="lockScreen('{{auth()->user()->name}}')"><i class="material-icons">lock</i>Lock</a></li>
-                    <li><a href="/logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                    <li><a href="./logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
                 </ul>
 
         </li>
