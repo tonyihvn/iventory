@@ -25,8 +25,8 @@
     <main>
         <div class="row">
             <div class="text-center" style="text-align: center; margin-top: 10px;">
-                <a href="/add_item" class="btn btn-large pulse"><i class="material-icons">add</i> Add New Item</a>
-                <a href="/inventories" class="btn btn-large green pulse"><i class="material-icons">remove_red_eye</i>Inventories</a>
+                <a href="add_item" class="btn btn-large pulse"><i class="material-icons">add</i> Add New Item</a>
+                <a href="inventories" class="btn btn-large green pulse"><i class="material-icons">remove_red_eye</i>Inventories</a>
             </div>
             <hr>
 
@@ -62,7 +62,7 @@
                                 @foreach ($allcats as $cat)
 
                                 <tr>
-                                    <td><a href="/inventorycategory/{{$cat->category}}/">{{$cat->category}}</a></td>
+                                    <td><a href="inventorycategory/{{$cat->category}}/">{{$cat->category}}</a></td>
                                     <td>{{$cat->quantity}}</td>
 
 
