@@ -70,8 +70,8 @@
                   <a class="collapsible-header waves-effect waves-blue"><i class="material-icons">list</i>Inventory Management<i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                   <div class="collapsible-body">
                     <ul>
-                      <li><a class="waves-effect waves-blue" href="/inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
-                      <li><a class="waves-effect waves-blue" href="/add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="inventories"><i class="material-icons">fullscreen</i>View All<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
+                      <li><a class="waves-effect waves-blue" href="add_item"><i class="material-icons">swap_horiz</i>Add New<span class="new badge right yellow darken-3"></span></a></li>
                       <li><a class="waves-effect waves-blue" href="/movements"><i class="material-icons">transfer</i>Movements<span class="new badge right yellow darken-3"></span></a></li>
                       <li><a class="waves-effect waves-blue" href="/categories"><i class="material-icons">swap_horiz</i>Categories<span class="new badge right yellow darken-3"></span></a></li>
                       <li><a class="waves-effect waves-blue" href="/damaged"><i class="material-icons">fullscreen</i>Damaged<span class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a></li>
