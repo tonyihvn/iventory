@@ -1,11 +1,11 @@
 @extends('template')
 
 @section('content')
-    
+
     <main>
         <div class="row">
             <div class="text-center" style="text-align: center; margin-top: 10px;">
-                <a href="/add_sales" class="btn btn-large pulse"><i class="material-icons">shopping</i> Add New Sales</a>
+                <a href="add_sales" class="btn btn-large pulse"><i class="material-icons">shopping</i> Add New Sales</a>
             </div>
                    <hr>
             <div class="col m6">
@@ -77,7 +77,7 @@
                 </div>
                 </a>
 
-               
+
 
                 <a href="view_sales">
                 <div style="padding: 20px;" class="grey lighten-3 col s6 waves-effect">
@@ -115,7 +115,7 @@
         </div>
         </div>
 
-        
+
     </main>
 
 @endsection

@@ -7,7 +7,7 @@
 
         @if ($facilities!=NULL)
           <div>
-              <a href="/add_facility" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
+              <a href="add_facility" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
           </div>
         <table id="products" class="display responsive-table" style="width:100%;;">
             <thead class="thead-dark">

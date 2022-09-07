@@ -14,7 +14,7 @@
                 </p>
                 <p>
                     You can also download a copy of the SOP to help guide you further.<br>
-                    <a href="/uploads/SOP.pdf" class="btn">Click Here to Get a Copy of the SOP Guide (in .PDF)</a>
+                    <a href="uploads/SOP.pdf" class="btn">Click Here to Get a Copy of the SOP Guide (in .PDF)</a>
 
                 </p>
 
