@@ -62,7 +62,7 @@
                                 @foreach ($allcats as $cat)
 
                                 <tr>
-                                    <td><a href="inventorycategory/{{$cat->category}}/">{{$cat->category}}</a></td>
+                                    <td><a href="inventorycategory/{{$cat->category}}">{{$cat->category}}</a></td>
                                     <td>{{$cat->quantity}}</td>
 
 
