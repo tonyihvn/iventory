@@ -34,10 +34,10 @@ Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->m
 Route::resource('inventories', 'InventoryController')->middleware('auth');
 
 Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
-Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->middleware('auth');
+Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
-Route::get('item/{id}', 'InventoryController@edit')->middleware('auth');
+Route::get('item/{id}', 'InventoryController@edit')->name('item')->middleware('auth');
 Route::get('print_item/{id}', 'InventoryController@show')->name('print_item')->middleware('auth');
 Route::get('reports', 'InventoryController@reports')->name('reports')->middleware('auth');
 Route::post('item_search','InventoryController@item_search')->name('item_search')->middleware('auth');
