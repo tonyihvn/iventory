@@ -24,7 +24,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <ahref="" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
+      <a href="" class="brand-logo"><img src="/uploads/{{$site_settings->logo}}" alt="{{$site_settings->organization_name}}" height="60" width="auto"></a>
 
       <ul class="right hide-on-med-and-down">
         <li class="input-field">
@@ -35,22 +35,22 @@
 
             </form>
         </li>
-        <li><ahref="" >Dashboard</a></li>
+        <li><a href="" >Dashboard</a></li>
         @auth
             @if (Auth()->user()->role=="Admin")
-                <li><ahref="edit_settings/1" >Settings</a></li>
+                <li><a href="edit_settings/1" >Settings</a></li>
             @endif
         @endauth
-        <li><ahref="help" >Help</a></li>
+        <li><a href="help" >Help</a></li>
         <li>
 
 
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown">Welcome @auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown" class="dropdown-content">
-                    <li><ahref="edit_user/{{Auth()->user()->id}}"><i class="material-icons">person</i>Profile</a></li>
+                    <li><a href="edit_user/{{Auth()->user()->id}}"><i class="material-icons">person</i>Profile</a></li>
                     <li class="divider"></li>
                     <li><a href="#lockscreenModal" class="modal-trigger" onclick="lockScreen('{{auth()->user()->name}}')"><i class="material-icons">lock</i>Lock</a></li>
-                    <li><ahref="logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                    <li><a href="logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
                 </ul>
 
         </li>
@@ -94,10 +94,10 @@
         <li><a class="waves-effect waves-blue"href="units"><i class="material-icons">swap_horiz</i>Units</a></li>
 
 
-        <li class="white"><ahref="home">My Inventories</a></li>
-        <li class="white"><ahref="categories">Categories</a></li>
-        <li class="white"><ahref="requests">Item Request</a></li>
-        <li class="white"><ahref="users">State Users</a></li>
+        <li class="white"><a href="home">My Inventories</a></li>
+        <li class="white"><a href="categories">Categories</a></li>
+        <li class="white"><a href="requests">Item Request</a></li>
+        <li class="white"><a href="users">State Users</a></li>
 
       @endif
         <li class="white"><div class="divider"></div></li>
@@ -123,11 +123,11 @@
         <li class="white"><div class="divider"></div></li>
 
         <li class="white"><a class="waves-effect waves-blue"href="reports"><i class="material-icons">swap_horiz</i>Inventory Report</a></li>
-        <li class="white"><ahref="edit_settings/1"><i class="material-icons">settings</i>Settings</a></li>
+        <li class="white"><a href="edit_settings/1"><i class="material-icons">settings</i>Settings</a></li>
         <li class="white"><div class="divider"></div></li>
       @endif
 
-        <li class="white"><ahref="help"><i class="material-icons">help</i>Help</a></li>
+        <li class="white"><a href="help"><i class="material-icons">help</i>Help</a></li>
         <li class="green">
                 <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#" data-activates="profile-dropdown2">@auth {{auth()->user()->name}} @endauth <i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                 <ul id="profile-dropdown2" class="dropdown-content">
@@ -135,7 +135,7 @@
                     <li class="divider"></li>
         <a href="#" id="unlock" class="btn btn-large">Click Here to Unlock Screen</a><hr>
                 <li><a href="#lockscreenModal" class="lockscreen modal-trigger" data-username="{{auth()->user()->name}}"><i class="material-icons">lock</i>Lock</a></li>
-                    <li><ahref="logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
+                    <li><a href="logout"><i class="material-icons">exit_to_app</i>Logout</a></li>
                 </ul>
 
         </li>
@@ -200,18 +200,18 @@
         <div class="col l2 offset-l2 s6">
           <h6>Links</h6>
           <ul>
-            <li><ahref="" class="grey-text text-lighten-3">Dashboard</a></li>
-            <li><ahref="inventories" class="grey-text text-lighten-3">Inventories</a></li>
+            <li><a href="" class="grey-text text-lighten-3">Dashboard</a></li>
+            <li><a href="inventories" class="grey-text text-lighten-3">Inventories</a></li>
           </ul>
         </div>
         <div class="col l2 s6">
           <h6>System Managment</h6>
           <ul>
-            <li><ahref="help" class="grey-text text-lighten-3">Help</a></li>
+            <li><a href="help" class="grey-text text-lighten-3">Help</a></li>
             @if(Auth()->user()->role=="Admin")
-                <li><ahref="edit_settings/1" class="grey-text text-lighten-3">Settings</a></li>
+                <li><a href="edit_settings/1" class="grey-text text-lighten-3">Settings</a></li>
             @endif
-            <li><ahref="help" class="grey-text text-lighten-3">Support</a></li>
+            <li><a href="help" class="grey-text text-lighten-3">Support</a></li>
           </ul>
         </div>
       </div>
@@ -233,7 +233,7 @@
           <p class="center">
             <a href="#" id="unlock" class="btn btn-large" onclick="closeModal()">Click Here to Unlock Screen</a><hr>
 
-            <ahref="logout" id="notuser">Logout</a>
+            <a href="logout" id="notuser">Logout</a>
           </p>
         </div>
       </div>
