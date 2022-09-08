@@ -24,7 +24,7 @@
             <div>
                 <a href="{{url('/register')}}" class="btn btn-small btn-floating right pulse"><i class="material-icons">add</i></a>
             </div>
-            <table id="audits" class="display responsive-table" style="width:100%;;">
+            <table id="products" class="display responsive-table" style="width:100%;">
                 <thead class="thead-dark">
                     <tr>
                         <th>Name</th>
