@@ -63,7 +63,11 @@
 
                         <div class="input-field">
                             <select name="facility" id="facility" materialize="material_select">
-                                <option value="{{$user->facility}}" selected>{{$user->facility}}</option>
+
+                                @php
+                                    $index = array_search($user->facility, array_column($facilities->toArray(), 'id'))
+                                @endphp
+                                <option value="{{$user->facility}}" selected>{{$facilities[$index]['facility_name'] }}</option>
                                 @foreach ($facilities as $facility)
                                 <option value="{{$facility->id}}">{{$facility->facility_name}}</option>
                                 @endforeach

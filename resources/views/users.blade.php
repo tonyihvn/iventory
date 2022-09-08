@@ -7,11 +7,16 @@
             <h5 class="text-center">Users</h5>
 
             @php
-            if(auth()->user()->role=="Admin"){
-                $clients = \App\User::all();
-            }else{
-                $clients = \App\User::where('state',Auth()->user()->state)->get();
-            }
+                if(auth()->user()->role=="Admin"){
+                    $clients = \App\User::all();
+                }else{
+                    $clients = \App\User::where('state',Auth()->user()->state)->get();
+                }
+
+                $facilities = \App\facilities::select('id','facility_name')->get();
+                $departments = \App\department::select('id','department_name')->get();
+                $units = \App\unit::select('id','unit_name')->get();
+
 
             @endphp
 
@@ -40,9 +45,9 @@
                         <td>{{$ca->name}}</td>
                         <td>{{$ca->email}}</td>
                         <td>{{$ca->phone_number}}</td>
-                        <td>{{\App\unit::select('unit_name')->where('id',$ca->unit)->first()->unit_name}}</td>
-                        <td>{{\App\department::select('department_name')->where('id',$ca->department)->first()->department_name}}</td>
-                        <td>{{\App\facilities::select('facility_name')->where('id',$ca->facility)->first()->facility_name}}</td>
+                        <td>{{ $units[array_search($ca->unit, array_column($units->toArray(), 'id'))]['unit_name']}}</td>
+                        <td>{{ $departments[array_search($ca->department, array_column($departments->toArray(), 'id'))]['department_name']}}</td>
+                        <td>{{ $facilities[array_search($ca->facility, array_column($facilities->toArray(), 'id'))]['facility_name']}}</td>
                         <td>{{$ca->state}}</td>
                         <td>{{$ca->role}}</td>
                         <td>
@@ -69,7 +74,6 @@
                             </div>
 
                         </td>
-
 
                     </tr>
                     @endforeach
