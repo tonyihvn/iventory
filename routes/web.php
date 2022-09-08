@@ -93,7 +93,7 @@ Route::get('edit_user/{id}', function(){
 */
 
 Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager');
-Route::post('deleteUser', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
+Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
 Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager');
 
 // HELP LINK
