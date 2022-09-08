@@ -63,11 +63,8 @@
 
                         <div class="input-field">
                             <select name="facility" id="facility" materialize="material_select">
-
-                                @php
-                                    $index = array_search($user->facility, array_column($facilities->toArray(), 'id'))
-                                @endphp
-                                <option value="{{$user->facility}}" selected>{{$facilities[$index]['facility_name'] }}</option>
+                               
+                                <option value="{{$user->facility}}" selected>{{$facilities[array_search($user->facility, array_column($facilities->toArray(), 'id'))]['facility_name']}}</option>
                                 @foreach ($facilities as $facility)
                                 <option value="{{$facility->id}}">{{$facility->facility_name}}</option>
                                 @endforeach
@@ -77,7 +74,7 @@
 
                         <div class="input-field">
                             <select name="department" id="department" materialize="material_select">
-                                <option value="{{$user->name}}" department>{{$user->department}}</option>
+                                <option value="{{$user->name}}" department>{{$departments[array_search($user->department, array_column($departments->toArray(), 'id'))]['department_name']}}</option>
                                 @foreach ($departments as $department)
                                 <option value="{{$department->id}}">{{$department->department_name}}</option>
                                 @endforeach
@@ -87,7 +84,7 @@
 
                         <div class="input-field">
                             <select name="unit" id="unit" materialize="material_select">
-                                <option value="{{$user->unit}}" selected>{{$user->unit}}</option>
+                                <option value="{{$user->unit}}" selected>{{$units[array_search($user->unit, array_column($units->toArray(), 'id'))]['unit_name']}}</option>
                                 @foreach ($units as $unit)
                                 <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
                                 @endforeach
