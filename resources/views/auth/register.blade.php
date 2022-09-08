@@ -50,12 +50,13 @@
                             <div class="input-field col s6">
                                 <select name="state" id="state" materialize="material_select">
 
-                                    <option disabled selected>State</option>
-                                    <option value="FCT">FCT</option>
-                                    <option value="RIVERS">RIVERS</option>
-                                    <option value="NASARAWA">NASARAWA</option>
-                                    <option value="KATSINA">KATSINA</option>
-
+                                    <option value="{{Auth()->user()->state}}" selected>{{Auth()->user()->state}}</option>
+                                        @if (Auth()->user()->role=="Admin")
+                                            <option value="FCT">FCT</option>
+                                            <option value="RIVERS">RIVERS</option>
+                                            <option value="NASARAWA">NASARAWA</option>
+                                            <option value="KATSINA">KATSINA</option>
+                                        @endif
                                 </select>
                                 <label for="state">Select State</label>
                             </div>
@@ -95,12 +96,14 @@
 
                             <div class="input-field col s4">
                                 <select name="role" id="role">
+                                    <option value="User" selected>Select User Role</option>
                                     @if (Auth()->user()->role=="Admin")
-                                        <option value="role" selected>User Role</option>
                                         <option value="Admin">Admin</option>
-                                        <option value="Manager">State Manager</option>
                                     @endif
-                                    <option value="Facility">Facility Manager</option>
+                                    @if (Auth()->user()->role!="User")
+                                        <option value="Manager">State Manager</option>
+                                        <option value="Facility">Facility Manager</option>
+                                    @endif
                                     <option value="User">User</option>
                                 </select>
                                 <label for="role">Select Role</label>

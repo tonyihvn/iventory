@@ -49,11 +49,13 @@
                         <div class="input-field">
                             <select name="state" id="state" materialize="material_select">
 
-                                <option selected value="{{$user->state}}">{{$user->state}}</option>
-                                <option value="FCT">FCT</option>
-                                <option value="RIVERS">RIVERS</option>
-                                <option value="NASARAWA">NASARAWA</option>
-                                <option value="KATSINA">KATSINA</option>
+                                <option value="{{Auth()->user()->state}}" selected>{{Auth()->user()->state}}</option>
+                                        @if (Auth()->user()->role=="Admin")
+                                            <option value="FCT">FCT</option>
+                                            <option value="RIVERS">RIVERS</option>
+                                            <option value="NASARAWA">NASARAWA</option>
+                                            <option value="KATSINA">KATSINA</option>
+                                        @endif
 
                             </select>
                             <label for="state">Select State</label>
@@ -92,12 +94,12 @@
                         <div class="input-field">
                             <select name="role" id="role">
                                 <option value="{{$user->role}}" selected>{{$user->role}}</option>
+                                <option value="User" selected>Select User Role</option>
                                     @if (Auth()->user()->role=="Admin")
-                                        <option value="role" selected>User Role</option>
                                         <option value="Admin">Admin</option>
-                                        <option value="Manager">State Manager</option>
                                     @endif
                                     @if (Auth()->user()->role!="User")
+                                        <option value="Manager">State Manager</option>
                                         <option value="Facility">Facility Manager</option>
                                     @endif
                                 <option value="User">User</option>

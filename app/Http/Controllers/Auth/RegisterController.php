@@ -84,7 +84,11 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        $facilities=facilities::select('id','facility_name')->orderBy('facility_name','asc')->get();
+        if (Auth()->user()->role=="Admin"){
+            $facilities=facilities::select('id','facility_name')->orderBy('facility_name','asc')->get();
+        }else{
+            $facilities=facilities::select('id','facility_name')->orderBy('facility_name','asc')->where('state',Auth()->user()->state)->get();
+        }
         $units=unit::select('id','unit_name')->get();
         $departments=department::select('id','department_name')->get();
 
