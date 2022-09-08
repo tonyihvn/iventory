@@ -12,7 +12,7 @@
                         <div class="row">
                             <div class="input-field col s6">
                                     <input type="hidden" name="itemid" value="{{$item->id}}">
-                                    <input type="hidden" name="old" value="{{$item->user->name.' - '.$item->unit->unit_name.', '.$item->department->department_name.', '.$item->facilities->facility_name}}">
+                                    <input type="hidden" name="old" value="{{ \App\User::select('name')->where('id',$item->user_id)->first()->name.' - '.$item->unit->unit_name.', '.$item->department->department_name.', '.$item->facilities->facility_name}}">
 
                                     <input type="text" class="validate" value="{{$item->item_name}}" readonly>
                             </div>
