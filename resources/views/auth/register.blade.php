@@ -62,7 +62,7 @@
 
                             <div class="input-field col s6">
                                 <select name="facility" id="facility" materialize="material_select">
-                                    <option value="facility" selected>Facility</option>
+                                    <option value="{{Auth()->user()->facility}}" selected>Facility</option>
                                     @foreach ($facilities as $facility)
                                     <option value="{{$facility->id}}">{{$facility->facility_name}}</option>
                                     @endforeach
@@ -75,7 +75,7 @@
                         <div class="row">
                             <div class="input-field col s4">
                                 <select name="department" id="department" materialize="material_select">
-                                    <option value="department" selected>Department</option>
+                                    <option value="{{Auth()->user()->department}}" selected>Department</option>
                                     @foreach ($departments as $department)
                                     <option value="{{$department->id}}">{{$department->department_name}}</option>
                                     @endforeach
@@ -85,7 +85,7 @@
 
                             <div class="input-field col s4">
                                 <select name="unit" id="unit" materialize="material_select">
-                                    <option value="unit" selected>Unit</option>
+                                    <option value="{{Auth()->user()->unit}}" selected>Unit</option>
                                     @foreach ($units as $unit)
                                     <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
                                     @endforeach
