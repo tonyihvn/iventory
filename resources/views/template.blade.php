@@ -164,23 +164,23 @@
 
       <ul>
           <li>
-              <a class="btn-floating tooltipped" data-position="top" data-tooltip="View All Inventory/Items" href="inventories"><i class="material-icons" title>storage</i></a>
+              <a class="btn-floating tooltipped" data-position="top" data-tooltip="View All Inventory/Items" href="{{url('/inventories')}}"><i class="material-icons" title>storage</i></a>
           </li>
           <li>
-              <a class="btn-floating tooltipped" data-position="top" data-tooltip="Facilities" href="facilities"><i class="material-icons" title>house</i></a>
+              <a class="btn-floating tooltipped" data-position="top" data-tooltip="Facilities" href="{{url('/facilities')}}"><i class="material-icons" title>house</i></a>
           </li>
           <li>
-          <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="movements"><i class="material-icons">repeat</i></a>
+          <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers" href="{{url('/movements')}}"><i class="material-icons">repeat</i></a>
           </li>
             @if (Auth()->user()->role=="Admin")
 
                 <li>
-                <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="suppliers"><i class="material-icons">local_shipping
+                <a class="btn-floating purple darken-1 tooltipped" data-position="top" data-tooltip="Our Suppliers" href="{{url('/suppliers')}}"><i class="material-icons">local_shipping
                     </i></a>
                 </li>
             @endif
           <li>
-          <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="users"><i class="material-icons">people</i></a>
+          <a class="btn-floating green tooltipped" data-position="top" data-tooltip="Users/Operators" href="{{url('/users')}}"><i class="material-icons">people</i></a>
           </li>
 
           <li>

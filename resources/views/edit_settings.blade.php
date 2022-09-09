@@ -7,7 +7,7 @@
                 <h3 class="card-header text-center" style="text-align:center;">Update System Settings</h3>
 
                     <div class="center">
-                        <img src="{{assets('uploads/'.$settings->logo)}}" alt="No Logo Uploaded!" height="80" width="auto">
+                        <img src="{{asset('uploads/'.$settings->logo)}}" alt="No Logo Uploaded!" height="80" width="auto">
                     </div>
                     <form method="POST" action="{{route('settings.update', $settings->id)}}" enctype="multipart/form-data" >
                         @csrf
