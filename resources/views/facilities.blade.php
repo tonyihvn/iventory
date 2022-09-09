@@ -12,7 +12,6 @@
         <table id="products" class="display responsive-table" style="width:100%;;">
             <thead class="thead-dark">
                 <tr>
-
                     <th>Facility Name</th>
                     <th>Datim Facility No</th>
                     <th>State</th>
@@ -25,9 +24,7 @@
             </thead>
             <tbody>
                 @foreach ($facilities as $facility)
-
                 <tr>
-
                     <td>{{$facility->facility_name}}</td>
                     <td>{{$facility->facility_no}}</td>
                     <td>{{$facility->state}}</td>

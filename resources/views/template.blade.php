@@ -268,7 +268,7 @@
             type: 'column'
             },
             title: {
-            text: 'Gadget/Equipment Distribution Accross States'
+            text: 'Gadget/Equipment Distribution Accross the State(s)'
             },
             xAxis: {
                 categories: categoris
