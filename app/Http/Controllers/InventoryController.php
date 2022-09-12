@@ -43,7 +43,7 @@ class InventoryController extends Controller
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
         }else{
-            $usrs = User::select('id','name')->where('user_id',auth()->user()->id)->get()->toArray();
+            $usrs = User::select('id','name')->where('id',auth()->user()->id)->get()->toArray();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
