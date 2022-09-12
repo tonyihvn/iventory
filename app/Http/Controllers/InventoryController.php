@@ -31,19 +31,23 @@ class InventoryController extends Controller
         $categories = category::select('id','category_name')->get();
 
         if(auth()->user()->role=="Admin"){
+            $usrs = User::select('id','name')->get()->toArray();
             $facilities = facilities::select('id','facility_name')->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->orderBy('item_name', 'asc')->get();
         }else if(auth()->user()->role=="Manager"){
+            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get()->toArray();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
         }else if(auth()->user()->role=="Facility"){
+            $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get()->toArray();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
         }else{
+            $usrs = User::select('id','name')->where('user_id',auth()->user()->id)->get()->toArray();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
     }
 
     public function categoryInventory($category)
