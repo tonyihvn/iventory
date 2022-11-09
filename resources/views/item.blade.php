@@ -175,7 +175,25 @@
                             <label>Select Unit</label>
                         </div>
                         <div class="row">
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
+                                <select name="user" class="initialized" id="user">
+                                    <option selected value='{{$item->user->id}}'>{{$item->user->name}}</option>
+                                    @if (Auth()->user()->role!="User")
+                                        @foreach ($users as $user)
+                                            <option value='{{$user->id}}'>{{$user->name}}</option>
+                                        @endforeach
+                                    @endif
+                                    <option value="0">Not Listed - Add User's Name</option>
+                                </select>
+                                <label>Select User</label>
+                            </div>
+
+                            <div class="input-field col s4" id="new_username">
+                                <input id="new_user" type="text" class="validate" name="new_user" value="">
+                                <label for="new_user">Enter Name</label>
+                            </div>
+
+                            <div class="input-field col s4">
                                 <select name="user" class="initialized">
                                     <option selected value='{{$item->user->id}}'>{{$item->user->name}}</option>
                                     @if (Auth()->user()->role!="User")
@@ -187,7 +205,7 @@
                                 <label>Select User</label>
                             </div>
 
-                            <div class="input-field col s6">
+                            <div class="input-field col s4">
                                 <select name="added_by" class="initialized">
                                     @auth
                                         <option value='{{auth()->user()->id}}' selected>{{auth()->user()->name}}</option>

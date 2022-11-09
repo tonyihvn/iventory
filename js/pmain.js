@@ -102,44 +102,10 @@ $(document).ready(function(){
             } );
         }
     } );
-
-    // $('.print_table:eq(1)').hide();
-
-    /*
-    $('#report').DataTable( {
-        searchPanes:{
-            panes: [
-                {
-                    header:'Custom',
-                    options:[
-                        {
-                            label:'Major Categories',
-                            value: function(rowData, rowIdx){
-                                return rowData[1] === 'Accountant' && rowData[2] === 'Tokyo';
-                            }
-                        }
-                    ],
-                    dtOpts:{
-                        searching: false,
-                        order: [[1, 'desc']]
-                    }
-                }
-            ],
-            layout: 'columns-9',
-        },
-        dom: 'Pfrtip',
-    });
-    */
-
-
-    //$('a.paginate_button').addClass('btn');
+;
 
     // INITIALIZE TOOL TIP
     $('.tooltipped').tooltip();
-
-    // INITIALIZE DATEPICKER
-
-
 
     // NEW SALES ITEM
 
@@ -236,6 +202,16 @@ $(document).ready(function(){
 
     $('#sales_form').each(function(){
         this.reset();
+    });
+
+
+    $('#user').change(function(){
+        if($(this).val() == 'None'){
+            $('#new_username').toggle();
+        }else{
+            $('#new_username').hide();
+
+        }
     });
 
 
