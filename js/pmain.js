@@ -209,7 +209,7 @@ $(document).ready(function(){
     $('#user').change(function(){
         alert("Change");
 
-        if($(this).val() == 'None'){
+        if($(this).val() ==0){
             $('#new_username').toggle();
         }else{
             $('#new_username').hide();
