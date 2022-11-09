@@ -100,7 +100,7 @@
                             <td>{{$inv->serial_no}} / {{$inv->ihvn_no}} / {{$inv->tag_no}}</td>
                             <td>{{$inv->category}}</td>
                             <td>{{isset($inv->facility) ? $inv->facility : $inv->facilities_id}}</td>
-                            <td>{{$inv->assigned_to!="" ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs, 'id'))]['name']}}</td>
+                            <td>{{$inv->assigned_to!="" ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name']}}</td>
                             <td>{{$inv->status}}</td>
                             <td>
 
