@@ -217,11 +217,13 @@
                                 </select>
                                 <label>Modified By</label>
                             </div>
-                        </div>
-                        <div class="input-field">
+
+                            <div class="input-field col s8">
                                 <input id="remarks" type="text" class="validate" name="remarks" value="{{$item->remarks}}">
                                 <label for="remarks">Remarks</label>
+                            </div>
                         </div>
+
 
                         <div class="input-field text-right right" style="margin-bottom:20px;">
 

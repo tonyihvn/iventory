@@ -204,6 +204,7 @@ $(document).ready(function(){
         this.reset();
     });
 
+    $('#new_username').hide();
 
     $('#user').change(function(){
         if($(this).val() == 'None'){
