@@ -139,7 +139,7 @@ class InventoryController extends Controller
             $userid = User::create([
                 'name' => $request->new_username,
                 'email'=> str_replace(' ','',$request->new_username)."@ihvnigeria.org",
-                'password' => Hash::make($data['nopassword']),
+                'password' => Hash::make('nopassword'),
                 'state'=>$request->state,
                 'department'=>$request->department,
                 'unit'=>$request->unit,
@@ -319,7 +319,7 @@ class InventoryController extends Controller
             $userid = User::create([
                 'name' => $request->new_username,
                 'email'=> str_replace(' ','',$request->new_username)."@ihvnigeria.org",
-                'password' => Hash::make($data['nopassword']),
+                'password' => Hash::make('nopassword'),
                 'state'=>$request->state,
                 'department'=>$request->department,
                 'unit'=>$request->unit,
