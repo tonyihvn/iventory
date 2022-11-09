@@ -102,7 +102,7 @@ $(document).ready(function(){
             } );
         }
     } );
-;
+
 
     // INITIALIZE TOOL TIP
     $('.tooltipped').tooltip();
@@ -207,6 +207,8 @@ $(document).ready(function(){
     $('#new_username').hide();
 
     $('#user').change(function(){
+        alert("Change");
+
         if($(this).val() == 'None'){
             $('#new_username').toggle();
         }else{

@@ -193,17 +193,6 @@
                                 <label for="new_user">Enter Name</label>
                             </div>
 
-                            <div class="input-field col s4">
-                                <select name="user" class="initialized">
-                                    <option selected value='{{$item->user->id}}'>{{$item->user->name}}</option>
-                                    @if (Auth()->user()->role!="User")
-                                        @foreach ($users as $user)
-                                            <option value='{{$user->id}}'>{{$user->name}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                                <label>Select User</label>
-                            </div>
 
                             <div class="input-field col s4">
                                 <select name="added_by" class="initialized">
