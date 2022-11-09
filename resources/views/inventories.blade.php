@@ -99,7 +99,9 @@
                             <td>{{$inv->item_name}}</td>
                             <td>{{$inv->serial_no}} / {{$inv->ihvn_no}} / {{$inv->tag_no}}</td>
                             <td>{{$inv->category}}</td>
-                            <td>{{$inv->facility!="" ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name']}}</td>
+                            <td> {{var_dump($facilities)}} <hr>
+                                {{var_dump($usrs)}}
+                                {{$inv->facility!="" ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name']}}</td>
                             <td>{{$inv->assigned_to!="" ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name']}}</td>
                             <td>{{$inv->status}}</td>
                             <td>
