@@ -228,19 +228,4 @@
     </div>
 </div>
 <script src="{{asset('/js/lga.js')}}"></script>
-
-<script>
-    $('#new_username').hide();
-
-    $('#user').change(function(){
-        alert("Change");
-
-        if($(this).val() ==0){
-            $('#new_username').toggle();
-        }else{
-            $('#new_username').hide();
-
-        }
-    });
-</script>
 @endsection
