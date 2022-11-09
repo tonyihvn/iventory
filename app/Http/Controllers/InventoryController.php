@@ -14,6 +14,7 @@ use App\files;
 use App\requests;
 use Auth;
 use File;
+use Illuminate\Support\Facades\Hash;
 
 
 use Illuminate\Http\Request;
@@ -134,6 +135,21 @@ class InventoryController extends Controller
             $singlefile = "";
         }
 
+        if($request->user==0){
+            $userid = User::create([
+                'name' => $request->new_username,
+                'email'=> str_replace(' ','',$request->new_username)."@ihvnigeria.org",
+                'password' => Hash::make($data['nopassword']),
+                'state'=>$request->state,
+                'department'=>$request->department,
+                'unit'=>$request->unit,
+                'facility'=>$request->facility,
+                'role' => 'User'
+            ])->id;
+        }else{
+            $userid = $request->user;
+        }
+
         if($request->quantity_added>1){
 
             $serialno = ''; $tagno='';
@@ -159,7 +175,7 @@ class InventoryController extends Controller
                     'type'=>$request->type,
                     'date_purchased'=>$request->date_purchased,
                     'supplier'=>$request->supplier,
-                    'user_id'=>$request->user,
+                    'user_id'=>$userid,
                     'quantity'=>$request->quantity,
                     'status'=>$request->status,
                     'state'=>$request->state,
@@ -183,7 +199,7 @@ class InventoryController extends Controller
                 'type'=>$request->type,
                 'date_purchased'=>$request->date_purchased,
                 'supplier'=>$request->supplier,
-                'user_id'=>$request->user,
+                'user_id'=>$userid,
                 'quantity'=>$request->quantity,
                 'status'=>$request->status,
                 'state'=>$request->state,
@@ -298,6 +314,22 @@ class InventoryController extends Controller
     public function update(Request $request, inventory $inventory)
     {
         $inventory = inventory::where('id','=', $request->id);
+
+        if($request->user==0){
+            $userid = User::create([
+                'name' => $request->new_username,
+                'email'=> str_replace(' ','',$request->new_username)."@ihvnigeria.org",
+                'password' => Hash::make($data['nopassword']),
+                'state'=>$request->state,
+                'department'=>$request->department,
+                'unit'=>$request->unit,
+                'facility'=>$request->facility,
+                'role' => 'User'
+            ])->id;
+        }else{
+            $userid = $request->user;
+        }
+
         $inventory->update([
             'item_name'=>$request->item_name,
             'serial_no'=>$request->serial_no,
@@ -307,7 +339,7 @@ class InventoryController extends Controller
             'type'=>$request->type,
             'date_purchased'=>$request->date_purchased,
             'supplier'=>$request->supplier,
-            'user_id'=>$request->user,
+            'user_id'=>$userid,
             'quantity'=>$request->quantity,
             'status'=>$request->status,
             'state'=>$request->state,

@@ -181,9 +181,14 @@
                                             <option value='{{$user->id}}'>{{$user->name}}</option>
                                         @endforeach
                                     @endif
-
+                                    <option value="0">Not Listed - Add User's Name</option>
                                 </select>
                                 <label>Select User</label>
+                            </div>
+
+                            <div class="input-field col s6" id="new_username">
+                                <input id="new_user" type="text" class="validate" name="new_user">
+                                <label for="new_user">Enter Name</label>
                             </div>
 
                             <div class="input-field col s6">
