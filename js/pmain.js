@@ -204,20 +204,6 @@ $(document).ready(function(){
         this.reset();
     });
 
-    $('#new_username').hide();
-
-    $('#user').change(function(){
-        alert("Change");
-
-        if($(this).val() ==0){
-            $('#new_username').toggle();
-        }else{
-            $('#new_username').hide();
-
-        }
-    });
-
-
 
 }); // END DOCUMENT READY
 
