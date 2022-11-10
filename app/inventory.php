@@ -8,7 +8,7 @@ class inventory extends Model
 {
 
     protected $guarded = [];
-    
+
     public function inventoryspec()
     {
         return $this->hasMany('App\inventoryspec','itemid','id');
