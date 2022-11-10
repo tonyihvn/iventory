@@ -36,7 +36,7 @@ class inventory extends Model
 
     public function currentUser()
     {
-        return $this->hasOne('App\User','id');
+        return $this->belongsTo('App\User','id');
     }
 
     public function movement()
