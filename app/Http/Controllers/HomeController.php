@@ -108,7 +108,7 @@ class HomeController extends Controller
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
             ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs]);
         }else{
-            return redirect()->route('inventories');
+            return redirect()->route('inventory');
         }
 
     }
