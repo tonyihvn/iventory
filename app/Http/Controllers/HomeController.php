@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\inventory;
 use App\audit;
 use App\User;
+use App\facilities;
 use DB;
 
 class HomeController extends Controller
