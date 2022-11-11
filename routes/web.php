@@ -33,7 +33,7 @@ Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->m
 // Inventories
 Route::resource('inventories', 'InventoryController')->middleware('auth');
 
-Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
+Route::get('inventory', 'InventoryController@index')->name('inventory')->name('inventories')->middleware('auth');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
