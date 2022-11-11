@@ -122,8 +122,6 @@ class HomeController extends Controller
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
             return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
         }
-
-
     }
 
     public function user_dashboard()
