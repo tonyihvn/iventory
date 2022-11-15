@@ -113,11 +113,9 @@
                                         <ul style="top: 0px !important">
                                             @if (Auth()->user()->role=="Admin")
                                                 <li>
-                                                        <form method="POST" action="{{route('inventories.destroy',$inv->id)}}">
-                                                            @csrf
-                                                            @method('DELETE')
+
                                                         <button onclick="return confirm('Are you sure you want to delete this item?')" class="btn-floating btn-small waves-effect red waves-light tooltipped" data-position="top" data-tooltip="Delete this Item"><i class="material-icons">delete</i></button>
-                                                        </form>
+
                                                 </li>
                                             @endif
                                             <li>

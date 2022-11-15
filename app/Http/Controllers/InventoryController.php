@@ -429,7 +429,7 @@ class InventoryController extends Controller
 
         session()->flash('message','The Item : '.var_dump($request->tid).' has been updated successfully!');
 
-        return redirect()->route('inventories');
+        return redirect()->back();
     }
 
     /**
