@@ -14,9 +14,12 @@
         </h4>
 
         @if ($inventories!=NULL)
-          <div>
-              <a href="{{url('/add_item')}}" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
-          </div>
+
+            @if (auth()->user()->role!='Observer')
+                <div>
+                    <a href="{{url('/add_item')}}" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
+                </div>
+            @endif
           <form action="{{route('fixItems')}}" method="POST">
                 @csrf
 
@@ -108,33 +111,34 @@
                             <td>{{$inv->assigned_to!="" ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name']}}</td>
                             <td>{{$inv->status}}</td>
                             <td>
+                                @if (auth()->user()->role!='Observer')
+                                    <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action" style="position: relative !important; float: text-align: center; display: inline-block; bottom: 0px !important; padding: 0px !important">
+                                            <a class="btn-floating btn-small dark-purple waves-effect waves-light" style="display: inline-block" >
+                                                <i class="small material-icons">menu</i>
+                                            </a>
+                                            <ul style="top: 0px !important">
+                                                @if (Auth()->user()->role=="Admin")
+                                                    <li>
 
-                                <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action" style="position: relative !important; float: text-align: center; display: inline-block; bottom: 0px !important; padding: 0px !important">
-                                        <a class="btn-floating btn-small dark-purple waves-effect waves-light" style="display: inline-block" >
-                                            <i class="small material-icons">menu</i>
-                                        </a>
-                                        <ul style="top: 0px !important">
-                                            @if (Auth()->user()->role=="Admin")
+                                                            <button onclick="return confirm('Are you sure you want to delete this item?')" class="btn-floating btn-small waves-effect red waves-light tooltipped" data-position="top" data-tooltip="Delete this Item"><i class="material-icons">delete</i></button>
+
+                                                    </li>
+                                                @endif
                                                 <li>
-
-                                                        <button onclick="return confirm('Are you sure you want to delete this item?')" class="btn-floating btn-small waves-effect red waves-light tooltipped" data-position="top" data-tooltip="Delete this Item"><i class="material-icons">delete</i></button>
-
+                                                    <a href="{{url('/print_item/'.$inv->id)}}" target="_blank" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
                                                 </li>
-                                            @endif
-                                            <li>
-                                                <a href="{{url('/print_item/'.$inv->id)}}" target="_blank" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item"><i class="material-icons">remove_red_eye</i></a>
-                                            </li>
-                                            <li>
-                                                    <a href="{{url('/item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit Item"><i class="material-icons">create</i></a>
-                                            </li>
+                                                <li>
+                                                        <a href="{{url('/item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit Item"><i class="material-icons">create</i></a>
+                                                </li>
 
-                                            <li>
-                                                    <a href="{{url('/move_item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Move / Transfer Item"><i class="material-icons">repeat</i></a>
-                                            </li>
+                                                <li>
+                                                        <a href="{{url('/move_item/'.$inv->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Move / Transfer Item"><i class="material-icons">repeat</i></a>
+                                                </li>
 
 
-                                        </ul>
-                                </div>
+                                            </ul>
+                                    </div>
+                                @endif
 
                             </td>
                         </tr>

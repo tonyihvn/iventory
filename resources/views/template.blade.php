@@ -156,7 +156,7 @@
 </main>
 
 <!-- Gitter Chat Link -->
-@if(Auth()->user()->role!="User")
+@if(Auth()->user()->role=="Admin")
   <div class="fixed-action-btn click-to-toggle hide_on_print" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large pink waves-effect waves-light">
           <i class="large material-icons">apps</i>
