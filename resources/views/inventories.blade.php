@@ -19,11 +19,6 @@
                 <div>
                     <a href="{{url('/add_item')}}" class="btn btn-small btn-floating right pulse tooltipped" data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
 
-                    @php
-                    if (auth()->user()->role=='Admin'){
-                        var_dump($facilities->toArray());
-                    }
-                    @endphp
                 </div>
             @endif
           <form action="{{route('fixItems')}}" method="POST">
@@ -101,6 +96,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $afacilities = $facilities->toArray();
+                        @endphp
                         @foreach ($inventories as $inv)
 
                         <tr>
@@ -113,6 +111,14 @@
                             <td>{{$inv->category}}</td>
                             <td>
 
+                                @php
+                    if (auth()->user()->role=='Admin'){
+                        echo array_search($inv->facility_id, array_column($facilities->toArray(), 'id'));
+                        echo "////<br>";
+                        {{$inv->facility!="" ? $inv->facility : $afacilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name']}}
+
+                    }
+                    @endphp
 
                                 {{$inv->facility!="" ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name']}}</td>
                             <td>{{$inv->assigned_to!="" ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name']}}</td>
