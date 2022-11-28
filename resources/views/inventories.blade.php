@@ -113,7 +113,7 @@
 
                                 @php
                     if (auth()->user()->role=='Admin'){
-                        echo var_dump(array_search($inv->facility_id, array_column($facilities, 'id')));
+                        echo var_dump(array_search($inv->facility_id, array_column($facilities->toArray(), 'id','id')));
                         echo "////<br>";
                         // echo $inv->facility!="" ? $inv->facility : $afacilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'];
 
