@@ -96,9 +96,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $afacilities = $facilities->toArray();
-                        @endphp
+
                         @foreach ($inventories as $inv)
 
                         <tr>
@@ -110,19 +108,6 @@
                             <td>{{$inv->serial_no}} / {{$inv->ihvn_no}} / {{$inv->tag_no}}</td>
                             <td>{{$inv->category}}</td>
                             <td>
-
-                                @php
-                    if (auth()->user()->role=='Admin'){
-                        echo $inv->facility_id;
-
-                        echo var_dump(array_search($inv->facility_id, array_column($facilities->toArray(), 'facility_name','id')));
-
-                        echo "////<br>";
-                        // echo $inv->facility!="" ? $inv->facility : $afacilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'];
-
-                    }
-                    @endphp
-
                                 {{$inv->facility!="" ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name']}}</td>
                             <td>{{$inv->assigned_to!="" ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name']}}</td>
                             <td>{{$inv->status}}</td>
