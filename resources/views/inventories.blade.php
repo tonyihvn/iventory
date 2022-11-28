@@ -21,7 +21,7 @@
 
                     @php
                     if (auth()->user()->role=='Admin'){
-                        var_dump($facilities->toArray())
+                        var_dump($facilities->toArray());
                     }
                     @endphp
                 </div>
