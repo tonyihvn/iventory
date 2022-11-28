@@ -28,7 +28,7 @@
 
       <ul class="right hide-on-med-and-down">
         <li class="input-field">
-            <form action="item_search" method="POST" style="position: relative;" id="searchform" class="row">
+            <form action="{{route('item_search')}}" method="POST" style="position: relative;" id="searchform" class="row">
                 @csrf
                 <input type="text" placeholder="Search Inventory" class="searchbox col s8" name="keyword">
                 <button class="btn btn-small btn-floating tooltipped col s2" data-position="top" data-tooltip="Search with IHVN Tag No, Item Name, etc" style="margin-top: 10px;"><i class="material-icons" style="margin-top:-10px !important;">search</i></button>
