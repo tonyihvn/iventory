@@ -25,7 +25,9 @@
     <main>
         <div class="row">
             <div class="text-center" style="text-align: center; margin-top: 10px;">
-                <a href="{{url('/add_item')}}" class="btn btn-large pulse"><i class="material-icons">add</i> Add New Item</a>
+                @if (auth()->user()->role!='Observer')
+                    <a href="{{url('/add_item')}}" class="btn btn-large pulse"><i class="material-icons">add</i> Add New Item</a>
+                @endif
                 <a href="{{url('/inventories')}}" class="btn btn-large green pulse"><i class="material-icons">remove_red_eye</i>Inventories</a>
             </div>
             <hr>

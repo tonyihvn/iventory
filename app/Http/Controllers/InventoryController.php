@@ -31,7 +31,7 @@ class InventoryController extends Controller
 
         $categories = category::select('id','category_name')->get();
 
-        if(auth()->user()->role=="Admin"){
+        if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get();
             $facilities = facilities::select('id','facility_name')->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','assigned_to','status')->orderBy('item_name', 'asc')->get();

@@ -19,6 +19,8 @@
           </div>
           <form action="{{route('fixItems')}}" method="POST">
                 @csrf
+
+                @if (auth()->user()->role!='Observer')
                 <div class="row">
                     <div class="input-field col s1 offset-l1">
                         <label>With Selected:</label>
@@ -67,6 +69,7 @@
                     </div>
 
                 </div>
+                @endif
 
 
                 <table id="products" class="print_table display nowrap responsive-table" style="width:100%;">
