@@ -34,6 +34,11 @@ class inventory extends Model
         return $this->belongsTo('App\unit','unit_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User','user_id');
+    }
+
     public function currentUser()
     {
         return $this->belongsTo('App\User','user_id');
