@@ -31,7 +31,7 @@ class HomeController extends Controller
     public function index()
     {
 
-        if(auth()->user()->role=='Admin'){
+        if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get()->toArray();
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
             ->groupBy('category')
