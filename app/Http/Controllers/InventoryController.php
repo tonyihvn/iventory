@@ -53,37 +53,54 @@ class InventoryController extends Controller
 
     public function categoryInventory($category)
     {
-        $facilities = facilities::select('id','facility_name')->get();
-
         $categories = category::select('id','category_name')->get();
 
-        if(auth()->user()->role=="Admin"){
-            $inventories = inventory::where('category',$category)->orderBy('item_name', 'asc')->get();
+        if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
+            $usrs = User::select('id','name')->get();
+            $facilities = facilities::select('id','facility_name')->get();
+            $inventories = inventory::where('category',$category)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->orderBy('item_name', 'asc')->get();
         }else if(auth()->user()->role=="Manager"){
-            $inventories = inventory::where('category',$category)->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::where('category',$category)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Facility"){
+            $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::where('category',$category)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
         }else{
-            $inventories = inventory::where('category',$category)->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
+            $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::where('category',$category)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'),['category'=>$category,'facilities'=>$facilities,'categories'=>$categories]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
     }
 
     public function facilityItems($fid)
     {
-        $facilities = facilities::select('id','facility_name')->get();
 
         $categories = category::select('id','category_name')->get();
 
         $catg = facilities::select('facility_name')->where('id',$fid)->first()->facility_name;
         $category = $catg." Inventory";
 
-        if(auth()->user()->role=="Admin"){
-            $inventories = inventory::where('facility_id',$fid)->orderBy('item_name', 'asc')->get();
+        if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
+            $usrs = User::select('id','name')->get();
+            $facilities = facilities::select('id','facility_name')->get();
+            $inventories = inventory::where('facility_id',$fid)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->orderBy('item_name', 'asc')->get();
         }else if(auth()->user()->role=="Manager"){
-            $inventories = inventory::where('facility_id',$fid)->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::where('facility_id',$fid)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Facility"){
+            $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::where('facility_id',$fid)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
         }else{
-            $inventories = inventory::where('facility_id',$fid)->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
+            $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::where('facility_id',$fid)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'),['category'=>$category,'facilities'=>$facilities,'categories'=>$categories]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'category'=>$category,'usrs'=>$usrs]);
     }
 
     /**
