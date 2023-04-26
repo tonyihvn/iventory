@@ -41,7 +41,11 @@ Route::get('item/{id}', 'InventoryController@edit')->name('item')->middleware('a
 Route::get('print_item/{id}', 'InventoryController@show')->name('print_item')->middleware('auth');
 Route::get('reports', 'InventoryController@reports')->name('reports')->middleware('auth');
 Route::post('item_search','InventoryController@item_search')->name('item_search')->middleware('auth');
-Route::post('fixItems','InventoryController@fixItems')->name('fixItems')->middleware('auth');
+Route::post('fixItems', 'InventoryController@fixItems')->name('fixItems')->middleware('auth');
+Route::get('update-tagnumbers', 'InventoryController@updateTagnumbers')->name('update-tagnumbers')->middleware('auth');
+Route::post('update-tags', 'InventoryController@updateTags')->name('update-tags')->middleware('auth');
+
+
 
 
 // Item Requests

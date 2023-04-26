@@ -493,6 +493,32 @@ class InventoryController extends Controller
         return view('generate_report', compact('inventories'),['all_items'=>$all_items]);
     }
 
+    public function updateTagnumbers()
+    {
+        return view('update_tag');
+    }
+
+    public function updateTags(Request $request)
+    {
+        if(isset($request->oldtag)){
+            $i = 0;
+
+            foreach ($request->oldtag as $pp){
+                // RECORD SALES
+                inventory::where('ihvn_no',$pp)->update([
+                    'ihvn_no'=>$request->newtag[$i],
+                    ]);
+                $i++;
+            }
+        }
+
+        $message = "New Tags updated successfully";
+
+        return redirect()->back()->with(['message'=>$message]);
+    }
+
+
+
 
     public function requests()
     {
