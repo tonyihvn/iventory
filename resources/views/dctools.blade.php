@@ -6,6 +6,9 @@
 
         <h4 class=" center">
             Data Collection Tools
+            @if (auth()->user()->role == 'DCTManager')
+                {{ auth()->user()->state }}
+            @endif
         </h4>
 
         @if ($dctools != null)
