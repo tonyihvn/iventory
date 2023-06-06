@@ -7,7 +7,7 @@
         <h4 class=" center">
             Data Collection Tools
             @if (auth()->user()->role == 'DCTManager')
-                {{ auth()->user()->state }}
+                for {{ auth()->user()->state }}
             @endif
         </h4>
 
@@ -37,8 +37,8 @@
 
                             <td>{{ $dc->tool_name }}</td>
                             <td>{{ $dc->category }}</td>
-                            @if (auth()->user()->role == 'DCTManager')
-                                <td>{{ isset($dctools->distributions) ? $dctools->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') : '' }}
+                            @if (auth()->user()->role == 'DCTAdmin')
+                                <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') : '' }}
                                 </td>
                             @else
                                 <td>{{ $dc->stock->quantity_remaining ?? '' }}</td>
