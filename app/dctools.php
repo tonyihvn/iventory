@@ -12,4 +12,9 @@ class dctools extends Model
     {
         return $this->hasOne('App\dcstocks','item_id');
     }
+
+    public function distributions()
+    {
+        return $this->hasMany('App\dcdistributions','item_id');
+    }
 }

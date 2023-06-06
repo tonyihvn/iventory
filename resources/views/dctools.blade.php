@@ -34,7 +34,12 @@
 
                             <td>{{ $dc->tool_name }}</td>
                             <td>{{ $dc->category }}</td>
-                            <td>{{ $dc->stock->quantity_remaining ?? '' }}</td>
+                            @if (auth()->user()->role == 'DCTManager')
+                                <td>{{ $dctools->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') ?? '' }}
+                                </td>
+                            @else
+                                <td>{{ $dc->stock->quantity_remaining ?? '' }}</td>
+                            @endif
 
                             <td>
 
