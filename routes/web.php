@@ -104,8 +104,8 @@ Route::get('add-dctool', 'DctoolsController@create')->name('add-dctool')->middle
 Route::get('add-dcstock/{dcid}', 'DctoolsController@addDCTStock')->name('add-dcstock')->middleware('role:DCTAdmin,Admin,Super');
 Route::post('newDCTSupply', 'DctoolsController@newDCTSupply')->name('newDCTSupply')->middleware('role:Admin,Super,DCTAdmin');
 Route::get('send-dctools/{dcid}', 'DctoolsController@dcDistribution')->name('send-dctools')->middleware('role:DCTAdmin,Admin,Super,DCTManager,DCTUser');
-Route::post('savedcDistribution', 'DctoolsController@savedcDistribution')->name('savedcDistribution')->middleware('role:Admin,Super,DCTAdmin');
-Route::get('dctreport/{dcid}', 'DctoolsController@dcReport')->name('dctreport')->middleware('role:DCTAdmin,Admin,Super');
+Route::post('savedcDistribution', 'DctoolsController@savedcDistribution')->name('savedcDistribution')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
+Route::get('dctreport/{dcid}', 'DctoolsController@dcReport')->name('dctreport')->middleware('role:DCTAdmin,Admin,Super,DCTManager');
 Route::get('dcutilization/{dcid}', 'DctoolsController@dcUtilization')->name('dctutilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 Route::post('savedcUtilization', 'DctoolsController@savedcUtilization')->name('savedcUtilization')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 Route::get('futilization/{dcid}', 'DctoolsController@fdcUtilization')->name('futilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
