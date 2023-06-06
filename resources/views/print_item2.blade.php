@@ -165,5 +165,4 @@
 
 
 </div>
-<script src="{{asset('/js/lga.js')}}"></script>
 @endsection

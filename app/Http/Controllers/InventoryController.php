@@ -11,7 +11,10 @@ use App\category;
 use App\audit;
 use App\User;
 use App\files;
+use App\supplies;
+use App\stocks;
 use App\requests;
+use App\dctools;
 use Auth;
 use File;
 use Illuminate\Support\Facades\Hash;
@@ -614,5 +617,44 @@ class InventoryController extends Controller
         return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
 
     }
+
+    public function addStock()
+    {
+        $items = inventory::select('id','item_name','category')->distinct('item_name')->get();
+        return view('new_stock',compact('items'));
+    }
+
+
+    public function newSupply(Request $request){
+        $this->validate($request, [
+            'item'=>'required'
+        ]);
+
+        supplies::create([
+            'item_id'=>$request->item,
+            'quantity_supplied'=>$request->quantity_supplied,
+            'date_supplied'=>$request->date_supplied,
+            'supplied_to'=>$request->supplied_to,
+            'supplier'=>$request->supplier,
+            'batchno'=>$request->batchno,
+            'remarks'=>$request->remarks
+        ]);
+
+        $itemstock = stocks::where('item_id',$request->item)->first();
+        if(isset($itemstock)){
+            $itemstock->increment('quantity_remaining',$request->quantity_supplied);
+        }else{
+            stocks::create([
+                'item_id'=>$request->item,
+                'quantity_remaining'=>$request->quantity_supplied
+            ]);
+        }
+
+        session()->flash('message','The item supplied has been added to stock!');
+        return redirect()->back();
+
+    }
+
+
 
 }

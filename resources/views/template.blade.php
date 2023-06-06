@@ -25,7 +25,8 @@
         <div class="nav-wrapper teal">
             <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i
                     class="material-icons">menu</i></a>
-            <a href="{{ url('/') }}" class="brand-logo"><img src="{{ asset('/uploads/' . $site_settings->logo) }}"
+            <a href="{{ url('/') }}" class="brand-logo"><img
+                    src="{{ asset('/uploads/' . $site_settings->logo) }}"
                     alt="{{ $site_settings->organization_name }}" height="60" width="auto"></a>
 
             <ul class="right hide-on-med-and-down">
@@ -111,7 +112,33 @@
                                         <li><a class="waves-effect waves-blue"
                                                 href="{{ url('/update-tagnumbers') }}"><i
                                                     class="material-icons">swap_horiz</i>Change Tag Numbers</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/add-stock') }}"><i
+                                                    class="material-icons">swap_horiz</i>Add New Stock</a></li>
 
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+                @elseif(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTUser')
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">list</i>DCTools Management<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('dctools') }}"><i
+                                                    class="material-icons">swap_horiz</i>All DCTools</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
+                                                    class="material-icons">swap_horiz</i>Add DCTools</a></li>
 
 
                                     </ul>

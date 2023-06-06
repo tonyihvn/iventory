@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Welcome and Home Pages
-Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,User,Observer');
+Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,User,Observer,DCTAdmin,DCTManager,DCTUser');
 
-Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,User,Observer');
+Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,User,Observer,DCTAdmin,DCTManager,DCTUser');
 
 Route::get('/home', 'HomeController@user_dashboard')->name('home')->middleware('auth');
 
@@ -44,8 +44,6 @@ Route::post('item_search','InventoryController@item_search')->name('item_search'
 Route::post('fixItems', 'InventoryController@fixItems')->name('fixItems')->middleware('auth');
 Route::get('update-tagnumbers', 'InventoryController@updateTagnumbers')->name('update-tagnumbers')->middleware('auth');
 Route::post('update-tags', 'InventoryController@updateTags')->name('update-tags')->middleware('auth');
-
-
 
 
 // Item Requests
@@ -76,7 +74,6 @@ Route::get('add_department', 'DepartmentController@create')->name('add_departmen
 // Categories
 Route::resource('categories', 'CategoryController')->middleware('auth');
 
-
 // Units
 Route::resource('units', 'UnitController')->middleware('auth');
 Route::get('add_unit', 'UnitController@create')->name('add_unit')->middleware('role:Admin,Manager');
@@ -90,15 +87,29 @@ Route::get('users', function(){
     return View('users');
 })->middleware('role:Admin,Manager');
 
-/*
-Route::get('edit_user/{id}', function(){
-    return View('edit_user');
-})->middleware('role:Admin');
-*/
-
 Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager');
 Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
 Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager');
+
+
+// STOCKS
+Route::get('add-stock', 'InventoryController@addStock')->name('add-stock')->middleware('role:Admin,Super');
+Route::post('newSupply', 'InventoryController@newSupply')->name('newSupply')->middleware('role:Admin,Super');
+
+
+// DCTOOLS
+Route::resource('dctools', 'DctoolsController')->middleware('auth');
+Route::get('dctools', 'DctoolsController@index')->name('dctools')->middleware('role:Admin,Manager,DCTAdmin,DCTManager,DCTUser');
+Route::get('add-dctool', 'DctoolsController@create')->name('add-dctool')->middleware('role:Admin,Manager,DCTAdmin');
+Route::get('add-dcstock/{dcid}', 'DctoolsController@addDCTStock')->name('add-dcstock')->middleware('role:DCTAdmin,Admin,Super');
+Route::post('newDCTSupply', 'DctoolsController@newDCTSupply')->name('newDCTSupply')->middleware('role:Admin,Super,DCTAdmin');
+Route::get('send-dctools/{dcid}', 'DctoolsController@dcDistribution')->name('send-dctools')->middleware('role:DCTAdmin,Admin,Super');
+Route::post('savedcDistribution', 'DctoolsController@savedcDistribution')->name('savedcDistribution')->middleware('role:Admin,Super,DCTAdmin');
+Route::get('dctreport/{dcid}', 'DctoolsController@dcReport')->name('dctreport')->middleware('role:DCTAdmin,Admin,Super');
+Route::get('dcutilization/{dcid}', 'DctoolsController@dcUtilization')->name('dctutilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
+Route::post('savedcUtilization', 'DctoolsController@savedcUtilization')->name('savedcUtilization')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
+Route::get('futilization/{dcid}', 'DctoolsController@fdcUtilization')->name('futilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
+
 
 // HELP LINK
 Route::get('help', function(){
