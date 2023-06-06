@@ -122,10 +122,30 @@
                             </li>
                         </ul>
                     </li>
-                @elseif(auth()->user()->role == 'Admin' ||
-                        auth()->user()->role == 'DCTAdmin' ||
-                        auth()->user()->role == 'DCTManager' ||
-                        auth()->user()->role == 'DCTUser')
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">list</i>DCTools Management<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('dctools') }}"><i
+                                                    class="material-icons">swap_horiz</i>All DCTools</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
+                                                    class="material-icons">swap_horiz</i>Add DCTools</a></li>
+
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                @elseif(auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTUser')
                     <li class="white">
                         <div class="divider"></div>
                     </li>
