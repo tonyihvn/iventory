@@ -16,6 +16,12 @@
         nav {
             background-color: white !important;
             box-shadow: none !important;
+        }
+
+        .select2 {
+            width: 100%;
+            position: relative !important;
+        }
     </style>
 </head>
 

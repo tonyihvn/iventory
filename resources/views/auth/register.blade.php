@@ -65,13 +65,13 @@
                         </div>
 
                         <div class="input-field col s6">
-                            <select name="facility" id="facility" materialize="material_select">
+                            <select name="facility" id="facility" materialize="material_select" class="select2">
                                 <option value="{{ Auth()->user()->facility }}" selected>Facility</option>
                                 @foreach ($facilities as $facility)
                                     <option value="{{ $facility->id }}">{{ $facility->facility_name }}</option>
                                 @endforeach
                             </select>
-                            <label for="facility">Select Facility</label>
+                            <label for="facility" class="active">Select Facility</label>
                         </div>
 
                     </div>
