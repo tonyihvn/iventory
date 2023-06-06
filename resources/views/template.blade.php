@@ -145,7 +145,7 @@
                             </li>
                         </ul>
                     </li>
-                @elseif(auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTUser')
+                @elseif(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTUser')
                     <li class="white">
                         <div class="divider"></div>
                     </li>
