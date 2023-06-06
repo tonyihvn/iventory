@@ -15,6 +15,6 @@ class dctools extends Model
 
     public function distributions()
     {
-        return $this->hasMany('App\dcdistributions','item_id');
+        return $this->hasMany('App\dcdistributions','item_id','id');
     }
 }
