@@ -66,4 +66,9 @@ class User extends Authenticatable
         return $this->hasMany('App\requests', 'user_id');
     }
 
+    public function facilityName()
+    {
+        return $this->hasOne('App\facilities', 'id','facility');
+    }
+
 }

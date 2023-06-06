@@ -14,7 +14,7 @@
                         <div class="input-field col s12">
                             <select name="item" id="item" materialize="material_select">
                                 <option value='{{ $dctool->id }}'>{{ $dctool->tool_name }} - {{ $dctool->category }}
-                                    ({{ $dctool->stock->quantity_remaining }} in stock)
+                                    ({{ $dctool->stock->quantity_remaining ?? '' }} in stock)
                                 </option>
                             </select>
                             <label for="item">Tool Name</label>
@@ -37,25 +37,28 @@
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <select name="sent_from" id="sent_from" materialize="material_select">
+                            <select name="sent_from" id="sent_from" materialize="material_select" class="select2">
+                                <option value='{{ auth()->user()->facility }}' selected>
+                                    {{ auth()->user()->facilityName->facility_name }}
+                                </option>
                                 @foreach ($facilities as $faci)
                                     <option value='{{ $faci->id }}'>{{ $faci->facility_name }}
                                     </option>
                                 @endforeach
                             </select>
-                            <label for="sent_from">Sent From</label>
+                            <label for="sent_from" class="active">Sent From</label>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <select name="sent_to" id="sent_to" materialize="material_select">
+                            <select name="sent_to" id="sent_to" materialize="material_select" class="select2">
                                 @foreach ($facilities as $faci)
                                     <option value='{{ $faci->id }}'>{{ $faci->facility_name }}
                                     </option>
                                 @endforeach
                             </select>
-                            <label for="sent_to">Sent From</label>
+                            <label for="sent_to" class="active">Sent From</label>
                         </div>
                     </div>
 

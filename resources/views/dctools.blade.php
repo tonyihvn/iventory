@@ -5,7 +5,7 @@
     <div class="row" style="width:98% !important; margin:auto;" id="printable" data-logo="{{ $site_settings->logo }}">
 
         <h4 class=" center">
-            DC Tools
+            Data Collection Tools
         </h4>
 
         @if ($dctools != null)

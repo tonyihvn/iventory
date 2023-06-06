@@ -122,10 +122,13 @@
                             </li>
                         </ul>
                     </li>
+                @elseif(auth()->user()->role == 'Admin' ||
+                        auth()->user()->role == 'DCTAdmin' ||
+                        auth()->user()->role == 'DCTManager' ||
+                        auth()->user()->role == 'DCTUser')
                     <li class="white">
                         <div class="divider"></div>
                     </li>
-                @elseif(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTUser')
                     <li class="white">
                         <ul class="collapsible collapsible-accordion">
 
@@ -419,6 +422,10 @@
         } else {
             $('#new_username').hide();
         }
+    });
+
+    $(document).ready(function() {
+        $('.select2').select2();
     });
 </script>
 
