@@ -167,7 +167,7 @@ class DctoolsController extends Controller
             'sentfrom_state'=>$fromstate
         ]);
 
-        if($fromstate!="WAREHOUSE"){
+        if($fromstate=="WAREHOUSE"){
         dcstocks::where('item_id',$request->item)->decrement('quantity_remaining',$request->quantity_sent);
         }
         session()->flash('message','The item was distributed successfully! <br>');
