@@ -19,7 +19,7 @@ class DctoolsController extends Controller
      */
     public function index()
     {
-        $dctools = dctools::all();
+        $dctools = dctools::with('distributions')->get();
         return view('dctools',compact('dctools'));
     }
 

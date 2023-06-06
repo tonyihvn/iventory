@@ -117,7 +117,7 @@ class HomeController extends Controller
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
             return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
         }else if(auth()->user()->role=="DCTAdmin" || auth()->user()->role=="DCTManager" || auth()->user()->role=="DCTUser"){
-            $dctools = dctools::all();
+            $dctools = dctools::with('distributions')->get();
             return view('dctools',compact('dctools'));
         }else{
             $categories = category::select('id','category_name')->get();

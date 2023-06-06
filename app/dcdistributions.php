@@ -27,4 +27,9 @@ class dcdistributions extends Model
     {
         return $this->hasOne('App\facilities','id','sent_to');
     }
+
+    public function dctools()
+    {
+        return $this->belongsTo('App\dctools','id','item_id');
+    }
 }
