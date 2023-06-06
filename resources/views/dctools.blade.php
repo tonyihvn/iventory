@@ -37,7 +37,7 @@
 
                             <td>{{ $dc->tool_name }}</td>
                             <td>{{ $dc->category }}</td>
-                            @if (auth()->user()->role == 'DCTManager')
+                            @if (auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTUser')
                                 <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : '' }}
                                 </td>
                             @else
@@ -74,12 +74,14 @@
                                                 data-position="top" data-tooltip="Send / Transfer to Facilities"><i
                                                     class="material-icons">repeat</i></a>
                                         </li>
-                                        <li>
-                                            <a href="{{ url('/dctreport/' . $dc->id) }}"
-                                                class="btn-floating btn-small waves-effect cyan waves-light tooltipped"
-                                                data-position="top" data-tooltip="View Item Report"><i
-                                                    class="material-icons">list</i></a>
-                                        </li>
+                                        @if (Auth()->user()->role != 'DCTUser')
+                                            <li>
+                                                <a href="{{ url('/dctreport/' . $dc->id) }}"
+                                                    class="btn-floating btn-small waves-effect cyan waves-light tooltipped"
+                                                    data-position="top" data-tooltip="View Item Report"><i
+                                                        class="material-icons">list</i></a>
+                                            </li>
+                                        @endif
 
 
                                     </ul>
