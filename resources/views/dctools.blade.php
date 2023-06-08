@@ -43,7 +43,7 @@
                             @elseif (auth()->user()->role == 'DCTUser')
                                 <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : '' }}
                                 </td>
-                            @else
+                            @elseif (auth()->user()->role == 'Admin')
                                 <td>{{ $dc->stock->quantity_remaining ?? '' }}</td>
                             @endif
 
