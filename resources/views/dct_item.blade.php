@@ -8,7 +8,7 @@
             <b>ITEM NAME: <br> {{ $item->tool_name }} </b>
 
             <b>Category: {{ $item->category }}</b> <br>
-            @if (auth()->user()->role = 'Admin' || auth()->user()->role == 'DCTAdmin')
+            @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
                 <small>
                     <i>Stock Balance:
                         {{ $item->stock->quantity_remaining ?? '' }}</i>
@@ -17,7 +17,7 @@
             <p>{{ $item->description }}</p>
         </div>
         <hr>
-        @if (auth()->user()->role = 'Admin' || auth()->user()->role == 'DCTAdmin')
+        @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
             <b style="text-align: center">Supplies</b>
 
             <table class="table display card">
@@ -47,7 +47,7 @@
         @endif
         <hr>
         <b>Item Distributiion</b><br>
-        @if (auth()->user()->role = 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'FCT')
+        @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'FCT')
             <b>FCT</b>
             <table style="background-color: #ccc">
                 <tr>
@@ -97,7 +97,7 @@
             </table>
         @endif
 
-        @if (auth()->user()->role = 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'Nasarawa')
+        @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'Nasarawa')
             <hr>
             <b>Nasarawa</b>
             <table style="background-color: #ccc">
@@ -140,7 +140,7 @@
                 </tbody>
             </table>
         @endif
-        @if (auth()->user()->role = 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'Rivers')
+        @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'Rivers')
             <hr>
             <b>Rivers</b>
             <table style="background-color: #ccc">
@@ -182,7 +182,7 @@
                 </tbody>
             </table>
         @endif
-        @if (auth()->user()->role = 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'Katsina')
+        @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin' || auth()->user()->state == 'Katsina')
             <hr>
             <b>Katsina</b>
             <table style="background-color: #ccc">
