@@ -17,6 +17,7 @@
             <thead>
                 <tr>
                     <th>Date Sent</th>
+                    <th>Tool Name</th>
                     <th>Quantity</th>
                     <th>From</th>
                     <th>Sender/Reciever</th>
@@ -27,6 +28,7 @@
                 @foreach ($distribution as $itd)
                     <tr>
                         <td>{{ $itd->date_sent }}</td>
+                        <td>{{ $itd->toolName->tool_name }}</td>
                         <td>{{ $itd->quantity_sent }}</td>
                         <td>{{ $itd->sentFrom->facility_name }}</td>
                         <td><small>{{ $itd->sent_by }}/{{ $itd->received_by }}</small></td>
