@@ -17,4 +17,6 @@ class dctoolutilizations extends Model
     {
         return $this->hasOne('App\dctools','id','item_id');
     }
+
+
 }

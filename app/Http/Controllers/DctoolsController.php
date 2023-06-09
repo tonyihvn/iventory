@@ -233,4 +233,19 @@ class DctoolsController extends Controller
 
     }
 
+    public function newDCTReport(){
+        $dctools = dctools::select('id','tool_name','category')->get();
+        $facilities = facilities::select('id','facility_name')->get();
+
+        return view('generate_dctreport',compact('dctools','facilities'));
+    }
+
+    public function generateDCTReport(Request $request){
+        $from =$request->date_from;
+        $to = $request->date_to;
+        $utilization = dctoolutilizations::whereIn('item_id', $request->items)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->orWhereIn('facility_id', $request->facilities)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+
+        return view('dct_report',compact('utilization','from','to'));
+    }
+
 }

@@ -109,6 +109,9 @@ Route::get('dctreport/{dcid}', 'DctoolsController@dcReport')->name('dctreport')-
 Route::get('dcutilization/{dcid}', 'DctoolsController@dcUtilization')->name('dctutilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 Route::post('savedcUtilization', 'DctoolsController@savedcUtilization')->name('savedcUtilization')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 Route::get('futilization/{dcid}', 'DctoolsController@fdcUtilization')->name('futilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
+Route::get('new-dctreport', 'DctoolsController@newDCTReport')->name('new-dctreport')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
+Route::post('generateDCTReport', 'DctoolsController@generateDCTReport')->name('generateDCTReport')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
+
 
 
 // HELP LINK

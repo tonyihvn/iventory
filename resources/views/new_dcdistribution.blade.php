@@ -58,7 +58,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <label for="sent_to" class="active">Sent From</label>
+                            <label for="sent_to" class="active">Send To</label>
                         </div>
                     </div>
 

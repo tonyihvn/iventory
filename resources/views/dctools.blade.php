@@ -38,13 +38,13 @@
                             <td>{{ $dc->tool_name }}</td>
                             <td>{{ $dc->category }}</td>
                             @if (auth()->user()->role == 'DCTManager')
-                                <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : '' }}
+                                <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
                                 </td>
                             @elseif (auth()->user()->role == 'DCTUser')
-                                <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : '' }}
+                                <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
                                 </td>
-                            @elseif (auth()->user()->role == 'Admin')
-                                <td>{{ $dc->stock->quantity_remaining ?? '' }}</td>
+                            @elseif (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
+                                <td>{{ $dc->stock->quantity_remaining ?? 0 }}</td>
                             @endif
 
                             <td>
@@ -58,28 +58,28 @@
                                     <ul style="top: 0px !important">
                                         @if (Auth()->user()->role == 'Admin' || Auth()->user()->role == 'DCTAdmin')
                                             <li>
-                                                <a href="{{ url('/add-dcstock/' . $dc->id) }}"
+                                                <a href="{{ url('/add-dcstock/' . $dc->id) }}" target="_blank"
                                                     class="btn-floating btn-small waves-effect blue waves-light tooltipped"
                                                     data-position="top" data-tooltip="Add to Stock"><i
                                                         class="material-icons">add</i></a>
                                             </li>
                                         @endif
                                         <li>
-                                            <a href="{{ url('/dcutilization/' . $dc->id) }}"
+                                            <a href="{{ url('/dcutilization/' . $dc->id) }}" target="_blank"
                                                 class="btn-floating btn-small waves-effect purple waves-light tooltipped"
                                                 data-position="top" data-tooltip="Enter Utilization"><i
                                                     class="material-icons">settings</i></a>
                                         </li>
 
                                         <li>
-                                            <a href="{{ url('/send-dctools/' . $dc->id) }}"
+                                            <a href="{{ url('/send-dctools/' . $dc->id) }}" target="_blank"
                                                 class="btn-floating btn-small waves-effect orange waves-light tooltipped"
                                                 data-position="top" data-tooltip="Send / Transfer to Facilities"><i
                                                     class="material-icons">repeat</i></a>
                                         </li>
                                         @if (Auth()->user()->role != 'DCTUser')
                                             <li>
-                                                <a href="{{ url('/dctreport/' . $dc->id) }}"
+                                                <a href="{{ url('/dctreport/' . $dc->id) }}" target="_blank"
                                                     class="btn-floating btn-small waves-effect cyan waves-light tooltipped"
                                                     data-position="top" data-tooltip="View Item Report"><i
                                                         class="material-icons">list</i></a>

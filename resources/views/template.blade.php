@@ -144,6 +144,8 @@
                                                     class="material-icons">swap_horiz</i>All DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
                                                     class="material-icons">swap_horiz</i>Add DCTools</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
+                                                    class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
 
 
                                     </ul>
@@ -168,6 +170,8 @@
                                                     class="material-icons">swap_horiz</i>All DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
                                                     class="material-icons">swap_horiz</i>Add DCTools</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
+                                                    class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
 
 
                                     </ul>
