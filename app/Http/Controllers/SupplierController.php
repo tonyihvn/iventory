@@ -14,7 +14,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $suppliers = supplier::all();
+        return view('suppliers',compact('suppliers'));
     }
 
     /**
@@ -24,7 +25,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('add_supplier');
     }
 
     /**
@@ -35,7 +36,18 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        supplier::create([
+            'supplier_name'=>$request->supplier_name,
+            'company_name'=>$request->company_name,
+            'phone_number'=>$request->phone_number,
+            'email'=>$request->email,
+            'items'=>$request->items,
+            'category'=>$request->category
+        ]);
+        session()->flash('message','The new supplier has been added to database! <br>');
+
+        return view('suppliers');
+
     }
 
     /**
@@ -78,8 +90,18 @@ class SupplierController extends Controller
      * @param  \App\supplier  $supplier
      * @return \Illuminate\Http\Response
      */
-    public function destroy(supplier $supplier)
+    public function destroy(Request $request, $id)
     {
-        //
+        supplier::findOrFail($id)->delete();
+
+        audit::create([
+            'action'=>"Deleted Supplier Transaction ",
+            'description'=>'A supplier was deleted',
+            'doneby'=>Auth::user()->id
+        ]);
+
+        session()->flash('message','The the selected item has been successfully deleted.');
+
+        return redirect()->back();
     }
 }

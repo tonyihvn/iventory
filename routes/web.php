@@ -27,8 +27,8 @@ Route::resource('settings', 'SettingsController')->middleware('role:Admin');
 Route::get('edit_settings/{id}', 'SettingsController@edit')->name('edit_settings')->middleware('role:Admin');
 
 // Suppliers
-Route::resource('suppliers', 'SupplierController')->middleware('role:Admin');
-Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->middleware('role:Admin');
+Route::resource('suppliers', 'SupplierController')->middleware('role:Admin,DCTAdmin');
+Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->middleware('role:Admin,DCTAdmin');
 
 // Inventories
 Route::resource('inventories', 'InventoryController')->middleware('auth');
@@ -111,7 +111,10 @@ Route::post('savedcUtilization', 'DctoolsController@savedcUtilization')->name('s
 Route::get('futilization/{dcid}', 'DctoolsController@fdcUtilization')->name('futilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 Route::get('new-dctreport', 'DctoolsController@newDCTReport')->name('new-dctreport')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 Route::post('generateDCTReport', 'DctoolsController@generateDCTReport')->name('generateDCTReport')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
-
+Route::post('bulkToolAction', 'DctoolsController@bulkToolAction')->name('bulkToolAction')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
+Route::post('saveBulkdcDistribution', 'DctoolsController@saveBulkdcDistribution')->name('saveBulkdcDistribution')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
+Route::post('newBulkDCTSupply', 'DctoolsController@newBulkDCTSupply')->name('newBulkDCTSupply')->middleware('role:Admin,Super,DCTAdmin');
+Route::get('confirm-delivery', 'DctoolsController@confirmDelivery')->name('confirm-delivery')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 
 
 // HELP LINK

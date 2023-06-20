@@ -526,16 +526,18 @@ class InventoryController extends Controller
     public function requests()
     {
         $facilities = facilities::select('id','facility_name')->get();
-
+        $dctools = dctools::select('tool_name')->get();
         if(Auth::user()->role=="Admin"){
             $requests = requests::with('user')->paginate(50);
-        }else if(Auth::user()->role=="Manager"){
+        }elseif(Auth::user()->role=="DCTAdmin"){
+            $requests = requests::where('type','DCT Tools')->with('user')->paginate(50);
+        }elseif(Auth::user()->role=="Manager"){
             $requests = requests::with('user')->where('state',auth()->user()->state)->paginate(50);
         }else{
-            $requests = requests::where('user_id', auth()->user()->id)->paginate(50)->with('users');
+            $requests = requests::where('user_id', auth()->user()->id)->with('user')->paginate(50);
         }
         $users = User::select('id','name','facility','department','unit')->get();
-        return view('requests',compact('requests'))->with(['users'=>$users,'facilities'=>$facilities]);
+        return view('requests',compact('requests','dctools'))->with(['users'=>$users,'facilities'=>$facilities]);
     }
 
     public function request($id)
@@ -560,6 +562,7 @@ class InventoryController extends Controller
             'request_reason'=>$request->request_reason,
             'comments'=>$request->comments,
             'remarks'=>'',
+            'type'=>$request->type
         ]);
 
         audit::create([

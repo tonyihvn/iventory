@@ -18,12 +18,13 @@ class CreateRequestsTable extends Migration
             $table->string('item_name');
             $table->string('quantity_requested')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->string('location')->nullable();
-            $table->string('state')->nullable();
-            $table->string('request_status')->nullable();
-            $table->text('request_reason')->nullable();
-            $table->string('comments')->nullable();
-            $table->string('remarks')->nullable();
+            $table->string('location',50)->nullable();
+            $table->string('state',50)->nullable();
+            $table->string('request_status',50)->nullable();
+            $table->text('request_reason',150)->nullable();
+            $table->string('comments',100)->nullable();
+            $table->string('remarks',150)->nullable();
+            $table->string('type',30)->nullable();
             $table->timestamps();
         });
     }

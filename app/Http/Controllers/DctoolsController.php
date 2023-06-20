@@ -8,6 +8,7 @@ use App\dcsupplies;
 use App\facilities;
 use App\dcdistributions;
 use App\dctoolutilizations;
+use App\supplier;
 use Illuminate\Http\Request;
 
 class DctoolsController extends Controller
@@ -100,7 +101,9 @@ class DctoolsController extends Controller
 
     public function addDCTStock($dcid){
         $item = dctools::select('id','tool_name','category')->where('id',$dcid)->first();
-        return view('new_dctstock',compact('item'));
+        $suppliers = supplier::select('supplier_name','company_name')->get();
+
+        return view('new_dctstock',compact('item','suppliers'));
     }
 
     public function dcDistribution($dcid){
@@ -140,6 +143,36 @@ class DctoolsController extends Controller
 
     }
 
+    public function newBulkDCTSupply(Request $request){
+
+        foreach($request->items as $key=>$item){
+
+            dcsupplies::create([
+                'item_id'=>$item,
+                'quantity_supplied'=>$request->quantity_supplied[$key],
+                'date_supplied'=>$request->date_supplied,
+                'supplied_to'=>$request->supplied_to,
+                'supplier'=>$request->supplier,
+                'batchno'=>$request->batchno,
+                'remarks'=>$request->remarks
+            ]);
+
+            $itemstock = dcstocks::where('item_id',$item)->first();
+            if(isset($itemstock)){
+                $itemstock->increment('quantity_remaining',$request->quantity_supplied[$key]);
+            }else{
+                dcstocks::create([
+                    'item_id'=>$item,
+                    'quantity_remaining'=>$request->quantity_supplied[$key]
+                ]);
+            }
+        }
+
+        session()->flash('message','The item supplied has been added to stock! <br>');
+        return redirect()->route('dctools');
+
+    }
+
     public function savedcDistribution(Request $request){
 
         $documentname = '';
@@ -161,6 +194,7 @@ class DctoolsController extends Controller
             'sent_to'=>$request->sent_to,
             'documents'=>$documentname,
             'remarks'=>$request->remarks,
+            'batchno'=>$request->batchno,
             'sent_by'=>$request->sent_by,
             'received_by'=>$request->received_by,
             'sentto_state'=>$state,
@@ -172,6 +206,45 @@ class DctoolsController extends Controller
         }
         session()->flash('message','The item was distributed successfully! <br>');
         return redirect()->back();
+
+    }
+
+    public function saveBulkdcDistribution(Request $request){
+
+        $documentname = '';
+
+        if($request->hasFile('documents'))
+        {
+            $file = $request->file('documents');
+            $documentname = $file->getClientOriginalName();
+            $file->move('uploads/', $documentname);
+        }
+
+        $state = facilities::where('id',$request->sent_to)->first()->state;
+        $fromstate = facilities::where('id',$request->sent_from)->first()->state;
+
+        foreach ($request->items as $key => $item) {
+            dcdistributions::create([
+                'item_id'=>$item,
+                'quantity_sent'=>$request->quantity_sent[$key],
+                'date_sent'=>$request->date_sent,
+                'sent_from'=>$request->sent_from,
+                'sent_to'=>$request->sent_to,
+                'documents'=>$documentname,
+                'remarks'=>$request->remarks,
+                'batchno'=>$request->batchno,
+                'sent_by'=>$request->sent_by,
+                'received_by'=>$request->received_by,
+                'sentto_state'=>$state,
+                'sentfrom_state'=>$fromstate
+            ]);
+
+            if($fromstate=="WAREHOUSE"){
+            dcstocks::where('item_id',$item)->decrement('quantity_remaining',$request->quantity_sent[$key]);
+            }
+        }
+        session()->flash('message','The item(s) was sent successfully! <br>');
+        return redirect()->route('dctools');
 
     }
 
@@ -230,12 +303,20 @@ class DctoolsController extends Controller
         $utilization = dctoolutilizations::where('facility_id',$dcid)->get();
 
         return view('fdcutilization',compact('distribution','utilization'));
-
     }
+
 
     public function newDCTReport(){
         $dctools = dctools::select('id','tool_name','category')->get();
-        $facilities = facilities::select('id','facility_name')->get();
+        if(Auth()->user()->role=="DCTManager"){
+            $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
+
+        }if(Auth()->user()->role=="DCTUser"){
+            $facilities = facilities::select('id','facility_name')->where('id',Auth()->user()->facility)->get();
+        }
+        else{
+            $facilities = facilities::select('id','facility_name')->get();
+        }
 
         return view('generate_dctreport',compact('dctools','facilities'));
     }
@@ -243,9 +324,56 @@ class DctoolsController extends Controller
     public function generateDCTReport(Request $request){
         $from =$request->date_from;
         $to = $request->date_to;
-        $utilization = dctoolutilizations::whereIn('item_id', $request->items)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->orWhereIn('facility_id', $request->facilities)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
 
+        if($request->items[0]== "All" && $request->facilities[0]!= "All"){
+            $utilization = dctoolutilizations::whereIn('facility_id', $request->facilities)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }elseif($request->facilities[0]== "All" && $request->items[0]!= "All"){
+            $utilization = dctoolutilizations::whereIn('item_id', $request->items)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }elseif($request->facilities[0]== "All" && $request->items[0]== "All"){
+
+            $utilization = dctoolutilizations::whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }else{
+        $utilization = dctoolutilizations::whereIn('item_id', $request->items)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->orWhereIn('facility_id', $request->facilities)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }
         return view('dct_report',compact('utilization','from','to'));
+    }
+
+    public function bulkToolAction(Request $request){
+        if(Auth()->user()->role=="DCTManager"){
+            $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
+
+        }if(Auth()->user()->role=="DCTUser"){
+            $facilities = facilities::select('id','facility_name')->where('id',Auth()->user()->facility)->get();
+        }
+        else{
+            $facilities = facilities::select('id','facility_name')->get();
+        }
+        $dctools = dctools::select('id','tool_name','category')->whereIn('id',$request->tool_name)->get();
+
+        if($request->action=="Distribution"){
+            return view('new_dcdistribution_bulk',compact('dctools','facilities'));
+
+        }else{
+            $suppliers = supplier::select('supplier_name','company_name')->get();
+            return view('new_bulkdctstock',compact('dctools','facilities','suppliers'));
+        }
+
+
+    }
+
+    public function confirmDelivery(){
+
+        if(Auth()->user()->role=="DCTManager"){
+            $distribution = dcdistributions::where('sent_to',Auth()->user()->state)->get();
+
+        }if(Auth()->user()->role=="DCTUser"){
+            $distribution = dcdistributions::where('sent_to',Auth()->user()->facility)->get();
+        }
+        else{
+            $distribution = dcdistributions::all();
+        }
+        return view('confirm-dctools',compact('distribution'));
+
     }
 
 }

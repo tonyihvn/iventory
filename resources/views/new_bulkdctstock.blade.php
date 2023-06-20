@@ -2,42 +2,44 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="card col m12" style="margin-top:20px; padding: 35px;">
+            <div class="card col m10 offset-m1" style="margin-top:20px; padding: 35px;">
 
                 <h3 class="card-header text-center" style="text-align:center;">Add New Supply</h3>
 
 
-                <form method="POST" action="{{ route('newDCTSupply') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('newBulkDCTSupply') }}" enctype="multipart/form-data">
                     @csrf
+                    @foreach ($dctools as $dctool)
+                        <div class="row">
+                            <div class="input-field col s10">
+                                <select name="items[]" id="item" materialize="material_select">
 
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select name="item" id="item" materialize="material_select">
+                                    <option value='{{ $dctool->id }}'>{{ $dctool->tool_name }} - {{ $dctool->category }}
+                                        ({{ $dctool->stock->quantity_remaining ?? '' }} in stock)
+                                    </option>
 
 
-                                <option value='{{ $item->id }}'>{{ $item->tool_name }} - {{ $item->category }}</option>
+                                </select>
+                                <label for="item">Tool Name</label>
+                            </div>
+                            <div class="input-field col s2">
+                                <input id="quantity_supplied" type="number" class="validate" name="quantity_supplied[]"
+                                    required>
+                                <label for="quantity_supplied">Quantity Supplied</label>
+                            </div>
 
-                            </select>
-                            <label for="item">Tool Name</label>
                         </div>
-
-
-                    </div>
+                    @endforeach
 
 
                     <div class="row">
-                        <div class="input-field col s4">
+                        <div class="input-field col s6">
                             <input id="date_supplied" type="date" class="datepicker" name="date_supplied">
                             <label for="date_supplied">Date Supplied</label>
                         </div>
 
-                        <div class="input-field col s4">
-                            <input id="quantity_supplied" type="number" class="validate" name="quantity_supplied">
-                            <label for="quantity_supplied">Quantity Supplied</label>
-                        </div>
 
-                        <div class="input-field col s4">
-
+                        <div class="input-field col s6">
                             <select name="supplier" id="supplier" materialize="material_select" class="select2">
                                 <option value='NA' selected>
                                     NA
@@ -48,7 +50,6 @@
                                     </option>
                                 @endforeach
                             </select>
-
                             <label for="supplier" class="active">Supplier</label>
                         </div>
                     </div>

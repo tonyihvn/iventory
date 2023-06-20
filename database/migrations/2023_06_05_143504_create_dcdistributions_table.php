@@ -28,9 +28,15 @@ class CreateDcdistributionsTable extends Migration
             $table->foreign('sent_to')->references('id')->on('facilities')->onDelete('cascade');
             $table->string('sentto_state',30)->nullable();
             $table->string('documents',80)->nullable();
-            $table->string('remarks')->nullable();
+            $table->string('remarks',80)->nullable();
             $table->string('sent_by')->nullable();
             $table->string('received_by')->nullable();
+
+            $table->string('batchno',80)->nullable();
+            $table->string('rdocuments',80)->nullable();
+            $table->string('rremarks',80)->nullable();
+            $table->double('quantity_received',10,2)->default(0)->nullable();
+
             $table->timestamps();
         });
     }

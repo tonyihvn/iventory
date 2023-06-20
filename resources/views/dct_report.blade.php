@@ -1,11 +1,11 @@
 @extends('largesheet_template')
 @section('content')
     <div style="width: 100% !important; overflow: visible;">
-        <b style="text-align: center;">DCT REPORT {{ $utilization[0]->remarks }}. <br> FROM {{ $from }} TO
+        <b style="text-align: center;">DCT REPORT {{ $utilization[0]->remarks ?? '' }}. <br> FROM {{ $from }} TO
             {{ $to }}</b> <small><i>Key: Qty = Quantity, St. Bal. = Stock Balance</i></small>
 
         <hr>
-        <table id="products" class="print_table display striped bordered highlight" style="font-size: 0.8em;">
+        <table id="products" class="display striped bordered highlight" style="font-size: 0.8em;">
             <thead>
                 <tr>
                     <th rowspan="2">DCT Tool Name</th>

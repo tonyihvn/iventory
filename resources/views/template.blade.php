@@ -144,6 +144,11 @@
                                                     class="material-icons">swap_horiz</i>All DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
                                                     class="material-icons">swap_horiz</i>Add DCTools</a></li>
+                                        <li><a class="waves-effect waves-green"
+                                                href="{{ url('confirm-delivery') }}"><i
+                                                    class="material-icons">swap_horiz</i>Confirm Item Delivery</a></li>
+                                        <li><a class="waves-effect waves-green" href="{{ url('requests') }}"><i
+                                                    class="material-icons">swap_horiz</i>Request for DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
                                                     class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
 
@@ -170,6 +175,11 @@
                                                     class="material-icons">swap_horiz</i>All DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
                                                     class="material-icons">swap_horiz</i>Add DCTools</a></li>
+                                        <li><a class="waves-effect waves-green"
+                                                href="{{ url('confirm-delivery') }}"><i
+                                                    class="material-icons">swap_horiz</i>Confirm Item Delivery</a></li>
+                                        <li><a class="waves-effect waves-green" href="{{ url('requests') }}"><i
+                                                    class="material-icons">swap_horiz</i>Request for DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
                                                     class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
 
@@ -456,6 +466,17 @@
 
     $(document).ready(function() {
         $('.select2').select2();
+    });
+
+    $("#type").change(function() {
+
+        var type = $('select[name=type] option').filter(':selected').val();
+
+        if (type == "DCT Tools") {
+            $("#dctool").attr("id", "dctools");
+        } else {
+            $("#dctools").attr("id", "dctool");
+        }
     });
 </script>
 
