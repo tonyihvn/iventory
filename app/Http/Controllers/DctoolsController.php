@@ -340,11 +340,12 @@ class DctoolsController extends Controller
             $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }elseif($request->items[0]== "Adult"){
             $dctoolss = dctools::select('id')->where('category','Adult')->get()->toArray();
-            $utilization = dctoolutilizations::whereRaw(' BETWEEN dated_from AND dated_to', [$from, $to])->get();
+            $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }else{
         $utilization = dctoolutilizations::whereIn('item_id', $request->items)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->orWhereIn('facility_id', $request->facilities)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }
-        return view('dct_report',compact('utilization','from','to'));
+        dd($utilization);
+        // return view('dct_report',compact('utilization','from','to'));
     }
 
     public function bulkToolAction(Request $request){
