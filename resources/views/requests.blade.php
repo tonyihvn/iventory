@@ -4,7 +4,7 @@
 
     <div class="row" style="width:98%; margin:auto;">
         <a href="{{ url('/requests') }}" class="btn green right">All Requests</a>
-        @if (!auth()->user()->role == 'Admin' || !auth()->user()->role == 'DCTAdmin')
+        @if (auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTAdmin')
             <div class="col s12 l8 offset-l2">
                 <h3 class="card-header text-center" style="text-align:center;">New Item Request Form</h3>
 

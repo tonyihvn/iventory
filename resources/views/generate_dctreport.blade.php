@@ -15,6 +15,9 @@
 
                             <select name="items[]" id="items" materialize="material_select" class="select2" multiple>
                                 <option value="All">All Tools</option>
+                                <option value="OVC">OVC</option>
+                                <option value="Adult">Adult</option>
+                                <option value="Paediatrics">Paediatrics</option>
                                 @foreach ($dctools as $dctool)
                                     <option value='{{ $dctool->id }}'>{{ $dctool->tool_name }} - {{ $dctool->category }}
                                     </option>
@@ -42,6 +45,10 @@
                         <div class="input-field col s12">
                             <select name="facilities[]" id="facilities" materialize="material_select" class="select2"
                                 multiple>
+                                <option value="FCT">FCT</option>
+                                <option value="Rivers">Rivers</option>
+                                <option value="Nasarawa">Nasarawa</option>
+                                <option value="Katsina">Katsina</option>
                                 <option value="All">All Facilities</option>
                                 <option value='{{ auth()->user()->facility }}' selected>
                                     {{ auth()->user()->facilityName->facility_name }}

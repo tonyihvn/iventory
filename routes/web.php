@@ -115,6 +115,7 @@ Route::post('bulkToolAction', 'DctoolsController@bulkToolAction')->name('bulkToo
 Route::post('saveBulkdcDistribution', 'DctoolsController@saveBulkdcDistribution')->name('saveBulkdcDistribution')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
 Route::post('newBulkDCTSupply', 'DctoolsController@newBulkDCTSupply')->name('newBulkDCTSupply')->middleware('role:Admin,Super,DCTAdmin');
 Route::get('confirm-delivery', 'DctoolsController@confirmDelivery')->name('confirm-delivery')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
+Route::post('saveConfirmation', 'DctoolsController@saveConfirmation')->name('saveConfirmation')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 
 
 // HELP LINK

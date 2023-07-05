@@ -332,6 +332,15 @@ class DctoolsController extends Controller
         }elseif($request->facilities[0]== "All" && $request->items[0]== "All"){
 
             $utilization = dctoolutilizations::whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }elseif($request->items[0]== "OVC"){
+            $dctoolss = dctools::select('id')->where('category','OVC')->get()->toArray();
+            $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }elseif($request->items[0]== "Paediatrics"){
+            $dctoolss = dctools::select('id')->where('category','Paediatrics')->get()->toArray();
+            $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
+        }elseif($request->items[0]== "Adult"){
+            $dctoolss = dctools::select('id')->where('category','Adult')->get()->toArray();
+            $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }else{
         $utilization = dctoolutilizations::whereIn('item_id', $request->items)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->orWhereIn('facility_id', $request->facilities)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }
@@ -374,6 +383,29 @@ class DctoolsController extends Controller
         }
         return view('confirm-dctools',compact('distribution'));
 
+    }
+
+    public function saveConfirmation(Request $request){
+        $documentname = '';
+
+        if($request->hasFile('documents'))
+        {
+            $file = $request->file('documents');
+            $documentname = $file->getClientOriginalName();
+            $file->move('uploads/', $documentname);
+        }
+
+        foreach ($request->tool_name as $key => $item) {
+            dcdistributions::where('id',$item)->update([
+                'quantity_received' => $request->qty_recieved[$key],
+                'rremarks' => $request->remarks,
+                'rdocuments'=>$documentname,
+             ]);
+
+        }
+
+        session()->flash('message','Item reciept confirmation has been saved!');
+        return redirect()->route('confirm-delivery');
     }
 
 }

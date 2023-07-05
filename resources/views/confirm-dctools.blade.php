@@ -21,7 +21,7 @@
 
         <b style="text-align: center">Tools Recieved</b>
 
-        <form action="{{ url('confirmDelivery') }}" method="POST">
+        <form action="{{ url('saveConfirmation') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="row">
@@ -63,7 +63,7 @@
                         <th>From</th>
                         <th>Batch Number</th>
                         <th>Qty Recieved</th>
-                        <th>Note</th>
+                        <th>Notes</th>
 
                     </tr>
                 </thead>
@@ -83,8 +83,16 @@
                                 <input type="text" class="iselect" name="qty_recieved[]" id="qtyr{{ $itd->id }}"
                                     value="{{ $itd->quantity_sent }}"><label for="qtyr{{ $itd->id }}"></label>
                             </td>
-                            <td><a href="{{ asset('uploads/' . $itd->documents) }}"
+                            <td>    @if($itd->documents!="")
+                                    S: <a href="{{ asset('uploads/' . $itd->documents) }}"
                                     target="_blank">{{ $itd->documents }}</a>
+                                    @endif
+                                    @if($itd->rdocuments!="")
+                                    <hr>R:
+                                    <a href="{{ asset('uploads/' . $itd->rdocuments) }}"
+                                        target="_blank">{{ $itd->rdocuments }}</a>
+                                    @endif
+
                             </td>
                         </tr>
                     @endforeach
