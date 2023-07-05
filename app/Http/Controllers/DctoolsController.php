@@ -339,6 +339,7 @@ class DctoolsController extends Controller
             $dctoolss = dctools::select('id')->where('category','Paediatrics')->get()->toArray();
             $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }elseif($request->items[0]== "Adult"){
+            dd($request->items[0]);
             $dctoolss = dctools::select('id')->where('category','Adult')->get()->toArray();
             $utilization = dctoolutilizations::whereIn('item_id', $dctoolss)->whereRaw('? BETWEEN dated_from AND dated_to', [$from, $to])->get();
         }else{
