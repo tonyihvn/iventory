@@ -455,7 +455,7 @@
 
 <script>
     $('#new_username').hide();
-
+    $('#dctool_select').hide();
     $('#user').change(function() {
         if ($(this).val() == 0) {
             $('#new_username').toggle();
@@ -473,9 +473,13 @@
         var type = $('select[name=type] option').filter(':selected').val();
 
         if (type == "DCT Tools") {
-            $("#dctool").attr("id", "dctools");
+            $("#dctool_select").show();
+            $("#gadgets").hide();
+            $("#quantity_requested").hide();
         } else {
-            $("#dctools").attr("id", "dctool");
+            $("#dctool_select").hide();
+            $("#gadgets").show();
+            $("#quantity_requested").show();
         }
     });
 </script>

@@ -5,13 +5,15 @@
 
         <table class="striped">
             <tr>
-                <td style="width:35%;">Item Name: <br>
-                    <h4>{{ $item->item_name }}</h4>
+                <td style="width:80%;"><b>Item Name: </b><br>
+                    {{ $item->item_name }}
                 </td>
-                <td>Quantity Needed: <br>
-                    <h4>{{ $item->quantity_requested }}</h4>
+                <td><b>Quantity Needed:</b> <br>
+                    {{ $item->quantity_requested }}
                 </td>
             </tr>
+        </table>
+        <table>
 
             <tr>
                 <td colspan="2"><strong>Reason:</strong> <br> {{ $item->request_reason }}</td>
@@ -22,7 +24,7 @@
 
             <tr>
                 <td><b>Date Requested: </b>{{ $item->created_at }}</td>
-                <td>Location To Be Used: {{ \App\facilities::where('id', $item->location)->first()->facility_name }}</td>
+                <td>Location To Be Used: {{ $item->location }}</td>
             </tr>
 
             <tr>
@@ -61,7 +63,7 @@
                                 <select name="request_status" id="request_status" materialize="material_select">
                                     <option value="{{ $item->request_status }}" selected>{{ $item->request_status }}
                                     </option>
-                                    @if (auth()->user()->role == 'Admin')
+                                    @if (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
                                         <option value="Recieved">Recieved</option>
                                         <option value="Processing">Processing</option>
                                         <option value="Delivered">Delivered</option>

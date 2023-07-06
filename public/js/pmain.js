@@ -10,8 +10,8 @@ $(document).ready(function(){
       }
     );
     // START OPEN
-    $('.button-collapse').sideNav('hide');   
-    
+    $('.button-collapse').sideNav('hide');
+
     // CONTROL ITEM SPECS HEADING
     $(".spechead").hide();
 
@@ -19,9 +19,9 @@ $(document).ready(function(){
     $(document).on("click", ".select-wrapper", function (event) {
         event.stopPropagation();
     });
-    
+
     //INITIALIZE SELECT2
-    
+
     $('#search_product').select2({width: "100%"});
 
     $('#keyword').select2({width: "100%"});
@@ -29,9 +29,9 @@ $(document).ready(function(){
     // $('select').material_select();
 
     setTimeout(function(){$('select').material_select();},1000);
-    
-    // $('select').formSelect();    
-    
+
+    // $('select').formSelect();
+
     // INITIALIZE DATATABLES
     $('#example').DataTable( {
       "order": [[ 0, "desc" ]],
@@ -51,14 +51,14 @@ $(document).ready(function(){
         ]
     } );
 
-    $('.page-link').addClass('btn btn-small');      
+    $('.page-link').addClass('btn btn-small');
 
     // TABLES WITH FILTERS
     $('#products thead tr').clone(true).appendTo( '#products thead' );
     $('#products thead tr:eq(1) th').each( function (i) {
         var title = $(this).text();
         $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
-        
+
         $( 'input', this ).on( 'keyup change', function () {
             if ( table.column(i).search() !== this.value ) {
                 table
@@ -69,7 +69,7 @@ $(document).ready(function(){
         } );
     } );
 
-   
+
     var table = $('#products').DataTable( {
         orderCellsTop: true,
         fixedHeader: true,
@@ -109,7 +109,7 @@ $(document).ready(function(){
         },
         dom: 'Pfrtip',
     });
- 
+
 
     //$('a.paginate_button').addClass('btn');
 
@@ -128,13 +128,19 @@ $(document).ready(function(){
         $("#search_product").focus();
     });
 
+    $('.add_tool').click(function(){
+        addTools(1);
+        reCalc();
+        $("#search_product").focus();
+    });
+
     $(".dt-button").click(function(){
         $('.print_table tr').find('th:last-child, td:last-child').remove();
         $(".dataTables_filter,.dataTables_info,.hide_on_print").remove();
         $("tr:eq(1)").remove();
         $('.dtsp-panesContainer').remove();
     });
-    
+
 
 
     $("#quantity").on('keyup', function (e) {
@@ -160,7 +166,7 @@ $(document).ready(function(){
         return false;
         }
     });
-    
+
 
     $("#tax").on('input', function(){
         var tax = $("#tax").val();
@@ -168,7 +174,7 @@ $(document).ready(function(){
         var total_discount = $("#total_discount").val();
         if(total_discount==""){total_discount=0}
         if(tax==""){tax=0}
-        var new_total = (parseFloat(sum)+parseFloat(tax)) - parseFloat(total_discount);  
+        var new_total = (parseFloat(sum)+parseFloat(tax)) - parseFloat(total_discount);
 
         $("#total_due").val(new_total.toFixed(2));
         reCalc();
@@ -198,13 +204,13 @@ $(document).ready(function(){
    $('.datepicker').on('mousedown',function(event){
         event.preventDefault();
     });
-    
+
     $('#sales_form').each(function(){
         this.reset();
     });
 
-   
-    
+
+
 }); // END DOCUMENT READY
 
 function delItem(id,table){
@@ -221,17 +227,17 @@ $("#item").keyup(function (e) {
     if (e.keyCode == 13) {
         var product_id = $(this).val();
         var all_products = $("#allproducts").val();
-        var all_items = $.parseJSON(all_products); 
+        var all_items = $.parseJSON(all_products);
         var product = all_items.filter( obj => obj.product_id === product_id)[0];
         addItem(product);
         reCalc();
-        $("#item").val("").focus();           
+        $("#item").val("").focus();
     }
 });
 
 
 $('#quantity_returned').on('input', function(){
-    
+
     var sp = $('#selling_price').val();
     var qs = $('#quantity_sold').val();
     var qr = $('#quantity_returned').val();
@@ -248,12 +254,24 @@ function addItem(item){
     var item_class = $(".add_item").attr("id");
       var old_class = parseFloat(item_class);
       new_class = old_class+1;
-      
+
     $(".add_item").prop('id', new_class);
 
     $("table tbody#item_list").append("<tr scope='row' class='row"+new_class+"'><td class='input-field'><input type='text' name='property[]' value='' placeholder='e.g. Color, Brand etc'></td><td class='input-field'><td class='input-field'><input type='text' name='value[]' value='' placeholder='e.g. Red, HP etc'></td><td><a href='#' class='btn-floating red btn-small delpos' onClick='delRow("+new_class+")'><i class='small material-icons'>remove</i></a></td></tr>");
-    
+
   };
+
+// ADD ITEM FUNCTION
+function addTools(item){
+    var item_class = $(".add_tool").attr("id");
+      var old_class = parseFloat(item_class);
+      new_class = old_class+1;
+
+    $(".add_tool").prop('id', new_class);
+
+    $("#dctool_select").append('<div class="row row'+new_class+'"><div class="input-field col s8"><input id="dctool" list="dctools" name="item[]" class="validate"><label for="items" class="active">Select Tool(s)</label></div><div class="input-field col s2"><input id="quantity" type="number" class="validate" name="quantity[]" value="1"><label for="quantity">Quantity Needed</label></div><div class="input-field col s2"><a href="#" class="btn-floating red btn-small delpos" onClick="delRow('+new_class+')">Remove</a></div></div>');
+
+};
 
 function changeAmount(clicked){
     // RECALCULATE AMOUNT OF ONE ITEM ON QUANTITY CHANGE
@@ -268,12 +286,12 @@ function changeUc(clicked){
     // RECALCULATE AMOUNT OF ONE ITEM ON QUANTITY CHANGE
     var uc = $("#unit"+clicked).val();
     var qty = $("#qty"+clicked).val();
-    
+
     var new_amount = parseFloat(qty)*parseFloat(uc);
     $("#amount"+clicked).val(new_amount.toFixed(2));
     reCalc();
 }
-  
+
 function reCalc(){
     // RECALCULATE TOTAL AMOUNT
     var sum = 0;
@@ -281,7 +299,7 @@ function reCalc(){
         sum += +$(this).val();
     });
     $("#total_due").val(sum.toFixed(2));
-    
+
 
     // RECALCULATE TOTAL DISCOUNT
     var total_discount = 0;
@@ -301,7 +319,7 @@ function reCalc(){
 
 }
 
-function delRow(rownum){    
+function delRow(rownum){
     $(".row"+rownum).remove();
     reCalc();
 };
@@ -325,7 +343,7 @@ function printtag(tagid) {
 
     var hashid = "#"+ tagid;
     var tagname =  $(hashid).prop("tagName").toLowerCase() ;
-    var attributes = ""; 
+    var attributes = "";
     var attrs = document.getElementById(tagid).attributes;
       $.each(attrs,function(i,elem){
         attributes +=  " "+  elem.name+" ='"+elem.value+"' " ;
@@ -350,7 +368,7 @@ function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); }
 
 function lockScreen(name) {
     $("#username").html('Hi '+name+'!');
-    $("#notuser").html('Not '+name+'? Login');  
+    $("#notuser").html('Not '+name+'? Login');
     $("#enter_password").toggle();
     // To disable f5
         /* jQuery < 1.7 */

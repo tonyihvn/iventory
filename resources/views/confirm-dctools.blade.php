@@ -1,4 +1,4 @@
-@extends('print_template')
+@extends('template')
 @section('content')
     <div class="container" style="width: 100% !important">
         <b style="text-align: center;">DCT TOOLS RECEIPT CONFIRMATION</b>
@@ -29,7 +29,7 @@
                 <div class="file-field input-field col s4">
                     <div class="btn">
                         <span>Upload Delivery Note</span>
-                        <input type="file" name="documents">
+                        <input type="file" name="documents" required>
                     </div>
                     <div class="file-path-wrapper">
                         <input class="file-path validate" type="text">

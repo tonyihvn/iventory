@@ -66,7 +66,7 @@
                         <div class="file-field input-field">
                             <div class="btn">
                                 <span>Upload Documents</span>
-                                <input type="file" name="documents">
+                                <input type="file" name="documents" required>
                             </div>
                             <div class="file-path-wrapper">
                                 <input class="file-path validate" type="text">

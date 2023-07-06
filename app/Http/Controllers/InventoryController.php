@@ -548,13 +548,22 @@ class InventoryController extends Controller
     }
 
     public function new_request(Request $request){
-        $this->validate($request, [
-            'item_name'=>'required|min:3'
-        ]);
+
+        $item = "";
+        $quantity = "";
+
+        if($request->type=="Gadgets"){
+            $item = $request->quantity_requested;
+            $quantity = $request->quantity_requested;
+        }else{
+            foreach($request->item as $key=>$dctool){
+                $item.=$dctool." Qty: ".$request->quantity[$key].", ::: ";
+            }
+        }
 
         requests::create([
-            'item_name'=>$request->item_name,
-            'quantity_requested'=>$request->quantity_requested,
+            'item_name'=>$item,
+            'quantity_requested'=>$quantity,
             'user_id'=>$request->user_id,
             'location'=>$request->location,
             'state'=>$request->state,

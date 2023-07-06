@@ -16,7 +16,7 @@
                             <select name="items[]" id="items" materialize="material_select" class="select2" multiple>
                                 <option value="All">All Tools</option>
                                 <option value="OVC">OVC</option>
-                                <option value="Adult">Adult</option>
+                                <option value="Adult Treatment">Adult Treatment</option>
                                 <option value="Paediatrics">Paediatrics</option>
                                 @foreach ($dctools as $dctool)
                                     <option value='{{ $dctool->id }}'>{{ $dctool->tool_name }} - {{ $dctool->category }}

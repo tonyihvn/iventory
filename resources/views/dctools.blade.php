@@ -66,10 +66,10 @@
                                 <td>{{ $dc->tool_name }}</td>
                                 <td>{{ $dc->category }}</td>
                                 @if (auth()->user()->role == 'DCTManager')
-                                    <td>{{ isset($dc->distributions) ? $dc->distributions->where('sentto_state', auth()->user()->state)->sum('quantity_sent') - $dc->distributions->where('sentfrom_state', auth()->user()->state)->sum('quantity_sent') : 0 }}
+                                    <td>{{ isset($dc->distributions) ? $dc->distributions->where('sentto_state', auth()->user()->state)->sum('quantity_received') - $dc->distributions->where('sentfrom_state', auth()->user()->state)->sum('quantity_sent') : 0 }}
                                     </td>
                                 @elseif (auth()->user()->role == 'DCTUser')
-                                    <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_sent') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
+                                    <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_received') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
                                     </td>
                                 @elseif (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
                                     <td>{{ $dc->stock->quantity_remaining ?? 0 }}</td>

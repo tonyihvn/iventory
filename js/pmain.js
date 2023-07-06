@@ -255,6 +255,18 @@ function addItem(item){
 
 };
 
+// ADD ITEM FUNCTION
+function addTools(){
+    var item_class = $(".add_tool").attr("id");
+      var old_class = parseFloat(item_class);
+      new_class = old_class+1;
+
+    $(".add_tool").prop('id', new_class);
+
+    $("#dctool_select").append('<div class="row row'+new_class+'"><div class="input-field col s8"><input id="dctool" list="dctools" name="item[]" class="validate"><label for="items" class="active">Select Tool(s)</label></div><div class="input-field col s2"><input id="quantity" type="number" class="validate" name="quantity[]" value="1"><label for="quantity">Quantity Needed</label></div><div class="input-field col s2"><a href="#" class="btn-floating red btn-small delpos" onClick="delRow('+new_class+')">Remove</a></div></div>');
+
+};
+
 function changeAmount(clicked){
     // RECALCULATE AMOUNT OF ONE ITEM ON QUANTITY CHANGE
     var qty = $("#qty"+clicked).val();

@@ -5,7 +5,7 @@
     <div class="row" style="width:98%; margin:auto;">
         <a href="{{ url('/requests') }}" class="btn green right">All Requests</a>
         @if (auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTAdmin')
-            <div class="col s12 l8 offset-l2">
+            <div class="col s12 l10 offset-l1">
                 <h3 class="card-header text-center" style="text-align:center;">New Item Request Form</h3>
 
 
@@ -21,23 +21,50 @@
                             </select>
                             <label for="type">Select State</label>
                         </div>
-                        <div class="input-field col s8">
-                            <input list="dctools" id="item_name" type="text" class="validate" name="item_name"
-                                placeholder="e.g. New Laptop, Ipad, Pen, Chair etc" required autofocus>
+
+                        <div class="input-field col s8" id="gadgets">
+
+                            <input id="item_name" type="text" class="validate" name="item_name"
+                                placeholder="e.g. New Laptop, Ipad, Pen, Chair etc">
 
                             <label for="item_name">Item Name</label>
 
-                            <datalist id="dctool">
-                                @foreach ($dctools as $dctool)
-                                    <option value="{{ $dctool->tool_name }}">
-                                @endforeach
+                        </div>
+                    </div>
+                    <div id="dctool_select">
+                        <div class="row row1">
+                            <div class="input-field col s8">
 
-                            </datalist>
+                                <input id="dctool" list="dctools" name="item[]" class="validate">
 
+                                <label for="items" class="active">Select Tool(s)</label>
+                            </div>
+                            <div class="input-field col s2">
+
+                                <input id="quantity" type="number" class="validate" name="quantity[]"
+                                    value="1">
+                                <label for="quantity">Quantity Needed</label>
+                            </div>
+                            <div class="input-field col s2">
+
+                                <a href="#" class="btn-floating red btn-small delpos" onClick="delRow(1)">X</a>
+                            </div>
                         </div>
 
 
+
+                        <datalist id="dctools">
+                            @foreach ($dctools as $dctool)
+                                <option value='{{ $dctool->tool_name }} - {{ $dctool->category }}'>
+                            @endforeach
+
+                        </datalist>
                     </div>
+                        <a class="btn btn-small cyan pulse waves-effect waves-light add_tool" onclick="addTools(1)" href="#" id="1">
+                            Add More Tools
+                            <i class="material-icons">add</i>
+                        </a>
+
 
                     <div class="row">
                         <div class="input-field col s4">

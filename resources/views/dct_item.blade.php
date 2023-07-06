@@ -51,7 +51,7 @@
             <b>FCT</b>
             <table style="background-color: #ccc">
                 <tr>
-                    <td>Total Received: <b>{{ $itemdist->where('sent_to', 346)->sum('quantity_sent') }}</b></td>
+                    <td>Total Received: <b>{{ $itemdist->where('sent_to', 346)->sum('quantity_received') }}</b></td>
                     <td>Total Issued to Facilities:
                         <b>{{ $itemdist->where('sentfrom_state', 'FCT')->sum('quantity_sent') }}</b>
                     </td>
@@ -102,7 +102,7 @@
             <b>Nasarawa</b>
             <table style="background-color: #ccc">
                 <tr>
-                    <td>Total Received: <b>{{ $itemdist->where('sentto_state', 'Nasarawa')->sum('quantity_sent') }}</b>
+                    <td>Total Received: <b>{{ $itemdist->where('sentto_state', 'Nasarawa')->sum('quantity_received') }}</b>
                     </td>
                     <td>Total Issued to Facilities:
                         <b>{{ $itemdist->where('sentfrom_state', 'Nasarawa')->sum('quantity_sent') }}</b>
@@ -145,7 +145,7 @@
             <b>Rivers</b>
             <table style="background-color: #ccc">
                 <tr>
-                    <td>Total Received: <b>{{ $itemdist->where('sentto_state', 'Rivers')->sum('quantity_sent') }}</b></td>
+                    <td>Total Received: <b>{{ $itemdist->where('sentto_state', 'Rivers')->sum('quantity_received') }}</b></td>
                     <td>Total Issued to Facilities:
                         <b>{{ $itemdist->where('sentfrom_state', 'Rivers')->sum('quantity_sent') }}</b>
                     </td>
@@ -187,7 +187,7 @@
             <b>Katsina</b>
             <table style="background-color: #ccc">
                 <tr>
-                    <td>Total Received: <b>{{ $itemdist->where('sentto_state', 'Katsina')->sum('quantity_sent') }}</b></td>
+                    <td>Total Received: <b>{{ $itemdist->where('sentto_state', 'Katsina')->sum('quantity_received') }}</b></td>
                     <td>Total Issued to Facilities:
                         <b>{{ $itemdist->where('sentfrom_state', 'Katsina')->sum('quantity_sent') }}</b>
                     </td>
