@@ -185,7 +185,7 @@
                                                     @if(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager')
                                                     <li><a class="waves-effect waves-blue" href="{{ url('/register') }}"><i
                                                         class="material-icons">swap_horiz</i>Create Users</a></li>
-                                                        <li><a class="waves-effect waves-blue" href="{{ url('/register') }}"><i
+                                                        <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
                                                             class="material-icons">swap_horiz</i>Users</a></li>
                                                     @endif
 

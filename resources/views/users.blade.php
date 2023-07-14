@@ -11,7 +11,7 @@
                     $clients = \App\User::all();
                 }elseif(auth()->user()->role=="Manager"){
                     $clients = \App\User::where('state',Auth()->user()->state)->get();
-                }elseif(auth()->user()->role=="DCTAdmin" || ){
+                }elseif(auth()->user()->role=="DCTAdmin" ){
                     $clients = \App\User::where('role','DCTManager')->orWhere('role','DCTUser')->get();
                 }elseif(auth()->user()->role=="DCTManager"){
                     $clients = \App\User::where('state',Auth()->user()->state)->where('role','DCTUser')->get();
