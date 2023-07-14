@@ -106,11 +106,17 @@
                                     <option value="DCTManager">DCT State Manager</option>
                                     <option value="DCTUser">DCT Facility User</option>
                                 @endif
-                                @if (Auth()->user()->role != 'User')
+                                @if (Auth()->user()->role == 'Admin' || Auth()->user()->role == 'Manager')
                                     <option value="Manager">State Manager</option>
                                     <option value="Facility">Facility Manager</option>
                                 @endif
-                                <option value="User">User</option>
+                                @if (Auth()->user()->role == 'DCTAdmin')
+                                    <option value="DCTManager">State Manager</option>
+                                    <option value="DCTUser">Facility Manager</option>
+                                @endif
+                                @if (Auth()->user()->role == 'DCTManager')
+                                    <option value="DCTUser">Facility Manager</option>
+                                @endif
                             </select>
                             <label for="role">Select Role</label>
                         </div>

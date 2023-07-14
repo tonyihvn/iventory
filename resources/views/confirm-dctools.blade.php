@@ -77,7 +77,11 @@
                             <td>{{ $itd->date_sent }}</td>
                             <td>{{ $itd->dcTool->tool_name }}</td>
                             <td>{{ $itd->quantity_sent }}</td>
-                            <td>{{ $itd->sentFrom->facility_name }}</td>
+                            <td>{{ $itd->sentFrom->facility_name }}
+                            @if ($itd->sent_from!=383)
+                                 <br> <span style="color: green;"> {{$itd->sentTo->facility_name}}</span>
+                            @endif
+                            </td>
                             <td>{{ $itd->batchno }}</td>
                             <td class="form-input">
                                 <input type="text" class="iselect" name="qty_recieved[]" id="qtyr{{ $itd->id }}"

@@ -16,7 +16,17 @@
                                 <select name="items[]" id="item" materialize="material_select">
 
                                     <option value='{{ $dctool->id }}'>{{ $dctool->tool_name }} - {{ $dctool->category }}
-                                        ({{ $dctool->stock->quantity_remaining ?? '' }} in stock)
+                                        (
+                                        @if (auth()->user()->role == 'DCTManager')
+                                            <td>{{ isset($dctool->distributions) ? $dctool->distributions->where('sentto_state', auth()->user()->state)->sum('quantity_received') - $dctool->distributions->where('sentfrom_state', auth()->user()->state)->sum('quantity_sent') : 0 }}
+                                            </td>
+                                        @elseif (auth()->user()->role == 'DCTUser')
+                                            <td>{{ isset($dctool->distributions) ? $dctool->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_received') - $dctool->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
+                                            </td>
+                                        @elseif (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
+                                            <td>{{ $dctool->stock->quantity_remaining ?? 0 }}</td>
+                                        @endif
+                                        in stock)
                                     </option>
 
 

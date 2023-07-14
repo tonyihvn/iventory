@@ -82,42 +82,15 @@ $(document).ready(function(){
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        aLengthMenu: [
+            [25, 50, 100, 200, -1],
+            [25, 50, 100, 200, "All"]
         ]
     } );
 
-
-    $('#report').DataTable( {
-        searchPanes:{
-            panes: [
-                {
-                    header:'Custom',
-                    options:[
-                        {
-                            label:'Major Categories',
-                            value: function(rowData, rowIdx){
-                                return rowData[1] === 'Accountant' && rowData[2] === 'Tokyo';
-                            }
-                        }
-                    ],
-                    dtOpts:{
-                        searching: false,
-                        order: [[1, 'desc']]
-                    }
-                }
-            ],
-            layout: 'columns-9',
-        },
-        dom: 'Pfrtip',
-    });
-
-
-    //$('a.paginate_button').addClass('btn');
-
     // INITIALIZE TOOL TIP
     $('.tooltipped').tooltip();
-
-    // INITIALIZE DATEPICKER
-
 
 
     // NEW SALES ITEM

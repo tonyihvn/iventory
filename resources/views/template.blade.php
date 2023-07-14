@@ -182,6 +182,12 @@
                                                     class="material-icons">swap_horiz</i>Request for DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
                                                     class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
+                                                    @if(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager')
+                                                    <li><a class="waves-effect waves-blue" href="{{ url('/register') }}"><i
+                                                        class="material-icons">swap_horiz</i>Create Users</a></li>
+                                                        <li><a class="waves-effect waves-blue" href="{{ url('/register') }}"><i
+                                                            class="material-icons">swap_horiz</i>Users</a></li>
+                                                    @endif
 
 
                                     </ul>

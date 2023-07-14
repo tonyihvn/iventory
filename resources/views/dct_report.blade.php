@@ -2,10 +2,10 @@
 @section('content')
     <div style="width: 100% !important; overflow: visible;">
         <b style="text-align: center;">DCT REPORT {{ $utilization[0]->remarks ?? '' }}. <br> FROM {{ $from }} TO
-            {{ $to }}</b> <small><i>Key: Qty = Quantity, St. Bal. = Stock Balance</i></small>
+            {{ $to }}</b> <small><i>Key: Qty: Quantity, St. Bal.: Stock Balance, Bm.: Benchmark</i></small>
 
         <hr>
-        <table id="products" class="display striped bordered highlight" style="font-size: 0.8em;">
+        <table class="display striped bordered highlight" style="font-size: 0.8em;">
             <thead>
                 <tr>
                     <th rowspan="2">DCT Tool Name</th>
@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     @foreach ($utilization->unique('facility_id') as $facility)
-                        <th>Benchmark</th>
+                        <th>Bm.</th>
                         <th>Qty Used</th>
                         <th>St. Bal.</th>
                     @endforeach

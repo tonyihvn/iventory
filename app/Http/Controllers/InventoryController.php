@@ -441,10 +441,23 @@ class InventoryController extends Controller
             }
         }
 
+        if(isset($request->new_name)){
+            $i = 0;
+
+            foreach ($request->tid as $itemid){
+                $it = inventory::where('id',$itemid)->first();
+                // RECORD SALES
+                $it->update([
+                    'item_name'=>$request->new_name
+                    ]);
+                $i++;
+            }
+        }
+
         audit::create([
             'action'=>"Updated Items ".var_dump($request->tid),
             'description'=>'An item was updated in the inventory',
-            'doneby'=>"Admin" // Auth::user()->id
+            'doneby'=>Auth()->user()->id
         ]);
 
         session()->flash('message','The Item : '.var_dump($request->tid).' has been updated successfully!');

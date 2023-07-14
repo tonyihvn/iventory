@@ -28,7 +28,7 @@
 
                 @if (auth()->user()->role != 'Observer')
                     <div class="row">
-                        <div class="input-field col s1 offset-l1">
+                        <div class="input-field col s1">
                             <label>With Selected:</label>
                         </div>
                         <div class="input-field col s3">
@@ -51,7 +51,7 @@
                             </select>
                         </div>
 
-                        <div class="input-field col s2">
+                        <div class="input-field col s1">
                             <select name="status">
                                 <option value='' disabled selected>Change Status</option>
                                 @if (Auth()->user()->role != 'User')
@@ -62,6 +62,12 @@
                                     <option value="Need Repairs">Need Repairs</option>
                                 @endif
                             </select>
+                        </div>
+
+                        <div class="input-field col s3">
+                            <input id="new_name" type="text" class="validate"
+                                name="new_name">
+                            <label for="new_name">Change Name</label>
                         </div>
 
 

@@ -20,7 +20,7 @@ Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('
 
 Route::get('/home', 'HomeController@user_dashboard')->name('home')->middleware('auth');
 
-Route::get('/register','RegisterController@showRegistrationForm')->name('register')->middleware('role:Admin');
+Route::get('/register','RegisterController@showRegistrationForm')->name('register')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 
 // Settings
 Route::resource('settings', 'SettingsController')->middleware('role:Admin');
@@ -85,11 +85,11 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('users', function(){
     return View('users');
-})->middleware('role:Admin,Manager');
+})->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 
-Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager');
+Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
-Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager');
+Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 
 
 // STOCKS

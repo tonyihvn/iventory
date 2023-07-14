@@ -107,18 +107,24 @@
                     <div class="input-field">
                         <select name="role" id="role">
                             <option value="{{ $user->role }}" selected>{{ $user->role }}</option>
-                            <option value="User" selected>Select User Role</option>
+                            <option value="User">Select User Role</option>
                             @if (Auth()->user()->role == 'Admin')
                                 <option value="Admin">Admin</option>
                                 <option value="DCTAdmin">DCTAdmin</option>
                                 <option value="DCTManager">DCT State Manager</option>
                                 <option value="DCTUser">DCT Facility User</option>
                             @endif
-                            @if (Auth()->user()->role != 'User')
-                                <option value="Manager">State Manager</option>
-                                <option value="Facility">Facility Manager</option>
-                            @endif
-                            <option value="User">User</option>
+                            @if (Auth()->user()->role == 'Admin' || Auth()->user()->role == 'Manager')
+                                    <option value="Manager">State Manager</option>
+                                    <option value="Facility">Facility Manager</option>
+                                @endif
+                                @if (Auth()->user()->role == 'DCTAdmin')
+                                    <option value="DCTManager">State Manager</option>
+                                    <option value="DCTUser">Facility Manager</option>
+                                @endif
+                                @if (Auth()->user()->role == 'DCTManager')
+                                    <option value="DCTUser">Facility Manager</option>
+                                @endif
                         </select>
                         <label for="role">Select Role</label>
                     </div>
