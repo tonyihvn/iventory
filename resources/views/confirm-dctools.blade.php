@@ -84,8 +84,8 @@
                             </td>
                             <td>{{ $itd->batchno }}</td>
                             <td class="form-input">
-                                <input type="text" class="iselect" name="qty_recieved[]" id="qtyr{{ $itd->id }}"
-                                    value="{{ $itd->quantity_received>0 ? $itd->quantity_received : $itd->quantity_sent }}"><label for="qtyr{{ $itd->id }}"></label>
+                                <input type="number" class="iselect" name="qty_recieved[]" id="qtyr{{ $itd->id }}"
+                                    value="{{ $itd->quantity_received }}"><label for="qtyr{{ $itd->id }}"></label>
                             </td>
                             <td>    @if($itd->documents!="")
                                     S: <a href="{{ asset('uploads/' . $itd->documents) }}"
