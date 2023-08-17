@@ -375,7 +375,7 @@ class DctoolsController extends Controller
     public function confirmDelivery(){
 
         if(Auth()->user()->role=="DCTManager"){
-            $distribution = dcdistributions::where('sent_to',Auth()->user()->state)->get();
+            $distribution = dcdistributions::where('sentto_state',Auth()->user()->state)->get();
 
         }if(Auth()->user()->role=="DCTUser"){
             $distribution = dcdistributions::where('sent_to',Auth()->user()->facility)->get();
