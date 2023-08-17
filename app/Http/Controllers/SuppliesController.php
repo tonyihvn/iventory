@@ -14,7 +14,9 @@ class SuppliesController extends Controller
      */
     public function index()
     {
-        //
+        $supplies = supplies::all();
+
+        return view('supplies',compact('supplies'));
     }
 
     /**

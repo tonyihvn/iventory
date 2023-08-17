@@ -49,4 +49,9 @@ class inventory extends Model
         return $this->hasMany('App\movement','inventories_id');
     }
 
+    public function uniqueName()
+    {
+        return $this->hasOne('App\items', 'id','item_id');
+    }
+
 }

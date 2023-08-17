@@ -15,6 +15,8 @@ class CreateInventoriesTable extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('item_id');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->string('item_name');
             $table->string('state')->nullable();
             $table->string('facility')->nullable();
@@ -26,7 +28,7 @@ class CreateInventoriesTable extends Migration
             $table->string('tag_no')->nullable();
 
 
-            $table->string('category');            
+            $table->string('category');
             $table->string('type')->nullable();
 
             $table->date('date_purchased')->nullable();
@@ -41,7 +43,7 @@ class CreateInventoriesTable extends Migration
 
             $table->unsignedBigInteger('unit_id');
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
-            
+
             $table->unsignedBigInteger('facility_id');
             $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
 

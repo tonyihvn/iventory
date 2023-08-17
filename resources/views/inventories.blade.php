@@ -6,10 +6,10 @@
 
         <h4 class=" center">
             @if (auth()->user()->role == 'User')
-                My Inventories
+                My Inventory
             @else
                 {{ auth()->user()->role != 'Admin' ? auth()->user()->state : '' }}
-                {{ isset($category) ? $category : 'inventories' }}
+                {{ isset($category) ? $category : 'Inventory' }}
             @endif
 
         </h4>
@@ -31,9 +31,9 @@
                         <div class="input-field col s1">
                             <label>With Selected:</label>
                         </div>
-                        <div class="input-field col s3">
+                        <div class="input-field col s2">
 
-                            <select name="facility" id="facility">
+                            <select name="facility" id="facility" materialize="material_select" class="select2">
                                 <option value="" disabled selected>Change Facility</option>
                                 @foreach ($facilities as $facility)
                                     <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
@@ -64,13 +64,23 @@
                             </select>
                         </div>
 
-                        <div class="input-field col s3">
-                            <input id="new_name" type="text" class="validate"
-                                name="new_name">
-                            <label for="new_name">Change Name</label>
+                        <div class="input-field col s2">
+                            <select name="item_id"  materialize="material_select" class="select2">
+                                <option value='' disabled selected>Update Unique Name</option>
+                                @foreach ($items as $it)
+                                    <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-
+                        @if (auth()->user()->role == 'Admin')
+                            <div class="input-field col s1">
+                                <select name="delete_items"  materialize="material_select">
+                                    <option value='' disabled selected>Delete?</option>
+                                <option value="Delete">Delete</option>
+                                </select>
+                            </div>
+                        @endif
 
                         <div class="input-field text-right col s2">
 
@@ -116,9 +126,9 @@
                                 <td>{{ $inv->serial_no }} / {{ $inv->ihvn_no }} / {{ $inv->tag_no }}</td>
                                 <td>{{ $inv->category }}</td>
                                 <td>
-                                    {{ $inv->facility != '' ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
+                                    {{ $inv->facility_id == 2 ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
                                 </td>
-                                <td>{{ $inv->assigned_to != '' ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name'] }}
+                                <td>{{ $inv->user_id == 2 ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name'] }}
                                 </td>
                                 <td>{{ $inv->status }}</td>
                                 <td>

@@ -16,7 +16,7 @@ class CreateSuppliesTable extends Migration
         Schema::create('supplies', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
-            $table->foreign('item_id')->references('id')->on('inventories')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
             $table->double('quantity_supplied',10,2)->default(0)->nullable();
             $table->date('date_supplied')->nullable();
             $table->string('supplied_to',50)->nullable();

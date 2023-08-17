@@ -18,6 +18,17 @@
 
                     <input type="hidden" name="id" value="{{ $item->id }}">
                     <div class="row">
+                        <div class="input-field col s12">
+                            <select name="item_id" id="item_id" materialize="material_select"  class="select2">
+                                <option value="{{ $item->item_id }}" selected>Change Item Unique Name</option>
+                                @foreach ($items as $it)
+                                    <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
+                                @endforeach
+                            </select>
+                            <label for="item_id" class="active">Item Name (Unique)</label>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="input-field col s6">
                             <input id="item_name" type="text" class="validate" name="item_name"
                                 value="{{ $item->item_name }}" required autofocus>
@@ -89,19 +100,19 @@
                             <div class="input-field col s4">
                                 <input id="date_purchased" type="date" class="datepicker" name="date_purchased"
                                     value="{{ $item->date_purchased }}">
-                                <label for="date_purchased">Date Purchased</label>
+                                <label for="date_purchased">Date Delivered</label>
                             </div>
 
                             <div class="input-field col s4">
                                 <input id="quantity" type="text" class="validate" name="quantity"
                                     value="{{ $item->quantity }}">
-                                <label for="quantity">Quantity Purchased</label>
+                                <label for="quantity">Quantity Recieved</label>
                             </div>
 
-                            <div class="input-field col s8">
+                            <div class="input-field col s4">
                                 <input id="supplier" type="text" class="validate" name="supplier"
                                     value="{{ $item->supplier }}">
-                                <label for="supplier">Supplier</label>
+                                <label for="supplier">Received By</label>
                             </div>
 
 
@@ -161,14 +172,14 @@
                     </div>
 
                     <div class="input-field">
-                        <select name="facility" class="initialized">
+                        <select name="facility"  materialize="material_select" class="select2">
                             <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name }}
                             </option>
                             @foreach ($facilities as $facility)
                                 <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
                             @endforeach
                         </select>
-                        <label>Select Facility</label>
+                        <label for="facility" class="active">Select Facility</label>
                     </div>
 
                     <div class="input-field">
@@ -193,7 +204,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <select name="user" class="initialized" id="user">
+                            <select name="user"  materialize="material_select" class="select2" id="user">
                                 <option selected value='{{ $item->user->id }}'>{{ $item->user->name }}</option>
                                 @if (Auth()->user()->role != 'User')
                                     @foreach ($users as $user)
@@ -202,7 +213,7 @@
                                 @endif
                                 <option value="0">Not Listed - Add User's Name</option>
                             </select>
-                            <label>Select User</label>
+                            <label for="user" class="active">Select User</label>
                         </div>
 
                         <div class="input-field col s6" id="new_username">

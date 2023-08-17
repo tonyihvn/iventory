@@ -14,13 +14,13 @@
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <select name="item" id="item" materialize="material_select">
+                            <select name="item" id="item" materialize="material_select"  class="select2">
                                 <option value="" disabled>Select Item</option>
                                 @foreach ($items->unique('item_name') as $it)
-                                    <option value='{{ $it->id }}'>{{ $it->item_name }} - {{ $it->category }}</option>
+                                    <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
                                 @endforeach
                             </select>
-                            <label for="item">Item Name</label>
+                            <label for="item" class="active">Item Name</label>
                         </div>
 
 

@@ -134,11 +134,14 @@ $(document).ready(function(){
 
     // PREVENT SUBMIT ON ENTER
     $(window).keydown(function(event){
-        if(event.keyCode == 13) {
-        event.preventDefault();
-        return false;
+        if(event.target.tagName != 'TEXTAREA') {
+            if(event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+            }
         }
     });
+
 
 
     $("#tax").on('input', function(){

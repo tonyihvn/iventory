@@ -73,6 +73,10 @@
                                                 <a href="{{url('/edit_user/'.$ca->id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="Edit User" target="_blank"><i class="material-icons">remove_red_eye</i></a>
                                         </li>
 
+                                        <li>
+                                            <a href="{{url('/user_items/'.$ca->id)}}" class="btn-floating btn-small waves-effect green waves-light tooltipped" data-position="top" data-tooltip="User's Items" target="_blank"><i class="material-icons">list</i></a>
+                                        </li>
+
 
                                     </ul>
                             </div>

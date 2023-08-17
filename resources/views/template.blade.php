@@ -120,6 +120,12 @@
                                                     class="material-icons">swap_horiz</i>Change Tag Numbers</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add-stock') }}"><i
                                                     class="material-icons">swap_horiz</i>Add New Stock</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/supplies') }}"><i
+                                                        class="material-icons">swap_horiz</i>View Supply History</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}"><i
+                                                        class="material-icons">swap_horiz</i>Manage Unique Items</a></li>
+
+
 
 
 

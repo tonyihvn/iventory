@@ -29,12 +29,15 @@ Route::get('edit_settings/{id}', 'SettingsController@edit')->name('edit_settings
 // Suppliers
 Route::resource('suppliers', 'SupplierController')->middleware('role:Admin,DCTAdmin');
 Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->middleware('role:Admin,DCTAdmin');
+Route::get('supplies', 'SuppliesController@index')->name('supplies')->middleware('role:Admin,Super');
 
 // Inventories
 Route::resource('inventories', 'InventoryController')->middleware('auth');
 
 Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');
+Route::get('user_items/{userid}/', 'InventoryController@userItems')->name('user_items')->middleware('auth');
+
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
 Route::get('item/{id}', 'InventoryController@edit')->name('item')->middleware('auth');
@@ -93,6 +96,12 @@ Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->m
 
 
 // STOCKS
+
+Route::get('uitems', 'InventoryController@uItems')->name('uitems')->middleware('role:Admin,Super');
+Route::get('edit_uitem/{uid}', 'InventoryController@editUItems')->name('edit_uitem')->middleware('role:Admin,Super');
+Route::get('deleteuitem/{uid}', 'InventoryController@deleteuitem')->name('deleteuitem')->middleware('role:Admin,Super');
+Route::post('newuItem', 'InventoryController@newuItem')->name('newuItem')->middleware('role:Admin,Super');
+
 Route::get('add-stock', 'InventoryController@addStock')->name('add-stock')->middleware('role:Admin,Super');
 Route::post('newSupply', 'InventoryController@newSupply')->name('newSupply')->middleware('role:Admin,Super');
 

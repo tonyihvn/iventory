@@ -11,7 +11,17 @@
                     @csrf
                     <small style="color: green; text-align: center;"><i>For multiple device entry seperate IHVN Tag No,
                             Serial Number, Device ID by commas</i></small>
-
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select name="item_id" id="item_id" materialize="material_select" class="select2">
+                                <option value="" disabled>Select Item Unique Name</option>
+                                @foreach ($items as $it)
+                                    <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
+                                @endforeach
+                            </select>
+                            <label for="item_id" class="active">Item Name (Unique)</label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="input-field col s4">
                             <input id="item_name" type="text" class="validate" name="item_name" required autofocus>
@@ -31,7 +41,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <input id="ihvn_no" type="text" class="validate" value="" name="ihvn_no" required>
+                            <input id="ihvn_no" type="text" class="validate" value="" name="ihvn_no">
                             <label for="ihvn_no">IHVN Tag Number(s)</label>
                         </div>
                         <div class="input-field col s6">
@@ -89,17 +99,17 @@
                         <div class="row">
                             <div class="input-field col s4">
                                 <input id="date_purchased" type="date" class="datepicker" name="date_purchased">
-                                <label for="date_purchased">Date Purchased</label>
+                                <label for="date_purchased">Date Delivered</label>
                             </div>
 
                             <div class="input-field col s4">
                                 <input id="quantity" type="text" class="validate" name="quantity">
-                                <label for="quantity">Quantity Purchased</label>
+                                <label for="quantity">Quantity Delivered</label>
                             </div>
 
                             <div class="input-field col s4">
                                 <input id="supplier" type="text" class="validate" name="supplier">
-                                <label for="supplier">Supplier</label>
+                                <label for="supplier">Recieved By</label>
                             </div>
                         </div>
                     @endif
@@ -143,13 +153,13 @@
 
 
                     <div class="input-field">
-                        <select name="facility" id="facility" materialize="material_select">
+                        <select name="facility" id="facility" materialize="material_select" class="select2">
                             <option value="" disabled selected>Facility</option>
                             @foreach ($facilities as $facility)
                                 <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
                             @endforeach
                         </select>
-                        <label for="facility">Select Facility</label>
+                        <label for="facility" class="active">Select Facility</label>
                     </div>
 
                     <div class="input-field">
@@ -173,7 +183,7 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s6">
-                            <select name="user" id="user" materialize="material_select">
+                            <select name="user[]" id="user" materialize="material_select" class="select2" multiple>
                                 <option value="{{ Auth()->user()->id }}" selected>{{ Auth()->user()->name }}</option>
                                 @if (Auth()->user()->role != 'User')
                                     @foreach ($users as $user)
@@ -182,7 +192,7 @@
                                 @endif
                                 <option value="0">Not Listed - Add User's Name</option>
                             </select>
-                            <label>Select User</label>
+                            <label for="user" class="active">Select User</label>
                         </div>
 
                         <div class="input-field col s6" id="new_username">

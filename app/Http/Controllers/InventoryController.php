@@ -15,6 +15,7 @@ use App\supplies;
 use App\stocks;
 use App\requests;
 use App\dctools;
+use App\items;
 use Auth;
 use File;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,7 @@ class InventoryController extends Controller
     {
 
         $categories = category::select('id','category_name')->get();
+        $items = items::select('id','item_name')->get();
 
         if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get();
@@ -51,13 +53,13 @@ class InventoryController extends Controller
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
     }
 
     public function categoryInventory($category)
     {
         $categories = category::select('id','category_name')->get();
-
+        $items = items::select('id','item_name')->get();
         if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get();
             $facilities = facilities::select('id','facility_name')->get();
@@ -75,14 +77,36 @@ class InventoryController extends Controller
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::where('category',$category)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
+    }
+
+    public function userItems($userid)
+    {
+        $categories = category::select('id','category_name')->get();
+        $items = items::select('id','item_name')->get();
+
+        $theuser = User::select('name','id')->where('id',$userid)->first();
+        $uname = trim($theuser->name);
+            $usrs = User::select('id','name')->get();
+            $facilities = facilities::select('id','facility_name')->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',$userid)
+
+            ->orWhere('assigned_to','like','%' . $uname . '%')->orderBy('item_name', 'asc')->get();
+
+            // ->orWhere(function ($query) use ($uname) {
+            //     $query->where('assigned_to', '=', $uname);
+            // })
+            // ->get();
+
+            session()->flash('message',$uname."'s Items");
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
     }
 
     public function facilityItems($fid)
     {
 
         $categories = category::select('id','category_name')->get();
-
+        $items = items::select('id','item_name')->get();
         $catg = facilities::select('facility_name')->where('id',$fid)->first()->facility_name;
         $category = $catg." Inventory";
 
@@ -103,7 +127,7 @@ class InventoryController extends Controller
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::where('facility_id',$fid)->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'category'=>$category,'usrs'=>$usrs]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'category'=>$category,'usrs'=>$usrs,'items'=>$items]);
     }
 
     /**
@@ -113,6 +137,7 @@ class InventoryController extends Controller
      */
     public function create()
     {
+        $items = items::select('id','item_name')->get();
         // $ihvn_no = "IHVN".substr(md5(uniqid(mt_rand(), true).microtime(true)),0, 8);
         if(Auth()->user()->role=="Admin"){
             $facilities = facilities::select('id','facility_name')->get();
@@ -126,7 +151,7 @@ class InventoryController extends Controller
         $units = unit::select('id','unit_name')->get();
         $categories = category::select('id','category_name')->get();
 
-        return view('new_item',compact('facilities'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories]);
+        return view('new_item',compact('facilities'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'items'=>$items]);
     }
 
     /**
@@ -154,29 +179,47 @@ class InventoryController extends Controller
         }else{
             $singlefile = "";
         }
+        $new_user = explode(',', $request->new_user);
+        $userid = array();
 
-        if($request->user==0){
-            $userid = User::create([
-                'name' => $request->new_user,
-                'email'=> str_replace(' ','',$request->new_user)."@ihvnigeria.org",
-                'password' => Hash::make('nopassword'),
-                'state'=>$request->state,
-                'department'=>$request->department,
-                'unit'=>$request->unit,
-                'facility'=>$request->facility,
-                'role' => 'User'
-            ])->id;
+        if($request->user[0]==0){
+            foreach($new_user as $key=>$newuser){
+                $user = User::create([
+                    'name' => $newuser,
+                    'email'=> strtolower(str_replace(' ','',$newuser)."@ihvnigeria.org"),
+                    'password' => Hash::make('nopassword'),
+                    'state'=>$request->state,
+                    'department'=>$request->department,
+                    'unit'=>$request->unit,
+                    'facility'=>$request->facility,
+                    'role' => 'User'
+                ])->id;
+
+                array_push($userid,$user);
+            }
         }else{
-            $userid = $request->user;
+
+            foreach($request->user as $key=>$newuser){
+
+                array_push($userid,$newuser);
+            }
+
         }
+
+
 
         if($request->quantity_added>1){
 
             $serialno = ''; $tagno='';
+            if($request->ihvn_no==""){
+                $ihvnno_arr = array_fill(0, $request->quantity_added, 'NA');
+            }else{
+               $ihvnno_arr = explode(',', $request->ihvn_no);
+            }
 
-            $ihvnno_arr = explode(',', $request->ihvn_no);
             $serial_no_arr = explode(',', $request->serial_no);
             $tag_no_arr = explode(',', $request->tag_no);
+
 
             foreach($ihvnno_arr as $key=>$ihvnno){
                 if(isset($serial_no_arr[$key])){
@@ -185,7 +228,15 @@ class InventoryController extends Controller
                 if(isset($tag_no_arr[$key])){
                     $tagno=$tag_no_arr[$key];
                 }
+
+                if(count($userid)>1){
+                    $user_id=$userid[$key];
+                }else{
+                    $user_id=$userid[0];
+                }
+
                 $itemid = inventory::create([
+                    'item_id'=>$request->item_id,
                     'item_name'=>$request->item_name,
                     'serial_no'=>$serialno,
                     'ihvn_no'=>$ihvnno,
@@ -195,7 +246,7 @@ class InventoryController extends Controller
                     'type'=>$request->type,
                     'date_purchased'=>$request->date_purchased,
                     'supplier'=>$request->supplier,
-                    'user_id'=>$userid,
+                    'user_id'=>$user_id,
                     'quantity'=>$request->quantity,
                     'status'=>$request->status,
                     'state'=>$request->state,
@@ -210,6 +261,7 @@ class InventoryController extends Controller
             }
         }else{
             $itemid = inventory::create([
+                'item_id'=>$request->item_id,
                 'item_name'=>$request->item_name,
                 'serial_no'=>$request->serial_no,
                 'ihvn_no'=>$request->ihvn_no,
@@ -219,7 +271,7 @@ class InventoryController extends Controller
                 'type'=>$request->type,
                 'date_purchased'=>$request->date_purchased,
                 'supplier'=>$request->supplier,
-                'user_id'=>$userid,
+                'user_id'=>$userid[0],
                 'quantity'=>$request->quantity,
                 'status'=>$request->status,
                 'state'=>$request->state,
@@ -313,7 +365,7 @@ class InventoryController extends Controller
     public function edit(inventory $inventory, $id)
     {
         $item = inventory::where('id','=',$id)->with('inventoryspec')->first();
-
+        $items = items::select('id','item_name')->get();
         $facilities = facilities::select('id','facility_name')->get();
         $departments = department::select('id','department_name')->get();
         $units = unit::select('id','unit_name')->get();
@@ -321,7 +373,7 @@ class InventoryController extends Controller
         $categories = category::select('id','category_name')->get();
 
 
-        return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities]);
+        return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities,'items'=>$items]);
     }
 
     /**
@@ -351,6 +403,7 @@ class InventoryController extends Controller
         }
 
         $inventory->update([
+            'item_id'=>$request->item_id,
             'item_name'=>$request->item_name,
             'serial_no'=>$request->serial_no,
             'ihvn_no'=>$request->ihvn_no,
@@ -441,17 +494,23 @@ class InventoryController extends Controller
             }
         }
 
-        if(isset($request->new_name)){
+        if(isset($request->item_id)){
             $i = 0;
+            $item = items::where('id',$request->item_id)->first();
 
             foreach ($request->tid as $itemid){
                 $it = inventory::where('id',$itemid)->first();
                 // RECORD SALES
                 $it->update([
-                    'item_name'=>$request->new_name
+                    'item_name'=>$item->item_name,
+                    'item_id'=>$request->item_id
                     ]);
                 $i++;
             }
+        }
+
+        if(isset($request->delete_items)){
+            inventory::whereIn('id',$request->tid)->delete();
         }
 
         audit::create([
@@ -460,9 +519,38 @@ class InventoryController extends Controller
             'doneby'=>Auth()->user()->id
         ]);
 
-        session()->flash('message','The Item : '.var_dump($request->tid).' has been updated successfully!');
+        session()->flash('message','The Item(s) has been updated successfully!');
 
         return redirect()->back();
+    }
+
+    public function uItems(){
+        $items = items::all();
+        return view('new_uitem',compact('items'));
+    }
+
+    public function editUItems($uid){
+        $item = items::where('id',$uid)->first();
+        $items = items::all();
+        return view('edit_uitem',compact('items','item'));
+    }
+
+    public function deleteuitem($uid){
+        items::where('id',$uid)->delete();
+        return redirect()->back()->with(['message'=>'Item deleted successfully']);
+    }
+
+
+    public function newuItem(Request $request){
+        items::updateOrCreate([
+
+            'id'   => $request->id
+        ],[
+            'item_name'=>$request->item_name,
+            'specifications'=>$request->specifications
+        ]);
+
+        return redirect()->back()->with(['message'=>'Item saved successfully']);
     }
 
     /**
@@ -617,6 +705,8 @@ class InventoryController extends Controller
     }
 
     public function item_search(Request $request){
+        $items = items::select('id','item_name')->get();
+
         $categories = category::select('id','category_name')->get();
 
         if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
@@ -639,13 +729,13 @@ class InventoryController extends Controller
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->where('ihvn_no', 'like', '%' . $request->keyword . '%')->orWhere('item_name', 'like', '%' . $request->keyword . '%')->orWhere('serial_no', 'like', '%' . $request->keyword . '%')->get();
         }
-        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
 
     }
 
     public function addStock()
     {
-        $items = inventory::select('id','item_name','category')->distinct('item_name')->get();
+        $items = items::select('id','item_name')->get();
         return view('new_stock',compact('items'));
     }
 

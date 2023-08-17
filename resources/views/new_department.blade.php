@@ -3,10 +3,10 @@
 <div class="container">
     <div class="row">
         <div class="card col m6 offset-m3" style="margin-top:20px;">
-            
+
                 <h3 class="card-header text-center" style="text-align:center;">Add New Department</h3>
 
-                
+
                     <form method="POST" action="{{ route('departments.store') }}">
                         @csrf
 
@@ -14,15 +14,15 @@
                                 <input id="department_name" type="text" class="validate" name="department_name" required autofocus>
                                 <label for="department_name">Department Name</label>
                         </div>
-                        
+
                         <div class="input-field">
-                                <select name="facility" id="facility">
+                                <select name="facility" id="facility" materialize="material_select" class="select2">
                                     <option value="" selected>Select Facility</option>
-                                    @foreach ($facilities as $facility)                                            
+                                    @foreach ($facilities as $facility)
                                     <option value="{{$facility->facility_name}}">{{$facility->facility_name}}</option>
                                     @endforeach
                                 </select>
-                                <label for="facility">Facility</label>
+                                <label for="facility" class="active">Facility</label>
                         </div>
 
                         <div class="input-field">
@@ -36,15 +36,15 @@
                         </div>
 
                         <div class="input-field text-right right" style="margin-bottom:20px;">
-                            
+
                                 <button type="submit" class="btn">
                                     Add Department
-                                </button>                               
-                        
+                                </button>
+
                         </div>
                     </form>
-                
-            
+
+
         </div>
     </div>
 </div>

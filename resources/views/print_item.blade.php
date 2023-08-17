@@ -33,6 +33,11 @@
 
             <tr>
                 <td colspan="2">
+                    @if ($item->item_id!="")
+
+                    {{$item->uniqueName->specifications}}
+
+                    @endif
                     @if ($item->inventoryspec != null)
                         <table class="table highlight" style="width: 50%; margin:auto">
 
