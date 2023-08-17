@@ -494,6 +494,16 @@
             $("#quantity_requested").show();
         }
     });
+
+    function updateqtyrName(iid){
+        if($('#t'+iid).is(':checked'))
+        {
+            $('#qtyr'+iid).attr('name', 'qty_received[]');
+        }else
+        {
+            $('#qtyr'+iid).attr('name', 'qty_recieved[]');
+        }
+    }
 </script>
 
 </html>

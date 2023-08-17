@@ -405,7 +405,7 @@ class DctoolsController extends Controller
 
         foreach ($request->tool_name as $key => $item) {
             dcdistributions::where('id',$item)->update([
-                'quantity_received' => $request->qty_recieved[$key],
+                'quantity_received' => $request->qty_received[$key],
                 'rremarks' => $request->remarks,
                 'rdocuments'=>$documentname,
              ]);

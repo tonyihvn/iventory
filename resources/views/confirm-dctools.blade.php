@@ -71,8 +71,8 @@
                     @foreach ($distribution as $itd)
                         <tr>
                             <td class="form-check">
-                                <input type="checkbox" class="iselect" name="tool_name[]" id="t{{ $itd->id }}"
-                                    value="{{ $itd->id }}"><label for="t{{ $itd->id }}"></label>
+                                <input type="checkbox" class="validate" name="tool_name[]" id="t{{ $itd->id }}"
+                                    value="{{ $itd->id }}" onclick="updateqtyrName({{$itd->id}})"><label for="t{{ $itd->id }}"></label>
                             </td>
                             <td>{{ $itd->date_sent }}</td>
                             <td>{{ $itd->dcTool->tool_name }}</td>
@@ -84,7 +84,7 @@
                             </td>
                             <td>{{ $itd->batchno }}</td>
                             <td class="form-input">
-                                <input type="number" class="iselect" name="qty_recieved[]" id="qtyr{{ $itd->id }}"
+                                <input type="number" class="validate" name="qty_recieved[]" id="qtyr{{ $itd->id }}"
                                     value="{{ $itd->quantity_received }}"><label for="qtyr{{ $itd->id }}"></label>
                             </td>
                             <td>    @if($itd->documents!="")
