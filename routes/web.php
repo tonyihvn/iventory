@@ -37,7 +37,8 @@ Route::resource('inventories', 'InventoryController')->middleware('auth');
 Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');
 Route::get('user_items/{userid}/', 'InventoryController@userItems')->name('user_items')->middleware('auth');
-
+Route::get('dataquality', 'InventoryController@dataQuality')->name('dataquality')->middleware('role:Admin,Manager');
+Route::post('updateInventory','InventoryController@updateInventory')->name('updateInventory')->middleware('role:Admin,Manager');
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
 Route::get('item/{id}', 'InventoryController@edit')->name('item')->middleware('auth');

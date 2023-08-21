@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('/css/dataTables.material.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/searchPanes.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/fixedHeader.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/pmain.scss') }}">
     <link rel="stylesheet"
         href="{{ asset('https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css') }}">
@@ -21,6 +22,13 @@
         .select2 {
             width: 100%;
             position: relative !important;
+        }
+
+        #float {
+            position: fixed;
+            bottom: 1em;
+            right: 2em;
+            z-index: 1000000000000000000;
         }
     </style>
 </head>
@@ -124,11 +132,8 @@
                                                         class="material-icons">swap_horiz</i>View Supply History</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}"><i
                                                         class="material-icons">swap_horiz</i>Manage Unique Items</a></li>
-
-
-
-
-
+                                        <li><a  class="waves-effect waves-blue" href="{{ url('/dataquality') }}">
+                                            <i class="material-icons">swap_horiz</i>Data Quality Checks</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -157,8 +162,6 @@
                                                     class="material-icons">swap_horiz</i>Request for DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
                                                     class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
-
-
                                     </ul>
                                 </div>
                             </li>
@@ -194,8 +197,6 @@
                                                         <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
                                                             class="material-icons">swap_horiz</i>Users</a></li>
                                                     @endif
-
-
                                     </ul>
                                 </div>
                             </li>
@@ -218,9 +219,8 @@
                                 class="material-icons">fullscreen</i>Departments</a></li>
                     <li><a class="waves-effect waves-blue" href="{{ url('/units') }}"><i
                                 class="material-icons">swap_horiz</i>Units</a></li>
-
-
                     <li class="white"><a href="{{ url('/home') }}">My Inventories</a></li>
+                    <li class="white"><a href="{{ url('/dataquality') }}">Data Quality Checks</a></li>
                     <li class="white"><a href="{{ url('/categories') }}">Categories</a></li>
                     <li class="white"><a href="{{ url('/requests') }}">Item Request</a></li>
                     <li class="white"><a href="{{ url('/users') }}">State Users</a></li>
@@ -397,18 +397,18 @@
 
 </body>
 <script src="{{ asset('/js/jquery-3.5.1.js') }}"></script>
-
-<script src="{{ asset('/js/pmain.js') }}"></script>
 <script src="{{ asset('/js/materialize.min.js') }}"></script>
-
 <script src="{{ asset('/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/dataTables.fixedHeader.min.js') }}"></script>
 <script src="{{ asset('/js/select2.min.js') }}"></script>
 <script src="{{ asset('/js/dataTables.select.min.js') }}"></script>
 <script src="{{ asset('/js/dataTables.searchPanes.min.js') }}"></script>
-<script src="{{ asset('/js/highcharts.js') }}"></script>
-<script src="{{ asset('/js/exporting.js') }}"></script>
+<script src="{{ asset('/js/pmain.js') }}"></script>
+
+
+{{-- <script src="{{ asset('/js/exporting.js') }}"></script> --}}
 <?php if(isset($dashboard)){ ?>
+    <script src="{{ asset('/js/highcharts.js') }}"></script>
 <script type="text/javascript">
     $(function() {
         var laptops = <?php echo $Laptops ?? ''; ?>;
@@ -504,6 +504,49 @@
             $('#qtyr'+iid).attr('name', 'qty_recieved[]');
         }
     }
+
+    function updateInvRecord(iid){
+        if($('#t'+iid).is(':checked'))
+        {
+            $('#ihvntag'+iid).attr('name', 'sihvn_no[]');
+            $('#serialno'+iid).attr('name', 'sserial_no[]');
+            $('#tagno'+iid).attr('name', 'stag_no[]');
+            $('#facility_id'+iid).attr('name', 'sfacility_id[]');
+            $('#user_id'+iid).attr('name', 'suser_id[]');
+            $('#status'+iid).attr('name', 'sstatus[]');
+        }else
+        {
+            $('#ihvntag'+iid).attr('name', 'ihvn_no[]');
+            $('#serialno'+iid).attr('name', 'serial_no[]');
+            $('#tagno'+iid).attr('name', 'tag_no[]');
+            $('#facility'+iid).attr('name', 'facility_id[]');
+            $('#user'+iid).attr('name', 'user_id[]');
+            $('#status'+iid).attr('name', 'status[]');
+        }
+    }
+
+    function updateInvFacility(iid){
+        var val = $('#facilityl'+iid).val()
+        var fid = $('#facilities option').filter(function() {
+            return this.value == val;
+        }).data('fid');
+        /* if value doesn't match an option, xyz will be undefined*/
+        var fidd = fid ? fid : '';
+        $("#sfacility_id"+iid).val(fidd);
+        $("#facility_id"+iid).val(fidd);
+    };
+
+    function updateInvUser(iid){
+        var val = $('#userl'+iid).val()
+        var uid = $('#users option').filter(function() {
+            return this.value == val;
+        }).data('uid');
+        /* if value doesn't match an option, xyz will be undefined*/
+        var uidd = uid ? uid : '';
+        $("#suser_id"+iid).val(uidd);
+        $("#user_id"+iid).val(uidd);
+    };
+
 </script>
 
 </html>

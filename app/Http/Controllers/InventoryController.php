@@ -56,6 +56,32 @@ class InventoryController extends Controller
         return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
     }
 
+    public function dataQuality()
+    {
+
+        $categories = category::select('id','category_name')->get();
+        $items = items::select('id','item_name')->get();
+
+        if(auth()->user()->role=="Admin"){
+            $usrs = User::select('id','name')->get();
+            $facilities = facilities::select('id','facility_name')->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Manager"){
+            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
+        }else if(auth()->user()->role=="Facility"){
+            $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
+        }else{
+            $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
+        }
+        return view('data-quality', compact('inventories'), ['facilities'=>$facilities,'usrs'=>$usrs,'items'=>$items]);
+    }
+
     public function categoryInventory($category)
     {
         $categories = category::select('id','category_name')->get();
@@ -553,6 +579,24 @@ class InventoryController extends Controller
         return redirect()->back()->with(['message'=>'Item saved successfully']);
     }
 
+    public function updateInventory(Request $request){
+
+        foreach ($request->tid as $key => $item) {
+            inventory::where('id',$item)->update([
+                'ihvn_no' => $request->sihvn_no[$key],
+                'tag_no' => $request->stag_no[$key],
+                'serial_no'=>$request->sserial_no[$key],
+                'facility_id'=>$request->sfacility_id[$key],
+                'user_id'=>$request->suser_id[$key],
+                'status'=>$request->sstatus[$key],
+             ]);
+
+        }
+
+        session()->flash('message','The selected items have been updated and saved!');
+        return redirect()->back();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -620,8 +664,6 @@ class InventoryController extends Controller
 
         return redirect()->back()->with(['message'=>$message]);
     }
-
-
 
 
     public function requests()

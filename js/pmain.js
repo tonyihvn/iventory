@@ -54,11 +54,18 @@ $(document).ready(function(){
     $('.page-link').addClass('btn btn-small');
 
 
+    $('.searchbox').keypress(function (e) {
 
+        if (e.which == 13) {
+            alert("Hola");
+          $('#searchform').submit();
+          // return false;    //<---- Add this line
+        }
+      });
 
-    var table = $('#products').DataTable( {
+    let table = $('#products').DataTable( {
         orderCellsTop: true,
-        fixedHeader: false,
+        fixedHeader: true,
         "order": [[ 0, "asc" ]],
         "paging": true,
         "pageLength": 100,
@@ -71,15 +78,6 @@ $(document).ready(function(){
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     } );
-
-    $('.searchbox').keypress(function (e) {
-
-        if (e.which == 13) {
-            alert("Hola");
-          $('#searchform').submit();
-          // return false;    //<---- Add this line
-        }
-      });
 
     // TABLES WITH FILTERS
     $('#products thead tr').clone(true).appendTo( '#products thead' );
@@ -102,6 +100,14 @@ $(document).ready(function(){
             } );
         }
     } );
+
+    document.querySelector('#enable').addEventListener('click', function () {
+        table.fixedHeader.enable();
+    });
+
+    document.querySelector('#disable').addEventListener('click', function () {
+        table.fixedHeader.disable();
+    });
 
 
     // INITIALIZE TOOL TIP

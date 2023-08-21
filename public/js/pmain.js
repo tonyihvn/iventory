@@ -54,23 +54,7 @@ $(document).ready(function(){
     $('.page-link').addClass('btn btn-small');
 
     // TABLES WITH FILTERS
-    $('#products thead tr').clone(true).appendTo( '#products thead' );
-    $('#products thead tr:eq(1) th').each( function (i) {
-        var title = $(this).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
-
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );
-
-
-    var table = $('#products').DataTable( {
+    const table = $('#products').DataTable( {
         orderCellsTop: true,
         fixedHeader: true,
         "order": [[ 0, "asc" ]],
@@ -88,6 +72,25 @@ $(document).ready(function(){
             [25, 50, 100, 200, "All"]
         ]
     } );
+
+    $('#products thead tr').clone(true).appendTo( '#products thead' );
+    $('#products thead tr:eq(1) th').each( function (i) {
+
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
+
+        $( 'input', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                table
+                    .column(i)
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+    } );
+
+
+
 
     // INITIALIZE TOOL TIP
     $('.tooltipped').tooltip();

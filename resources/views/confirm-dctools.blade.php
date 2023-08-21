@@ -45,7 +45,7 @@
 
                 <div class="input-field text-right col s3">
 
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn"  onclick="return confirm('Please ensure that you have checked (from the left) all the items you want to confirm?')">
                         Confirm Delivery
                     </button>
 

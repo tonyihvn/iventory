@@ -84,7 +84,7 @@
 
                         <div class="input-field text-right col s2">
 
-                            <button type="submit" class="btn">
+                            <button type="submit" class="btn"  onclick="return confirm('Are you sure you want to save this actions. Please ensure that you check the edited items?')">
                                 Save
                             </button>
 
@@ -92,7 +92,6 @@
 
                     </div>
                 @endif
-
 
                 <table id="products" class="print_table display responsive-table" style="width:100%;">
                     <thead class="thead-dark">
@@ -183,6 +182,9 @@
 
                 </table>
             </form>
+            <div id="float">
+                <button id="enable">Enable FixedHeader</button> <button id="disable">Disable FixedHeader</button>
+            </div>
         @else
             <blockquote>No items found in the database.</blockquote>
         @endif
