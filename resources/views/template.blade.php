@@ -221,6 +221,7 @@
                                 class="material-icons">swap_horiz</i>Units</a></li>
                     <li class="white"><a href="{{ url('/home') }}">My Inventories</a></li>
                     <li class="white"><a href="{{ url('/dataquality') }}">Data Quality Checks</a></li>
+
                     <li class="white"><a href="{{ url('/categories') }}">Categories</a></li>
                     <li class="white"><a href="{{ url('/requests') }}">Item Request</a></li>
                     <li class="white"><a href="{{ url('/users') }}">State Users</a></li>

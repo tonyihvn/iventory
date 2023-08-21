@@ -18,6 +18,7 @@ use App\dctools;
 use App\items;
 use Auth;
 use File;
+use DB;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -581,14 +582,25 @@ class InventoryController extends Controller
 
     public function updateInventory(Request $request){
 
+        $changedIHVNNo = '';
+
         foreach ($request->tid as $key => $item) {
-            inventory::where('id',$item)->update([
+
+
+            $inv = inventory::where('id',$item)->first();
+
+            if($inv->ihvn_no!=$request->sihvn_no[$key] && $request->sihvn_no[$key]!=''){
+                $changedIHVNNo = ' ::: IHVN Tag Changed from '. $request->sihvn_no[$key].' ::: ';
+            }
+
+            $inv->update([
                 'ihvn_no' => $request->sihvn_no[$key],
                 'tag_no' => $request->stag_no[$key],
                 'serial_no'=>$request->sserial_no[$key],
                 'facility_id'=>$request->sfacility_id[$key],
                 'user_id'=>$request->suser_id[$key],
                 'status'=>$request->sstatus[$key],
+                'remarks' => DB::raw("CONCAT(`remarks`,'$changedIHVNNo')")
              ]);
 
         }
@@ -655,6 +667,7 @@ class InventoryController extends Controller
                 // RECORD SALES
                 inventory::where('ihvn_no',$pp)->update([
                     'ihvn_no'=>$request->newtag[$i],
+                    'remarks' => DB::raw("CONCAT('Old Tag Changed: $pp', `remarks`)")
                     ]);
                 $i++;
             }

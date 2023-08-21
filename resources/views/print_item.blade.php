@@ -111,8 +111,7 @@
             </tr>
 
             <tr>
-                <td style="font-weight: bold;">Remarks: <br>{{ $item->remarks }}</td>
-                <td><b>Status/Condition:</b> {{ $item->remarks }}</td>
+                <td colspan="2"> <b>Remarks:</b> <br>{{ $item->remarks }}</td>
             </tr>
         </table>
 
