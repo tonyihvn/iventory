@@ -101,14 +101,16 @@ $(document).ready(function(){
         }
     } );
 
-    document.querySelector('#enable').addEventListener('click', function () {
-        table.fixedHeader.enable();
-    });
+    if( $('#enable').length )         // use this if you are using id to check
+    {
+        document.querySelector('#enable').addEventListener('click', function () {
+            table.fixedHeader.enable();
+        });
 
-    document.querySelector('#disable').addEventListener('click', function () {
-        table.fixedHeader.disable();
-    });
-
+        document.querySelector('#disable').addEventListener('click', function () {
+            table.fixedHeader.disable();
+        });
+    }
 
     // INITIALIZE TOOL TIP
     $('.tooltipped').tooltip();
@@ -202,9 +204,9 @@ $(document).ready(function(){
         isRTL: true,
         format: 'yyyy-mm-dd',
         closeOnSelect: true // Close upon selecting a date,
-   });
+    });
 
-   $('.datepicker').on('mousedown',function(event){
+    $('.datepicker').on('mousedown',function(event){
         event.preventDefault();
     });
 
