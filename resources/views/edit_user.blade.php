@@ -58,9 +58,9 @@
                             <option value="{{ Auth()->user()->state }}" selected>{{ Auth()->user()->state }}</option>
                             @if (Auth()->user()->role == 'Admin')
                                 <option value="FCT">FCT</option>
-                                <option value="RIVERS">RIVERS</option>
-                                <option value="NASARAWA">NASARAWA</option>
-                                <option value="KATSINA">KATSINA</option>
+                                <option value="Rivers">RIVERS</option>
+                                <option value="Nasarawa">NASARAWA</option>
+                                <option value="Katsina">KATSINA</option>
                             @endif
 
                         </select>
