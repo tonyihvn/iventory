@@ -14,6 +14,7 @@
                     @csrf
                     <input name="_method" type="hidden" value="PUT">
                     <input type="hidden" name="id" value="{{ $user->id }}">
+                    <input type="hidden" name="oldpassword" value="{{ $user->password }}">
                     <div class="input-field">
 
 
@@ -127,6 +128,36 @@
                                 @endif
                         </select>
                         <label for="role">Select Role</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <label for="password"
+                                class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+
+
+                            <input id="password" type="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password">
+
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+
+                        </div>
+
+
+
+                        <div class="input-field col s6">
+                            <label for="password-confirm"
+                                class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+
+
+                            <input id="password-confirm" type="password" class="form-control" name="password_confirmation"
+                                >
+
+                        </div>
                     </div>
 
 

@@ -10,6 +10,7 @@ use App\unit;
 use Illuminate\Http\Request;
 use App\User;
 use Auth;
+use Illuminate\Support\Facades\Hash;
 
 class categoryController extends Controller
 {
@@ -31,7 +32,7 @@ class categoryController extends Controller
      */
     public function create()
     {
-       // 
+       //
     }
 
     /**
@@ -54,10 +55,10 @@ class categoryController extends Controller
         audit::create([
             'action'=>"Created New Category ".$request->category_name,
             'description'=>'A new category was created',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
         session()->flash('message','The New category: '.$request->category_name.' has been added successfully!');
-        
+
         return redirect()->back();
     }
 
@@ -108,9 +109,9 @@ class categoryController extends Controller
         audit::create([
             'action'=>"Deleted category ".$request->id,
             'description'=>'A category was deleted',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin" // Auth::user()->id
         ]);
- 
+
         session()->flash('message','The the selected category has been successfully deleted.');
 
         return redirect()->back();
@@ -134,9 +135,9 @@ class categoryController extends Controller
         audit::create([
             'action'=>"Deleted User ".$request->id,
             'description'=>'A USer was deleted',
-            'doneby'=>Auth::user()->id           
+            'doneby'=>Auth::user()->id
         ]);
- 
+
         session()->flash('message','The the selected user has been successfully deleted.');
 
         return redirect()->back();
@@ -146,16 +147,33 @@ class categoryController extends Controller
     {
         $user = User::findOrFail($request->id);
 
-       
-        $user->fill(\Request::all());
+        if($request->password==""){
+            $password = $request->oldpassword;
+        }else{
+            $password = Hash::make($request->password);
+        }
+
+        // dd($request->password);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $password,
+            'phone_number' => $request->phone_number,
+            'unit' => $request->unit,
+            'department' => $request->department,
+            'facility' => $request->facility,
+            'state' => $request->state,
+            'role' => $request->role
+        ]);
         $user->save();
 
         audit::create([
             'action'=>"Updated User ".$request->id,
-            'description'=>'A USer was updated',
-            'doneby'=>Auth::user()->id           
+            'description'=>'The user '.$request->name.' was updated',
+            'doneby'=>Auth::user()->id
         ]);
- 
+
         session()->flash('message','The the selected user has been successfully updated');
 
         return redirect()->back();

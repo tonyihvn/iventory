@@ -10,6 +10,8 @@ use App\User;
 use App\facilities;
 use App\category;
 use App\dctools;
+use App\items;
+
 use DB;
 
 class HomeController extends Controller
@@ -31,7 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        $items = items::select('id','item_name')->get();
         if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get()->toArray();
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
@@ -115,7 +117,7 @@ class HomeController extends Controller
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
-            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
+            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
         }else if(auth()->user()->role=="DCTAdmin" || auth()->user()->role=="DCTManager" || auth()->user()->role=="DCTUser"){
             $dctools = dctools::with('distributions')->get();
             return view('dctools',compact('dctools'));
@@ -124,7 +126,7 @@ class HomeController extends Controller
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
-            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs]);
+            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
         }
     }
 
