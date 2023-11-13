@@ -48,7 +48,7 @@ class DctoolsController extends Controller
             'category'=>$request->category
         ])->id;
 
-        stocks::create([
+        dcstocks::create([
             'item_id'=>$item_id,
             'quantity_remaining'=>0
         ]);
