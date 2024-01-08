@@ -170,45 +170,6 @@
                                     Status: <b>{{ $re->request_status }}</b>
                                     Date Sent: {{date('Y-m-d',strtotime($re->created_at)) }}</b> <br>
 
-                                @php
-                                    $position = strpos($re->item_name,", :::");
-                                @endphp
-                                @if (($position === false))
-                                    {{$re->item_name}}
-                                @else
-
-                                    @php
-                                        // Given data
-                                        $data = rtrim($re->item_name, ", :::");
-                                        // Split the data by ":::" to get individual items
-                                        $items = explode(", :::", $data);
-                                        // Initialize arrays to store item names and quantities
-                                        $itemNames = [];
-                                        $itemQuantities = [];
-
-                                    @endphp
-                                    <table class="table table-condensed table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Item Name</th>
-                                                <th>Quantity</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach ($items as $item)
-                                                @php $splitString = explode(" - Qty: ", $item); @endphp
-
-                                                    <tr>
-                                                        <td>{{isset($splitString[0]) ? $splitString[0] : ''}}</td>
-                                                        <td>{{isset($splitString[1]) ? $splitString[1] : ''}}</td>
-                                                    </tr>
-                                            @endforeach
-
-                                        </tbody>
-                                    </table>
-                                @endif
-
                                 </td>
 
                                 <td>{{ $re->comments }} <b> {{ $re->remarks }}</b></td>
@@ -236,7 +197,7 @@
                                             <li>
                                                 <a href="{{ url('/request/' . $re->id) }}"
                                                     class="btn-floating btn-small waves-effect blue waves-light tooltipped"
-                                                    data-position="top" data-tooltip="Update Request" target="_blank"><i
+                                                    data-position="top" data-tooltip="View/Update Request" target="_blank"><i
                                                         class="material-icons">list</i></a>
                                             </li>
 

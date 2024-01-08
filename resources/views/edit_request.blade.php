@@ -3,17 +3,46 @@
     <div class="container">
 
 
-        <table class="striped">
-            <tr>
-                <td style="width:80%;"><b>Item Name: </b><br>
-                    {{ $item->item_name }}
-                </td>
-                <td><b>Quantity Needed:</b> <br>
-                    {{ $item->quantity_requested }}
-                </td>
-            </tr>
-        </table>
-        <table>
+
+                    @php
+                        $position = strpos($item->item_name,", :::");
+                    @endphp
+                    @if (($position === false))
+                        {{$item->item_name}}, Quantity: {{ $item->quantity_requested }}
+                    @else
+
+                        @php
+                            // Given data
+                            $data = rtrim($item->item_name, ", :::");
+                            // Split the data by ":::" to get individual items
+                            $items = explode(", :::", $data);
+                            // Initialize arrays to store item names and quantities
+                            $itemNames = [];
+                            $itemQuantities = [];
+
+                        @endphp
+                        <table id="products" class="display" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($items as $it)
+                                    @php $splitString = explode(" - Qty: ", $it); @endphp
+
+                                        <tr>
+                                            <td>{{isset($splitString[0]) ? $splitString[0] : ''}}</td>
+                                            <td>{{isset($splitString[1]) ? $splitString[1] : ''}}</td>
+                                        </tr>
+                                @endforeach
+
+                            </tbody>
+                        </table>
+                    @endif
+
 
             <tr>
                 <td colspan="2"><strong>Reason:</strong> <br> {{ $item->request_reason }}</td>
