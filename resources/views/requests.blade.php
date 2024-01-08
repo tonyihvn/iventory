@@ -155,7 +155,8 @@
                 <table id="requests" class="display responsive-table striped" style="width:100%;;">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Requested By</th>
+                            <th>Sent By</th>
+                            <th>Date</th>
                             <th>Qty</th>
                             <th>Status</th>
                             <th>Comments/ <b>Remarks</b></th>
@@ -167,6 +168,7 @@
                             <tr>
 
                                 <td>{{ $re->user->name }}</td>
+                                <td>{{date('Y-m-d',strtotime($re->created_at)) }}</td>
                                 <td>{{ $re->quantity_requested }}</td>
                                 <td>{{ $re->request_status }}</td>
                                 <td>{{ $re->comments }} <b> {{ $re->remarks }}</b></td>
@@ -210,7 +212,8 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Requested By</th>
+                            <th>Sent By</th>
+                            <th>Date</th>
                             <th>Qty</th>
                             <th>Status</th>
                             <th>Comments/ <b>Remarks</b></th>
