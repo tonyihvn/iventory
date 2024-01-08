@@ -151,7 +151,7 @@
                 <table id="requests" class="display responsive-table striped" style="width:100%;;">
                     <thead class="thead-dark">
                         <tr>
-                            <th>Item Name</th>
+                            <th>Items</th>
                             <th>Requested By</th>
                             <th>Qty</th>
                             <th>Status</th>
@@ -162,7 +162,48 @@
                     <tbody>
                         @foreach ($requests as $re)
                             <tr>
-                                <td>{{ $re->item_name }}</td>
+                                <td>
+
+                                @php
+                                    $position = strpos($re->item_name,", :::");
+                                @endphp
+                                @if (($position === false))
+                                    {{$re->item_name}}
+                                @else
+
+                                    @php
+                                        // Given data
+                                        $data = rtrim($re->item_name, ", :::");
+                                        // Split the data by ":::" to get individual items
+                                        $items = explode(", :::", $data);
+                                        // Initialize arrays to store item names and quantities
+                                        $itemNames = [];
+                                        $itemQuantities = [];
+
+                                    @endphp
+                                    <table class="table table-condensed table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Item Name</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach ($items as $item)
+                                                @php $splitString = explode(" - Qty: ", $item); @endphp
+
+                                                    <tr>
+                                                        <td>{{$splitString[0]}}</td>
+                                                        <td>{{$splitString[1]}}</td>
+                                                    </tr>
+                                            @endforeach
+
+                                        </tbody>
+                                    </table>
+                                @endif
+
+                                </td>
                                 <td>{{ $re->user->name }}</td>
                                 <td>{{ $re->quantity_requested }}</td>
                                 <td>{{ $re->request_status }}</td>
@@ -207,7 +248,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Item Name</th>
+                            <th>Items</th>
                             <th>Requested By</th>
                             <th>Qty</th>
                             <th>Status</th>
