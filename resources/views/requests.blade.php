@@ -194,8 +194,8 @@
                                                 @php $splitString = explode(" - Qty: ", $item); @endphp
 
                                                     <tr>
-                                                        <td>{{$splitString[0]}}</td>
-                                                        <td>{{$splitString[1]}}</td>
+                                                        <td>{{isset($splitString[0]) ? $splitString[0] : ''}}</td>
+                                                        <td>{{isset($splitString[1]) ? $splitString[1] : ''}}</td>
                                                     </tr>
                                             @endforeach
 
