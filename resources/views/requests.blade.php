@@ -156,9 +156,6 @@
                     <thead class="thead-dark">
                         <tr>
                             <th>Items</th>
-                            <th>Requested By</th>
-                            <th>Qty</th>
-                            <th>Status</th>
                             <th>Comments/ <b>Remarks</b></th>
                             <th>Action</th>
                         </tr>
@@ -167,6 +164,11 @@
                         @foreach ($requests as $re)
                             <tr>
                                 <td>
+
+                                    Requested By: <b>{{ $re->user->name }},</b>
+                                    Qty: <b>{{ $re->quantity_requested }}</b>
+                                    Status: <b>{{ $re->request_status }}</b>
+                                    Date Sent: {{date('Y-m-d',strtotime($re->created_at)) }}</b> <br>
 
                                 @php
                                     $position = strpos($re->item_name,", :::");
@@ -208,9 +210,7 @@
                                 @endif
 
                                 </td>
-                                <td>{{ $re->user->name }}</td>
-                                <td>{{ $re->quantity_requested }}</td>
-                                <td>{{ $re->request_status }}</td>
+
                                 <td>{{ $re->comments }} <b> {{ $re->remarks }}</b></td>
                                 <td>
                                     <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action"
@@ -253,9 +253,6 @@
                     <tfoot>
                         <tr>
                             <th>Items</th>
-                            <th>Requested By</th>
-                            <th>Qty</th>
-                            <th>Status</th>
                             <th>Comments/ <b>Remarks</b></th>
                             <th>Action</th>
                         </tr>
