@@ -115,6 +115,77 @@
             </tr>
         </table>
 
+        @if ($item->movement!=NULL)
+            <h4>Movements for this item (Transfers)</h4>
+            <table class="print_table display striped" style="width:100%;;">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Item Name</th>
+                        <th>ID</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Reason</th>
+                        <th>Date</th>
+                        <th>File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($item->movement as $mv)
+
+                    <tr>
+
+                        <td>{{$mv->inventory->item_name}}</td>
+                        <td>{{$mv->inventory->serial_no}}</td>
+                        <td>{{$mv->from}}</td>
+                        <td>{{ \App\User::where('id',$mv->to)->first()->name}}</td>
+                        <td>{{$mv->reason}}</td>
+                        <td>{{$mv->date_moved}}</td>
+                        <td>
+                            @if(substr($mv->file, -3)=="jpg" || substr($mv->file, -3)=="png" || substr($mv->file, -3)=="peg")
+                            <img src="/uploads/{{$mv->inventories_id}}/{{$mv->file}}" height="80" width="auto"/>
+                            @elseif(substr($mv->file, -3)=="pdf")
+                            <a href="#fileModal" id="viewfile" onclick="viewFile()" class="btn-floating btn-small waves-effect waves-light btn modal-trigger tooltipped" data-position="top" data-tooltip="View / Edit Item" data-src="/uploads/{{$mv->inventories_id}}/{{$mv->file}}" data-filename="{{$mv->item_name}}"><i class="material-icons">remove_red_eye</i></a>
+                            @elseif(substr($mv->file, -3)=="doc" || substr($mv->file, -3)=="ocx" || substr($mv->file, -3)=="ptx" || substr($mv->file, -3)=="ppt" || substr($mv->file, -3)=="xls")
+
+                            <a href="{{url('/uploads/'.$mv->inventories_id.'/'.$mv->file)}}">Open File</a>
+                            <!--<a href="#fileModal" id="viewfile" onclick="viewFile()" class="btn-floating btn-small waves-effect waves-light btn modal-trigger tooltipped" data-position="top" data-tooltip="View / Edit Item" data-src="https://view.officeapps.live.com/op/view.aspx?src=http://localhost/uploads/{{$mv->inventories_id}}/{{urlencode($mv->file)}}" data-filename="{{$mv->item_name}}"><i class="material-icons">remove_red_eye</i></a>
+
+                            <a href="#fileModal" id="viewfile" onclick="viewFile()" class="btn-floating btn-small waves-effect waves-light btn modal-trigger tooltipped" data-position="top" data-tooltip="View / Edit Item" data-src="http://docs.google.com/gview?url=http://localhost/uploads/{{$mv->inventories_id}}/{{urlencode($mv->file)}}" data-filename="{{$mv->item_name}}"><i class="material-icons">remove_red_eye</i></a>-->
+
+                            @elseif($mv->file=="Multiple Files")
+                            @php
+                                $files = scandir('uploads/'.$mv->inventories_id);
+                                foreach ($files as $key => $file) {
+                                    echo '<a href="uploads/'.$mv->inventories_id.'/'.$file.'" target="_blank">'.$file.'</a><br>';
+                                }
+                            @endphp
+
+                            @elseif(substr($mv->file,-3)=="zip")
+                            @php
+                                $za = new ZipArchive();
+
+                                $za->open($mv->file);
+
+                                for( $i = 0; $i < $za->numFiles; $i++ ){
+                                    $stat = $za->statIndex( $i );
+                                    print_r( basename( $stat['name'] ) . PHP_EOL );
+                                }
+                            @endphp
+
+                            @else
+
+                            @endif
+                        </td>
+                        <td>
+
+                    </tr>
+                    @endforeach
+                </tbody>
+
+            </table>
+        @else
+            <blockquote>No movement transaction found in the database.</blockquote>
+        @endif
 
 
     </div>
