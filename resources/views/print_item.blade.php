@@ -156,7 +156,7 @@
                             @php
                                 $files = scandir('uploads/'.$mv->inventories_id);
                                 foreach ($files as $key => $file) {
-                                    echo '<a href="/uploads/'.$mv->inventories_id.'/'.$file.'" target="_blank">'.$file.'</a><br>';
+                                    echo '<a href="/iventory/uploads/'.$mv->inventories_id.'/'.$file.'" target="_blank">'.$file.'</a><br>';
                                 }
                             @endphp
 
