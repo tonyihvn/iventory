@@ -721,9 +721,9 @@ class InventoryController extends Controller
         requests::create([
             'item_name'=>$item,
             'quantity_requested'=>$quantity,
-            'user_id'=>$request->user_id,
+            'user_id'=>Auth()->user()->id,
             'location'=>$request->location,
-            'state'=>$request->state,
+            'state'=>Auth()->user()->state,
             'request_status'=>'Sent',
             'request_reason'=>$request->request_reason,
             'comments'=>$request->comments,

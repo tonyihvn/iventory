@@ -204,6 +204,7 @@
                     <tfoot>
                         <tr>
                             <th>Sent By</th>
+                            <th>State</th>
                             <th>Date</th>
                             <th>Qty</th>
                             <th>Status</th>
