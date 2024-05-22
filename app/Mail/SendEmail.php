@@ -16,6 +16,7 @@ class SendEmail extends Mailable
 
     public function __construct($name,$reason)
     {
+        // The variables for sending unique e-mail
         $this->name = $name;
         $this->reason = $reason;
     }
