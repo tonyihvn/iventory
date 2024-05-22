@@ -737,6 +737,7 @@ class InventoryController extends Controller
             'doneby'=>Auth()->user()->id
         ]);
 
+        try{
         // SEND E-MAILS
         $reqState = Auth()->user()->state;
         $stateInvPOCEmails = User::select('email')->where('role','DCTManager')->where('state',$reqState)->get()->toArray();
@@ -748,8 +749,10 @@ class InventoryController extends Controller
                 Mail::to($email)->send(new SendEmail(Auth()->user()->name,$request->request_reason));
             }
 
-            return 'Emails sent successfully!';
-
+        }//catch exception
+        catch(Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
 
         session()->flash('message','Your '.$request->item_name.' request has been sent successfully!');
         return redirect()->back();
