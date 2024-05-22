@@ -49,7 +49,6 @@ Route::post('fixItems', 'InventoryController@fixItems')->name('fixItems')->middl
 Route::get('update-tagnumbers', 'InventoryController@updateTagnumbers')->name('update-tagnumbers')->middleware('auth');
 Route::post('update-tags', 'InventoryController@updateTags')->name('update-tags')->middleware('auth');
 
-
 // Item Requests
 Route::get('requests', 'InventoryController@requests')->name('requests')->middleware('auth');
 Route::get('request/{id}', 'InventoryController@request')->name('request')->middleware('auth');

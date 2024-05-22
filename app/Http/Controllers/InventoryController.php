@@ -20,7 +20,8 @@ use Auth;
 use File;
 use DB;
 use Illuminate\Support\Facades\Hash;
-
+use App\Mail\SendEmail;
+use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Http\Request;
 
@@ -735,6 +736,20 @@ class InventoryController extends Controller
             'description'=>'A Request Item was deleted',
             'doneby'=>Auth()->user()->id
         ]);
+
+        // SEND E-MAILS
+        $reqState = Auth()->user()->state;
+        $stateInvPOCEmails = User::select('email')->where('role','DCTManager')->where('state',$reqState)->get()->toArray();
+
+            $AdminEmails = ['sdabban@ihvnigeria.org', 'mokposo@ihvnigeria.org', 'anwokoma@ihvnigeria.org'];
+            $emails = array_merge($stateInvPOCEmails,$AdminEmails);
+
+            foreach ($emails as $email) {
+                Mail::to($email)->send(new SendEmail(Auth()->user()->name,$request->request_reason));
+            }
+
+            return 'Emails sent successfully!';
+
 
         session()->flash('message','Your '.$request->item_name.' request has been sent successfully!');
         return redirect()->back();
