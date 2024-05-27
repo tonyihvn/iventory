@@ -9,6 +9,7 @@
     <hr>
     <p>{{$reason}}</p>
     <p>Please, visit click <a href="http://172.16.12.39:90/iventory/requests" class="btn btn-primary btn-inline">Here</a> to Visit the SI Inventory Management System for action. </p>
+    <p>If you are outside the IHVN Network Click <a href="http://41.223.44.123:90/iventory/requests" class="btn btn-primary btn-inline">Here</a>.</p>
 
     <p>
         Regards, <br><br>
