@@ -15,8 +15,10 @@
                     <th>Tool Name</th>
                     <th>Qty Sent</th>
                     <th>Date</th>
-                    <th>Sent From / State</th>
-                    <th>Sent To / State</th>
+                    <th>Sent From Facility</th>
+                    <th>From State</th>
+                    <th>Sent To Facility</th>
+                    <th>To State</th>
                     <th>Send Ref</th>
                     <th>Sender</th>
                     <th>Send Remarks</th>
@@ -36,8 +38,10 @@
                         <td>{{$dc->dcTool->tool_name}}</td>
                         <td>{{$dc->quantity_sent}}</td>
                         <td>{{$dc->date_sent}}</td>
-                        <td>{{$dc->sentFrom->facility_name ?? ""}} / {{$dc->sentfrom_state}}</td>
-                        <td>{{$dc->sentTo->facility_name ?? ""}} / {{$dc->sentto_state}}</td>
+                        <td>{{$dc->sentFrom->facility_name ?? ""}}</td>
+                        <th>{{$dc->sentfrom_state}}</th>
+                        <td>{{$dc->sentTo->facility_name ?? ""}}</td>
+                        <td>{{$dc->sentto_state}}</td>
                         <td><a href="{{ asset('uploads/' . $dc->documents) }}"
                             target="_blank">{{ $dc->documents }}</a></td>
                         <td>{{$dc->sent_by}}</td>
