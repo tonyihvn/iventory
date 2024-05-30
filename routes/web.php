@@ -119,6 +119,7 @@ Route::get('dcutilization/{dcid}', 'DctoolsController@dcUtilization')->name('dct
 Route::post('savedcUtilization', 'DctoolsController@savedcUtilization')->name('savedcUtilization')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 Route::get('futilization/{dcid}', 'DctoolsController@fdcUtilization')->name('futilization')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 Route::get('new-dctreport', 'DctoolsController@newDCTReport')->name('new-dctreport')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
+Route::get('distribution-report', 'DctoolsController@DCTDistributionReport')->name('distribution-report')->middleware('role:DCTAdmin,DCTManager,Admin,Super,DCTUser');
 Route::post('generateDCTReport', 'DctoolsController@generateDCTReport')->name('generateDCTReport')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 Route::post('bulkToolAction', 'DctoolsController@bulkToolAction')->name('bulkToolAction')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
 Route::post('saveBulkdcDistribution', 'DctoolsController@saveBulkdcDistribution')->name('saveBulkdcDistribution')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
