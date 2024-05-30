@@ -84,7 +84,7 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
-        if (Auth()->user()->role=="Admin"){
+        if (Auth()->user()->role=="Admin" || Auth()->user()->role=="DCTAdmin"){
             $facilities=facilities::select('id','facility_name')->orderBy('facility_name','asc')->get();
         }else{
             $facilities=facilities::select('id','facility_name')->orderBy('facility_name','asc')->where('state',Auth()->user()->state)->get();

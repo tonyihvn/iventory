@@ -54,7 +54,7 @@
                             <select name="state" id="state" materialize="material_select">
 
                                 <option value="{{ Auth()->user()->state }}" selected>{{ Auth()->user()->state }}</option>
-                                @if (Auth()->user()->role == 'Admin')
+                                @if (Auth()->user()->role == 'Admin' || Auth()->user()->role=='DCTAdmin')
                                     <option value="FCT">FCT</option>
                                     <option value="Rivers">RIVERS</option>
                                     <option value="Nasarawa">NASARAWA</option>
