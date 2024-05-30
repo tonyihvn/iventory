@@ -33,7 +33,7 @@
                 @foreach ($distribution as $dc)
                     <tr>
 
-                        <td>{{$dc->dcTool->name}}</td>
+                        <td>{{$dc->dcTool->tool_name}}</td>
                         <td>{{$dc->quantity_sent}}</td>
                         <td>{{$dc->date_sent}}</td>
                         <td>{{$dc->sentFrom->facility_name ?? ""}} / {{$dc->sentfrom_state}}</td>
