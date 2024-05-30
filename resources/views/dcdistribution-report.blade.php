@@ -39,14 +39,14 @@
                         <td>{{$dc->sentFrom->facility_name ?? ""}} / {{$dc->sentfrom_state}}</td>
                         <td>{{$dc->sentTo->facility_name ?? ""}} / {{$dc->sentto_state}}</td>
                         <td><a href="{{ asset('uploads/' . $dc->documents) }}"
-                            target="_blank">{{ $itd->documents }}</a></td>
+                            target="_blank">{{ $dc->documents }}</a></td>
                         <td>{{$dc->sent_by}}</td>
                         <td>{{$dc->remarks}}</td>
                         <td>{{$dc->quantity_received}}</td>
                         <td>{{$dc->received_by}}</td>
                         <td>{{$dc->batchno}}</td>
                         <td><a href="{{ asset('uploads/' . $dc->rdocuments) }}"
-                            target="_blank">{{ $itd->rdocuments }}</a></td>
+                            target="_blank">{{ $dc->rdocuments }}</a></td>
                         <td>{{$dc->rremarks}}</td>
 
                     </tr>
