@@ -39,7 +39,7 @@
                         <td>{{$dc->quantity_sent}}</td>
                         <td>{{$dc->date_sent}}</td>
                         <td>{{$dc->sentFrom->facility_name ?? ""}}</td>
-                        <th>{{$dc->sentfrom_state}}</th>
+                        <td>{{$dc->sentfrom_state}}</td>
                         <td>{{$dc->sentTo->facility_name ?? ""}}</td>
                         <td>{{$dc->sentto_state}}</td>
                         <td><a href="{{ asset('uploads/' . $dc->documents) }}"
