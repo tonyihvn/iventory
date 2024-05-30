@@ -415,4 +415,11 @@ class DctoolsController extends Controller
         return redirect()->route('confirm-delivery');
     }
 
+
+    public function DCTDistributionReport(){
+        $distribution = dcdistributions::all();
+
+        return view('dcdistribution-report', compact('distribution'));
+    }
+
 }
