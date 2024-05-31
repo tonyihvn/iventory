@@ -420,7 +420,7 @@ class DctoolsController extends Controller
         $distribution = dcdistributions::all();
 
         if(Auth()->user()->role=="DCTManager"){
-            $distribution = $distribution->where('sentfrom_state',Auth()->User()->state)->get();
+            $distribution = $distribution->where('sentfrom_state',Auth()->user()->state)->get();
         }
 
         return view('dcdistribution-report', compact('distribution'));
