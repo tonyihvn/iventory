@@ -192,7 +192,7 @@
                                         <li><a class="waves-effect waves-green" href="{{ url('requests') }}"><i
                                                     class="material-icons">swap_horiz</i>Request for DCTools</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
-                                                    class="material-icons">swap_horiz</i>Generate DCT Report</a>
+                                                    class="material-icons">swap_horiz</i>Utilization Report</a>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/distribution-report') }}"><i
                                             class="material-icons">swap_horiz</i>DCT Distribution Report</a></li>
                                         </li>
