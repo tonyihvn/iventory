@@ -71,12 +71,12 @@ class RegisterController extends Controller
 
         try{
             // SEND E-MAILS
-                $userEmail = $data['email'];
-                $AdminEmails = ['sdabban@ihvnigeria.org', 'anwokoma@ihvnigeria.org'];
+                $userEmail = [$data['email']];
+                $AdminEmails = ['sdabban@ihvnigeria.org'];
                 $emails = array_merge($userEmail,$AdminEmails);
 
                 foreach ($emails as $email) {
-                    Mail::to($email)->send(new SendEmail($data['name'],$data['password'],$data['email']));
+                    Mail::to($email)->cc('anwokoma@ihvnigeria.org')->send(new SendEmail($data['name'],$data['password'],$data['email']));
                 }
 
             }//catch exception
