@@ -78,7 +78,7 @@ class RegisterController extends Controller
                 $emails = array_merge($userEmail,$AdminEmails);
 
                 foreach ($emails as $email) {
-                    Mail::to($email)->cc('anwokoma@ihvnigeria.org')->send(new SendEmail($data['name'],$data['password'],$data['email']));
+                    Mail::to($email)->cc('anwokoma@ihvnigeria.org')->send(new accountEmail($data['name'],$data['password'],$data['email']));
                 }
 
             }//catch exception
