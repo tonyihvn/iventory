@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use App\facilities;
 use App\department;
 use App\unit;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\accountEmail;
 
 class RegisterController extends Controller
 {
