@@ -68,6 +68,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+        try{
+            // SEND E-MAILS
+                $userEmail = $data['email'];
+                $AdminEmails = ['sdabban@ihvnigeria.org', 'anwokoma@ihvnigeria.org'];
+                $emails = array_merge($userEmail,$AdminEmails);
+
+                foreach ($emails as $email) {
+                    Mail::to($email)->send(new SendEmail($data['name'],$data['password']));
+                }
+
+            }//catch exception
+            catch(Exception $e) {
+                echo 'Message: ' .$e->getMessage();
+            }
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -80,6 +95,8 @@ class RegisterController extends Controller
             'role' => $data['role']
 
         ]);
+
+
     }
 
     public function showRegistrationForm()
