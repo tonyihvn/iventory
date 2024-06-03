@@ -11,10 +11,11 @@ class accountEmail extends Mailable
 
     public $name;
 
-    public function __construct($name,$password)
+    public function __construct($name,$password,$email)
     {
         $this->name = $name;
         $this->password = $password;
+        $this->email = $email;
     }
 
     public function build()
@@ -22,7 +23,8 @@ class accountEmail extends Mailable
         return $this->view('emails.account_email')
                     ->with([
                         'name' => $this->name,
-                        'password' => $this->password
+                        'password' => $this->password,
+                        'email'=>$this->email
                     ]);
     }
 }
