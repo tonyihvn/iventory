@@ -73,19 +73,19 @@ class RegisterController extends Controller
 
         try{
             // SEND E-MAILS
-                $userEmail = [$data['email']];
-                $AdminEmails = ['sdabban@ihvnigeria.org'];
-                $emails = array_merge($userEmail,$AdminEmails);
+                // $userEmail = [$data['email']];
+                $AdminEmails = ['anwokoma@ihvnigeria.org','sdabban@ihvnigeria.org'];
+                // $emails = array_merge($userEmail,$AdminEmails);
 
-                foreach ($emails as $email) {
-                    Mail::to($email)->cc('anwokoma@ihvnigeria.org')->send(new accountEmail($data['name'],$data['password'],$data['email']));
-                }
+
+                Mail::to($data['email'])->cc($AdminEmails)->send(new accountEmail($data['name'],$data['password'],$data['email']));
+
 
             }//catch exception
             catch(Exception $e) {
                 echo 'Message: ' .$e->getMessage();
             }
-        return User::create([
+        User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -97,6 +97,9 @@ class RegisterController extends Controller
             'role' => $data['role']
 
         ]);
+        session()->flash('message','The New Account has been created successfully!');
+
+        return redirect()->back();
 
 
     }
