@@ -93,6 +93,8 @@ Route::get('users', function(){
 Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
 Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
+Route::post('addMoreFacilities', 'InventoryController@addMoreFacilities')->name('addMoreFacilities')->middleware('role:Admin,Super','DCTAdmin','DCTManager');
+
 
 
 // STOCKS

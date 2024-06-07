@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="card col m8 offset-m2">
+            <div class="card col m8">
 
                 <div class="card-header"><b>Update Account/Profile</b>
                     <hr>
@@ -172,6 +172,34 @@
 
 
             </div>
+            <card class="col m4">
+                <form action="{{route('addMoreFacilities')}}">
+                    <input type="hidden" name="user_id" value="{{$user->id}}">
+
+                    <div class="input-field">
+                        <select name="facilities[]" id="facilities" materialize="material_select" class="select2">
+
+                            <option value="{{ $user->facility }}" selected>
+                                {{ $facilities[array_search($user->facility, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
+                            </option>
+                            @foreach ($facilities as $facility)
+                                <option value="{{ $facility->id }}">{{ $facility->facility_name }}</option>
+                            @endforeach
+                        </select>
+                        <label for="facilities">Add More Facilities</label>
+                    </div>
+
+                    <div class="input-field" style="text-align:right; margin-bottom: 20px;">
+                        <div class="col-md-6 offset-md-4">
+                            <button type="submit" class="btn btn-primary">
+                                Add Facilities
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </card>
         </div>
     </div>
 @endsection
