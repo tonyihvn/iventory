@@ -16,6 +16,8 @@ use App\stocks;
 use App\requests;
 use App\dctools;
 use App\items;
+use App\multifacilities;
+
 use Auth;
 use File;
 use DB;
@@ -47,9 +49,17 @@ class InventoryController extends Controller
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
         }else if(auth()->user()->role=="Facility"){
+
+            // Step 1: Get the list of facility IDs
+            $facilityIds = multifacilities::pluck('facility_id')->toArray();
+
+            // Step 2: Add a custom facility ID to the list
+            $customFacilityId = auth()->user()->facility; // Replace with your custom facility ID
+            $facilityIds[] = $customFacilityId;
+
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
-            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->whereIn('facility_id',$facilityIds)->orderBy('item_name', 'asc')->get();
         }else{
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
@@ -839,6 +849,23 @@ class InventoryController extends Controller
         }
 
         session()->flash('message','The item supplied has been added to stock!');
+        return redirect()->back();
+
+    }
+
+    public function addMoreFacilities(Request $request){
+
+        foreach($request->facilities as $facility){
+            if($facility!=""){
+                $requested = multifacilities::create([
+                    'user_id'=>$request->user_id,
+                    'facility_id'=>$facility
+                ]);
+            }
+        }
+
+
+        session()->flash('message','You have successfull added more facilities to the selected user!');
         return redirect()->back();
 
     }
