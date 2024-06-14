@@ -173,7 +173,7 @@
 
             </div>
             <card class="col m4">
-                <form action="{{route('addMoreFacilities')}}">
+                <form action="{{route('addMoreFacilities')}}" method="post">
                     <input type="hidden" name="user_id" value="{{$user->id}}">
 
                     <div class="input-field">
