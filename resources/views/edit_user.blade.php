@@ -177,7 +177,7 @@
                     <input type="hidden" name="user_id" value="{{$user->id}}">
 
                     <div class="input-field">
-                        <select name="facilities[]" id="facilities" materialize="material_select" class="select2" multiple>
+                        <select name="facilities[]" id="facilities" materialize="material_select" class="select2 active" multiple>
 
                             <option value="{{ $user->facility }}" selected>
                                 {{ $facilities[array_search($user->facility, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
