@@ -15,8 +15,10 @@ class CreateMultifacilitiesTable extends Migration
     {
         Schema::create('multifacilities', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('facility_id', 30)->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('facility_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('facility_id')->references('id')->on('facilities')->onDelete('cascade');
             $table->timestamps();
         });
     }

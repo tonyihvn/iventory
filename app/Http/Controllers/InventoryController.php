@@ -854,7 +854,6 @@ class InventoryController extends Controller
     }
 
     public function addMoreFacilities(Request $request){
-
         foreach($request->facilities as $facility){
             if($facility!=""){
                 $requested = multifacilities::create([
@@ -863,11 +862,8 @@ class InventoryController extends Controller
                 ]);
             }
         }
-
-
-        session()->flash('message','You have successfull added more facilities to the selected user!');
+        session()->flash('message','You have successful added more facilities to the selected user!');
         return redirect()->back();
-
     }
 
 
