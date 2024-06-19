@@ -863,7 +863,7 @@ class InventoryController extends Controller
             }
         }
         session()->flash('message','You have successful added more facilities to the selected user!');
-        return redirect()->back();
+        return redirect()->route('users');
     }
 
 
