@@ -52,7 +52,7 @@
                         <td>{{ $units[array_search($ca->unit, array_column($units->toArray(), 'id'))]['unit_name']}}</td>
                         <td>{{ $departments[array_search($ca->department, array_column($departments->toArray(), 'id'))]['department_name']}}</td>
                         <td>@php
-                                if($ca->assignedFacilities->count()==0)){
+                                if($ca->assignedFacilities->count()==0){
                                     echo $facilities[array_search($ca->facility, array_column($facilities->toArray(), 'id'))]['facility_name'];
                                  }else{
                                     $numItems = count($ca->assignedFacilities);
