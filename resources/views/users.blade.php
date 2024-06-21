@@ -61,7 +61,7 @@
                                         if ($key == $last_key) {
                                             echo $facility->facilityName->facility_name;
                                         }else{
-                                            echo $facility->facilityName->facility_name", <br>";
+                                            echo $facility->facilityName->facility_name.",<br>";
                                         }
                                     }
                                 }
