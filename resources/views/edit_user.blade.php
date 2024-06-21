@@ -174,6 +174,7 @@
             </div>
             <card class="col m4">
                 <form action="{{route('addMoreFacilities')}}" method="post">
+                    @csrf
                     <input type="hidden" name="user_id" value="{{$user->id}}">
 
                     <div class="input-field">
