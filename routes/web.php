@@ -88,7 +88,7 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('users', function(){
     return View('users');
-})->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
+})->name('users')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 
 Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
 Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
