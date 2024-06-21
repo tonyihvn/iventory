@@ -36,7 +36,7 @@
                         <th>Phone Number</th>
                         <th>Unit</th>
                         <th>Department</th>
-                        <th>Facility</th>
+                        <th>Facilit(y/ies)</th>
                         <th>State</th>
                         <th>Role</th>
                         <th>Actions</th>
@@ -55,9 +55,14 @@
                                 if(empty($ca->assignedFacilities)){
                                     echo $facilities[array_search($ca->facility, array_column($facilities->toArray(), 'id'))]['facility_name'];
                                  }else{
-                                    foreach($ca->assignedFacilities as $facility)
+                                    $last_key = end(array_keys($ca->assignedFacilities));
+                                    foreach($ca->assignedFacilities as $key=>$facility)
                                     {
-                                        echo $facility->facilityName->facility_name;
+                                        if ($key == $last_key) {
+                                            echo $facility->facilityName->facility_name;
+                                        }else{
+                                            echo $facility->facilityName->facility_name", <br>";
+                                        }
                                     }
                                 }
                             @endphp
