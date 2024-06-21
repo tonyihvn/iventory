@@ -71,4 +71,9 @@ class User extends Authenticatable
         return $this->hasOne('App\facilities', 'id','facility');
     }
 
+    public function assignedFacilities()
+    {
+        return $this->hasMany('App\multifacilities', 'user_id');
+    }
+
 }

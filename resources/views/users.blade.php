@@ -51,7 +51,17 @@
                         <td>{{$ca->phone_number}}</td>
                         <td>{{ $units[array_search($ca->unit, array_column($units->toArray(), 'id'))]['unit_name']}}</td>
                         <td>{{ $departments[array_search($ca->department, array_column($departments->toArray(), 'id'))]['department_name']}}</td>
-                        <td>{{ $facilities[array_search($ca->facility, array_column($facilities->toArray(), 'id'))]['facility_name']}}</td>
+                        <td>@php
+                                if(empty($ca->assignedFacilities)){
+                                    echo $facilities[array_search($ca->facility, array_column($facilities->toArray(), 'id'))]['facility_name'];
+                                 }else{
+                                    foreach($ca->assignedFacilities as $facility)
+                                    {
+                                        echo $facility->facilityName->facility_name;
+                                    }
+                                }
+                            @endphp
+                        </td>
                         <td>{{$ca->state}}</td>
                         <td>{{$ca->role}}</td>
                         <td>
