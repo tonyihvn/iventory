@@ -55,7 +55,7 @@
                                 if(empty($ca->assignedFacilities)){
                                     echo $facilities[array_search($ca->facility, array_column($facilities->toArray(), 'id'))]['facility_name'];
                                  }else{
-                                    $last_key = end(array_keys($ca->assignedFacilities));
+                                    $last_key = end(array_keys($ca->assignedFacilities->toArray()));
                                     foreach($ca->assignedFacilities as $key=>$facility)
                                     {
                                         if ($key == $last_key) {
