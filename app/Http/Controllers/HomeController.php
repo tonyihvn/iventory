@@ -112,7 +112,15 @@ class HomeController extends Controller
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
             ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs]);
-        }else if(auth()->user()->role=="User"){
+        }
+        else if(auth()->user()->role=="Facility"){
+            $categories = category::select('id','category_name')->get();
+            $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
+            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
+            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
+        }
+        else if(auth()->user()->role=="User"){
             $categories = category::select('id','category_name')->get();
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
