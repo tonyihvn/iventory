@@ -854,6 +854,7 @@ class InventoryController extends Controller
     }
 
     public function addMoreFacilities(Request $request){
+        dd("You are here");
         foreach($request->facilities as $facility){
             if($facility!=""){
                 $requested = multifacilities::create([
