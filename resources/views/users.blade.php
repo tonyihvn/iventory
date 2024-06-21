@@ -59,7 +59,7 @@
                                     $i = 0;
                                     foreach($ca->assignedFacilities as $key=>$facility)
                                     {
-                                        if(++$i === $numItems)
+                                        if(++$i === $numItems){
                                             echo $facility->facilityName->facility_name;
                                         }else{
                                             echo $facility->facilityName->facility_name.",<br>";
