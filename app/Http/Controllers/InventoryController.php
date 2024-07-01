@@ -867,6 +867,15 @@ class InventoryController extends Controller
         return redirect()->route('users');
     }
 
+    public function switchFacility(Request $request){
+        $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth::id())->get()->toArray();
+        $assignedFacilities = facilities::whereIn('id',$otherfacilities)->get();
+
+        $dctools = dctools::with('distributions')->get();
+        $selectedFacility = $request->facility_id;
+        return view('dctools',compact('dctools','assignedFacilities','selectedFacility'));
+    }
+
 
 
 }

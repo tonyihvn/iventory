@@ -11,7 +11,8 @@ use App\facilities;
 use App\category;
 use App\dctools;
 use App\items;
-
+use App\multifacilities;
+use Auth;
 use DB;
 
 class HomeController extends Controller
@@ -34,6 +35,9 @@ class HomeController extends Controller
     public function index()
     {
         $items = items::select('id','item_name')->get();
+        $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth::id())->get()->toArray();
+        $assignedFacilities = facilities::whereIn('id',$otherfacilities)->get();
+        $selectedFacility = Auth::user()->facility;
         if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get()->toArray();
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
@@ -128,7 +132,8 @@ class HomeController extends Controller
             return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
         }else if(auth()->user()->role=="DCTAdmin" || auth()->user()->role=="DCTManager" || auth()->user()->role=="DCTUser"){
             $dctools = dctools::with('distributions')->get();
-            return view('dctools',compact('dctools'));
+
+            return view('dctools',compact('dctools','assignedFacilities','selectedFacility'));
         }else{
             $categories = category::select('id','category_name')->get();
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();

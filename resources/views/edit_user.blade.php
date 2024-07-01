@@ -56,7 +56,7 @@
                     <div class="input-field">
                         <select name="state" id="state" materialize="material_select">
 
-                            <option value="{{ Auth()->user()->state }}" selected>{{ Auth()->user()->state }}</option>
+                            <option value="{{ $user->state }}" selected>{{ $user->state }}</option>
                             @if (Auth()->user()->role == 'Admin')
                                 <option value="FCT">FCT</option>
                                 <option value="Rivers">RIVERS</option>

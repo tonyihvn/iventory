@@ -36,7 +36,7 @@
                         <th>Phone Number</th>
                         <th>Unit</th>
                         <th>Department</th>
-                        <th>Facilit(y/ies)</th>
+                        <th style="font-size: 0.7em;">Facilit(y/ies)</th>
                         <th>State</th>
                         <th>Role</th>
                         <th>Actions</th>
@@ -60,9 +60,9 @@
                                     foreach($ca->assignedFacilities as $key=>$facility)
                                     {
                                         if(++$i === $numItems){
-                                            echo $facility->facilityName->facility_name;
+                                            echo "- ".$facility->facilityName->facility_name;
                                         }else{
-                                            echo $facility->facilityName->facility_name.",<br>";
+                                            echo "- ".$facility->facilityName->facility_name.",<br>";
                                         }
                                     }
                                 }

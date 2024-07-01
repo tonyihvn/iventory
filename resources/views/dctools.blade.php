@@ -18,6 +18,36 @@
 
                 </div>
             @endif
+
+            @if (isset($assignedFacilities))
+            <div class="row" style="float: right;">
+                <form action="{{route('switchFacility')}}" method="post">
+                    @csrf
+                    <div class="input-field col s6">
+                        <select name="facility_id" id="facility_id" materialize="material_select" class="select2">
+
+                            <option value="" selected disabled>
+                                Select to Switch
+                            </option>
+                            @foreach ($assignedFacilities as $facility)
+                                <option value="{{ $facility->id }}">{{ $facility->facility_name }}</option>
+                            @endforeach
+                        </select>
+                        <label for="facility_id" class="active">Switch to Another Facility</label>
+                    </div>
+
+                    <div class="input-field col s6" style="text-align:right; margin-bottom: 20px;">
+                        <div>
+                            <button type="submit" class="btn btn-primary">
+                                Switch
+                            </button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        @endif
             <form action="{{ url('bulkToolAction') }}" method="POST">
                 @csrf
 
@@ -69,7 +99,7 @@
                                     <td>{{ isset($dc->distributions) ?  $dc->distributions->where('sentto_state', auth()->user()->state)->sum('quantity_received') - $dc->distributions->where('sentfrom_state', auth()->user()->state)->sum('quantity_sent')  : 0 }}
                                     </td>
                                 @elseif (auth()->user()->role == 'DCTUser')
-                                    <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', auth()->user()->facilityName->id)->sum('quantity_received') - $dc->distributions->where('sent_from', auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
+                                    <td>{{ isset($dc->distributions) ? $dc->distributions->where('sent_to', $selectedFacility ? $selectedFacility : auth()->user()->facilityName->id)->sum('quantity_received') - $dc->distributions->where('sent_from', $selectedFacility ? $selectedFacility : auth()->user()->facilityName->id)->sum('quantity_sent') : 0 }}
                                     </td>
                                 @elseif (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
                                     <td>{{ $dc->stock->quantity_remaining ?? 0 }}</td>

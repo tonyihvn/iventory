@@ -10,6 +10,7 @@ use App\dcdistributions;
 use App\dctoolutilizations;
 use App\supplier;
 use Illuminate\Http\Request;
+use App\multifacilities;
 
 class DctoolsController extends Controller
 {
@@ -256,12 +257,15 @@ class DctoolsController extends Controller
     }
 
     public function dcUtilization($dcid){
+        $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth()->user()->id)->get()->toArray();
+        // dd($otherfacilities);
+
         $dctool = dctools::where('id',$dcid)->first();
         if(Auth()->user()->role=="DCTManager"){
             $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
 
         }if(Auth()->user()->role=="DCTUser"){
-            $facilities = facilities::select('id','facility_name')->where('id',Auth()->user()->facility)->get();
+            $facilities = facilities::select('id','facility_name')->where('id',Auth()->user()->facility)->orWhereIn('id',$otherfacilities)->get();
         }
         else{
             $facilities = facilities::select('id','facility_name')->get();
@@ -308,11 +312,13 @@ class DctoolsController extends Controller
 
     public function newDCTReport(){
         $dctools = dctools::select('id','tool_name','category')->get();
+        $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth()->user()->id)->get()->toArray();
+        // dd(Auth()->user()->facility);
         if(Auth()->user()->role=="DCTManager"){
             $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
 
         }if(Auth()->user()->role=="DCTUser"){
-            $facilities = facilities::select('id','facility_name')->where('id',Auth()->user()->facility)->get();
+            $facilities = facilities::select('id','facility_name')->where('id',Auth()->user()->facility)->orWhereIn('id',$otherfacilities)->get();
         }
         else{
             $facilities = facilities::select('id','facility_name')->get();
@@ -373,12 +379,13 @@ class DctoolsController extends Controller
     }
 
     public function confirmDelivery(){
+        $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth()->user()->id)->get()->toArray();
 
         if(Auth()->user()->role=="DCTManager"){
             $distribution = dcdistributions::where('sentto_state',Auth()->user()->state)->get();
 
-        }else if(Auth()->user()->role=="DCTUser"){
-            $distribution = dcdistributions::where('sent_to',Auth()->user()->facility)->get();
+        }elseif(Auth()->user()->role=="DCTUser"){
+            $distribution = dcdistributions::where('sent_to',Auth()->user()->facility)->orWhereIn('id',$otherfacilities)->get();
         }else{
             $distribution = dcdistributions::all();
         }
