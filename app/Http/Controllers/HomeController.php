@@ -12,6 +12,7 @@ use App\category;
 use App\dctools;
 use App\items;
 use App\multifacilities;
+use App\concurrency;
 use Auth;
 use DB;
 
@@ -141,6 +142,46 @@ class HomeController extends Controller
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
             return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
         }
+    }
+
+    public function concurrency(){
+
+        $state = User::select('state')->where('state',Auth::user()->state)->first()->state;
+        if(Auth::user()->role=="Admin"){
+            $locations = facilities::select('id','facility_name')->get();
+            $assets = concurrency::all();
+        }elseif(Auth::user()->role=="Manager"){
+            $locations = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $assets = concurrency::where('state',$state)->get();
+        }elseif(Auth::user()->role=="Facility"){
+            $locations = null;
+            $assets = concurrency::where('location',Auth::user()->facilityName->facility_name)->get();
+        }else{
+            $locations = null;
+            $assets = null;
+            $state = null;
+        }
+        return view('concurrency', compact('assets','state','locations'));
+    }
+
+    public function concurrencyUpdate(Request $request)
+    {
+        $assets = $request->input('assets');
+        // dd($assets);
+        foreach ($assets as $assetData) {
+            $asset = concurrency::find($assetData['id']);
+            if ($asset) {
+                // Update each column present in the row
+                foreach ($assetData as $column => $value) {
+                    if ($column !== 'id') {
+                        $asset->$column = $value;
+                    }
+                }
+                $asset->save();
+            }
+        }
+        return response()->json(['success' => true]);
+
     }
 
     // public function user_dashboard()

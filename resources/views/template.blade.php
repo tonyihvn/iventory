@@ -208,6 +208,10 @@
                         </ul>
                     </li>
                 @elseif(auth()->user()->role == 'Manager')
+                    <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
+                                class="material-icons">fullscreen</i>Concurrency Check<span
+                                class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a>
+                    </li>
                     <li><a class="waves-effect waves-blue" href="{{ url('/inventories') }}"><i
                                 class="material-icons">fullscreen</i>View All<span
                                 class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a>
@@ -238,6 +242,10 @@
                 @if (auth()->user()->role == 'Admin')
                     <li class="white">
                         <ul class="collapsible collapsible-accordion">
+                            <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
+                                        class="material-icons">fullscreen</i>Concurrency Check<span
+                                        class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a>
+                            </li>
                             <li>
                                 <a class="collapsible-header waves-effect waves-blue"><i
                                         class="material-icons">folder_open</i>System Management<i
