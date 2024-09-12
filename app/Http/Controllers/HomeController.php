@@ -147,6 +147,7 @@ class HomeController extends Controller
     public function concurrency(){
 
         $state = User::select('state')->where('state',Auth::user()->state)->first()->state;
+        $models = concurrency::select('model')->distinct('model')->get();
         if(Auth::user()->role=="Admin"){
             $locations = facilities::select('id','facility_name')->get();
             $assets = concurrency::all();
@@ -161,7 +162,7 @@ class HomeController extends Controller
             $assets = null;
             $state = null;
         }
-        return view('concurrency', compact('assets','state','locations'));
+        return view('concurrency', compact('assets','state','locations','models'));
     }
 
     public function concurrencyUpdate(Request $request)
@@ -171,6 +172,15 @@ class HomeController extends Controller
         foreach ($assets as $assetData) {
             $asset = concurrency::find($assetData['id']);
             if ($asset) {
+                // Update each column present in the row
+                foreach ($assetData as $column => $value) {
+                    if ($column !== 'id') {
+                        $asset->$column = $value;
+                    }
+                }
+                $asset->save();
+            }else{
+                $asset = concurrency::updateOrCreate(['id'=>$assetData['id']],['other_info'=>'New']);
                 // Update each column present in the row
                 foreach ($assetData as $column => $value) {
                     if ($column !== 'id') {

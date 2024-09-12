@@ -36,9 +36,9 @@ Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->m
 Route::get('supplies', 'SuppliesController@index')->name('supplies')->middleware('role:Admin,Super');
 
 // Inventories
-Route::resource('inventories', 'InventoryController')->middleware('auth');
+Route::resource('inventories', 'InventoryController')->middleware('auth')->middleware('role:Admin');
 
-Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
+Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('role:Admin');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');
 Route::get('user_items/{userid}/', 'InventoryController@userItems')->name('user_items')->middleware('auth');
 Route::get('dataquality', 'InventoryController@dataQuality')->name('dataquality')->middleware('role:Admin,Manager');

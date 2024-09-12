@@ -2,11 +2,14 @@
 @extends('template')
 @section('content')
 <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
-<style>
-    .edited-cell {
-        background-color: lightgreen;
-    }
-</style>
+    <style>
+        .edited-cell {
+            background-color: lightgreen !important;
+        }
+        .empty-cell {
+            background-color: rgb(248, 215, 215); /* Light red color */
+        }
+    </style>
     <div class="row" style="padding: 5px;">
         <h3 style="text-align: center">Assets Table {{$state}}</h3>
         <div class="row" style="text-align: center">
@@ -21,6 +24,20 @@
             <datalist id="locationList">
                 @foreach($locations as $location)
                     <option value="{{ $location->facility_name }}">
+                @endforeach
+            </datalist>
+
+            <datalist id="conditionList">
+                    <option value="Operational">
+                    <option value="Not Operational">
+                    <option value="Lost">
+                    <option value="Archived">
+                    <option value="Need Repairs">
+            </datalist>
+
+            <datalist id="modelList">
+                @foreach($models as $model)
+                    <option value="{{ $model->model }}">
                 @endforeach
             </datalist>
         </div>
@@ -58,7 +75,8 @@
                         <td class="location-column" data-column="location">{{ $asset->location }}</td>
 
                     @endif
-                    <td contenteditable="true" data-column="model">{{ $asset->model }}</td>
+                    <td class="model-column" data-column="model">{{ $asset->model }}</td>
+                    {{-- <td contenteditable="true" data-column="model">{{ $asset->model }}</td> --}}
                     <td contenteditable="true" data-column="serial_number">{{ $asset->serial_number }}</td>
                     <td contenteditable="true" data-column="tag_number">{{ $asset->tag_number }}</td>
                     <td contenteditable="true" data-column="user">{{ $asset->user }}</td>
@@ -68,7 +86,9 @@
                     <td contenteditable="true" data-column="grant">{{ $asset->grant }}</td>
                     <td contenteditable="true" data-column="category">{{ $asset->category }}</td>
                     <td contenteditable="true" data-column="batch">{{ $asset->batch }}</td>
-                    <td contenteditable="true" data-column="condition">{{ $asset->condition }}</td>
+                    <td class="condition-column" data-column="condition">{{ $asset->condition }}</td>
+
+                    {{-- <td contenteditable="true" data-column="condition">{{ $asset->condition }}</td> --}}
                     <td contenteditable="true" data-column="date_delivered">{{ $asset->date_delivered }}</td>
                     <td contenteditable="true" data-column="received_by">{{ $asset->received_by }}</td>
                     <td contenteditable="true" data-column="comments">{{ $asset->comments }}</td>
@@ -87,9 +107,15 @@
             let modifiedRows = [];
             let newRows = [];
 
+            $('td').each(function() {
+                if ($(this).text().trim() === '') {
+                    $(this).css('background-color', 'rgb(248, 215, 215)'); // Set background to light red
+                }
+            });
+
             // Add a new row
             $('#addRowButton').click(function() {
-                let newRow = `<tr data-id="new">
+                let newRow = `<tr data-id="0">
                     <td>New</td>
                     @if (Auth()->user()->role=="Admin")
                     <td contenteditable="true" data-column="state"></td>
@@ -104,10 +130,8 @@
                     @elseif (Auth()->user()->role=="Facility")
                         <td contenteditable="false" data-column="location">{{Auth::user()->facilityName->facility_name}}</td>
                     @endif
-                    <td class="location-column" data-column="location">
-                        <input type="text" list="locationList" class="location-input">
-                    </td>
-                    <td contenteditable="true" data-column="model"></td>
+                    <input type="text" list="modelList" class="model-input">
+                    // <td contenteditable="true" data-column="model"></td>
                     <td contenteditable="true" data-column="serial_number"></td>
                     <td contenteditable="true" data-column="tag_number"></td>
                     <td contenteditable="true" data-column="user"></td>
@@ -117,14 +141,15 @@
                     <td contenteditable="true" data-column="grant"></td>
                     <td contenteditable="true" data-column="category"></td>
                     <td contenteditable="true" data-column="batch"></td>
-                    <td contenteditable="true" data-column="condition"></td>
+                    <input type="text" list="conditionList" class="condition-input">
+                    // <td contenteditable="true" data-column="condition"></td>
                     <td contenteditable="true" data-column="date_delivered"></td>
                     <td contenteditable="true" data-column="received_by"></td>
                     <td contenteditable="true" data-column="comments"></td>
                     <td><button class="btn btn-danger deleteRowButton">Delete</button></td>
                 </tr>`;
 
-                $('#products tbody').append(newRow);
+                $('#products tbody').prepend(newRow);
             });
 
              // Handle location cell click and datalist behavior
@@ -145,7 +170,62 @@
 
                         if (newLocation !== originalLocation) {
                             currentElement.addClass('edited-cell');
+                            $(this).css('background-color', 'lightgreen');
                             updateModifiedRows(currentElement.closest('tr'), 'location', newLocation);
+                        } else {
+
+                            currentElement.removeClass('edited-cell');
+                        }
+                    });
+                }
+            });
+
+            // Handle condition cell click and datalist behavior
+            $(document).on('click', '.condition-column', function() {
+                let currentElement = $(this);
+                let originalCondition = currentElement.text().trim();
+
+                if (!currentElement.find('input').length) {
+                    let inputElement = `<input type="text" list="conditionList" class="condition-input" value="${originalCondition}">`;
+                    currentElement.html(inputElement);
+                    let inputField = currentElement.find('input');
+                    inputField.focus(); // Automatically focus the input
+
+                    inputField.on('blur', function() {
+                        let newCondition = inputField.val().trim();
+                        inputField.remove();
+                        currentElement.text(newCondition);
+
+                        if (newCondition !== originalCondition) {
+                            currentElement.addClass('edited-cell');
+                            $(this).css('background-color', 'lightgreen');
+                            updateModifiedRows(currentElement.closest('tr'), 'condition', newCondition);
+                        } else {
+                            currentElement.removeClass('edited-cell');
+                        }
+                    });
+                }
+            });
+
+            // Handle model cell click and datalist behavior
+            $(document).on('click', '.model-column', function() {
+                let currentElement = $(this);
+                let originalModel = currentElement.text().trim();
+
+                if (!currentElement.find('input').length) {
+                    let inputElement = `<input type="text" list="modelList" class="model-input" value="${originalModel}">`;
+                    currentElement.html(inputElement);
+                    let inputField = currentElement.find('input');
+                    inputField.focus(); // Automatically focus the input
+
+                    inputField.on('blur', function() {
+                        let newModel = inputField.val().trim();
+                        inputField.remove();
+                        currentElement.text(newModel);
+
+                        if (newModel !== originalModel) {
+                            currentElement.addClass('edited-cell');
+                            updateModifiedRows(currentElement.closest('tr'), 'model', newModel);
                         } else {
                             currentElement.removeClass('edited-cell');
                         }
@@ -162,6 +242,8 @@
                 }
             });
 
+
+
             $(document).on('blur', '[contenteditable="true"]', function() {
                 let cell = $(this);
                 let originalContent = cell.data('original');
@@ -170,6 +252,7 @@
 
                 if (newContent !== originalContent) {
                     cell.addClass('edited-cell');
+                    $(this).css('background-color', 'lightgreen');
                     updateModifiedRows(cell.closest('tr'), column, newContent);
                 } else {
                     cell.removeClass('edited-cell');
