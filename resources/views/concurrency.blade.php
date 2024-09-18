@@ -73,7 +73,6 @@
                     <td contenteditable="false" data-column="state">{{ $asset->state }}</td>
                     @if (Auth()->user()->role!=="Facility")
                         <td class="location-column" data-column="location">{{ $asset->location }}</td>
-
                     @endif
                     <td class="model-column" data-column="model">{{ $asset->model }}</td>
                     {{-- <td contenteditable="true" data-column="model">{{ $asset->model }}</td> --}}
