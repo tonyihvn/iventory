@@ -14,35 +14,35 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Welcome and Home Pages
-Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
+Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
 
-Route::get('/concurrency', 'HomeController@concurrency')->name('concurrency')->middleware('role:Admin,Manager,Facility,User,Observer');
-Route::post('/concurrencyUpdate', 'HomeController@concurrencyUpdate')->name('concurrencyUpdate')->middleware('role:Admin,Manager,Facility,User,Observer');
+Route::get('/concurrency', 'HomeController@concurrency')->name('concurrency')->middleware('role:Super,Admin,Manager,Facility,User,Observer');
+Route::post('/concurrencyUpdate', 'HomeController@concurrencyUpdate')->name('concurrencyUpdate')->middleware('role:Super,Admin,Manager,Facility,User,Observer');
 
 
-Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
+Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
 
 Route::get('/home', 'HomeController@user_dashboard')->name('home')->middleware('auth');
 
-Route::get('/register','RegisterController@showRegistrationForm')->name('register')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
+Route::get('/register','RegisterController@showRegistrationForm')->name('register')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager');
 
 // Settings
-Route::resource('settings', 'SettingsController')->middleware('role:Admin');
-Route::get('edit_settings/{id}', 'SettingsController@edit')->name('edit_settings')->middleware('role:Admin');
+Route::resource('settings', 'SettingsController')->middleware('role:Super,Admin');
+Route::get('edit_settings/{id}', 'SettingsController@edit')->name('edit_settings')->middleware('role:Super,Admin');
 
 // Suppliers
 Route::resource('suppliers', 'SupplierController')->middleware('role:Admin,DCTAdmin');
-Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->middleware('role:Admin,DCTAdmin');
-Route::get('supplies', 'SuppliesController@index')->name('supplies')->middleware('role:Admin,Super');
+Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->middleware('role:Super,Admin,DCTAdmin');
+Route::get('supplies', 'SuppliesController@index')->name('supplies')->middleware('role:Super,Admin,Super');
 
 // Inventories
-Route::resource('inventories', 'InventoryController')->middleware('auth')->middleware('role:Admin');
+Route::resource('inventories', 'InventoryController')->middleware('auth')->middleware('role:Super,Admin');
 
-Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('role:Admin');
+Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('role:Super,Admin');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');
 Route::get('user_items/{userid}/', 'InventoryController@userItems')->name('user_items')->middleware('auth');
-Route::get('dataquality', 'InventoryController@dataQuality')->name('dataquality')->middleware('role:Admin,Manager');
-Route::post('updateInventory','InventoryController@updateInventory')->name('updateInventory')->middleware('role:Admin,Manager');
+Route::get('dataquality', 'InventoryController@dataQuality')->name('dataquality')->middleware('role:Super,Admin,Manager');
+Route::post('updateInventory','InventoryController@updateInventory')->name('updateInventory')->middleware('role:Super,Admin,Manager');
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
 Route::get('item/{id}', 'InventoryController@edit')->name('item')->middleware('auth');
@@ -63,27 +63,27 @@ Route::post('update_request', 'InventoryController@update_request')->name('updat
 
 // Facilities
 Route::resource('facilities', 'FacilitiesController')->middleware('role:Admin,Manager');
-Route::get('add_facility', 'FacilitiesController@create')->name('add_facility')->middleware('role:Admin,Manager');
+Route::get('add_facility', 'FacilitiesController@create')->name('add_facility')->middleware('role:Super,Admin,Manager');
 Route::get('facility/{id}', 'FacilitiesController@edit')->middleware('role:Admin,Manager');
-Route::get('facilityitems/{fid}', 'InventoryController@facilityItems')->middleware('role:Admin,Manager');
+Route::get('facilityitems/{fid}', 'InventoryController@facilityItems')->middleware('role:Super,Admin,Manager');
 
 // Movements
-Route::resource('movements', 'MovementController')->middleware('role:Admin,Manager');
-Route::get('move_item/{id}', 'MovementController@edit')->name('move_item')->middleware('role:Admin,Manager');
+Route::resource('movements', 'MovementController')->middleware('role:Super,Admin,Manager');
+Route::get('move_item/{id}', 'MovementController@edit')->name('move_item')->middleware('role:Super,Admin,Manager');
 
 // Audits
-Route::resource('audits', 'AuditController')->middleware('role:Admin');
+Route::resource('audits', 'AuditController')->middleware('role:Super,Admin');
 
 // Departments
 Route::resource('departments', 'DepartmentController')->middleware('auth');
-Route::get('add_department', 'DepartmentController@create')->name('add_department')->middleware('role:Admin,Manager');
+Route::get('add_department', 'DepartmentController@create')->name('add_department')->middleware('role:Super,Admin,Manager');
 
 // Categories
 Route::resource('categories', 'CategoryController')->middleware('auth');
 
 // Units
 Route::resource('units', 'UnitController')->middleware('auth');
-Route::get('add_unit', 'UnitController@create')->name('add_unit')->middleware('role:Admin,Manager');
+Route::get('add_unit', 'UnitController@create')->name('add_unit')->middleware('role:Super,Admin,Manager');
 
 // ACCESS AND AUTHENTICATIONS
 Auth::routes();
@@ -92,11 +92,11 @@ Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get('users', function(){
     return View('users');
-})->name('users')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
+})->name('users')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager');
 
-Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
-Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Admin');
-Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Admin,Manager,DCTAdmin,DCTManager');
+Route::get('edit_user/{id}', 'CategoryController@editUser')->name('edit_user')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager');
+Route::delete('deleteUser/{id}', 'CategoryController@deleteUser')->name('deleteUser')->middleware('role:Super,Admin');
+Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager');
 Route::post('addMoreFacilities', 'InventoryController@addMoreFacilities')->name('addMoreFacilities')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
 Route::post('switchFacility', 'InventoryController@switchFacility')->name('switchFacility')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 
@@ -115,8 +115,8 @@ Route::post('newSupply', 'InventoryController@newSupply')->name('newSupply')->mi
 
 // DCTOOLS
 Route::resource('dctools', 'DctoolsController')->middleware('auth');
-Route::get('dctools', 'DctoolsController@index')->name('dctools')->middleware('role:Admin,Manager,DCTAdmin,DCTManager,DCTUser');
-Route::get('add-dctool', 'DctoolsController@create')->name('add-dctool')->middleware('role:Admin,Manager,DCTAdmin');
+Route::get('dctools', 'DctoolsController@index')->name('dctools')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager,DCTUser');
+Route::get('add-dctool', 'DctoolsController@create')->name('add-dctool')->middleware('role:Super,Admin,Manager,DCTAdmin');
 Route::get('add-dcstock/{dcid}', 'DctoolsController@addDCTStock')->name('add-dcstock')->middleware('role:DCTAdmin,Admin,Super');
 Route::post('newDCTSupply', 'DctoolsController@newDCTSupply')->name('newDCTSupply')->middleware('role:Admin,Super,DCTAdmin');
 Route::get('send-dctools/{dcid}', 'DctoolsController@dcDistribution')->name('send-dctools')->middleware('role:DCTAdmin,Admin,Super,DCTManager,DCTUser');
