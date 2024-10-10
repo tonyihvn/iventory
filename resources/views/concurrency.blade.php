@@ -105,6 +105,7 @@
             // $('#assetsTable').DataTable(); // Initialize DataTable
             let modifiedRows = [];
             let newRows = [];
+            let newRowCounter = 1;
 
             $('td').each(function() {
                 if ($(this).text().trim() === '') {
@@ -114,23 +115,24 @@
 
             // Add a new row
             $('#addRowButton').click(function() {
-                let newRow = `<tr data-id="0">
+                let newRowId = `new-${newRowCounter++}`; // Unique ID for the new row
+
+                let newRow = `<tr data-id="${newRowId}">
                     <td>New</td>
                     @if (Auth()->user()->role=="Admin")
-                    <td contenteditable="true" data-column="state"></td>
+                        <td contenteditable="true" data-column="state"></td>
                     @elseif (Auth()->user()->role=="Manager" || Auth()->user()->role=="Facility")
                         <td contenteditable="false" data-column="state">{{$state}}</td>
                     @endif
 
                     @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Manager")
                         <td class="location-column" data-column="location">
-                            <input type="text" list="locationList" class="location-input">
                         </td>
+
                     @elseif (Auth()->user()->role=="Facility")
                         <td contenteditable="false" data-column="location">{{Auth::user()->facilityName->facility_name}}</td>
                     @endif
-                    <input type="text" list="modelList" class="model-input">
-                    // <td contenteditable="true" data-column="model"></td>
+                    <td contenteditable="true" class="model-column" data-column="model"></td>
                     <td contenteditable="true" data-column="serial_number"></td>
                     <td contenteditable="true" data-column="tag_number"></td>
                     <td contenteditable="true" data-column="user"></td>
@@ -140,8 +142,7 @@
                     <td contenteditable="true" data-column="grant"></td>
                     <td contenteditable="true" data-column="category"></td>
                     <td contenteditable="true" data-column="batch"></td>
-                    <input type="text" list="conditionList" class="condition-input">
-                    // <td contenteditable="true" data-column="condition"></td>
+                    <td contenteditable="true" class="condition-column" data-column="condition"></td>
                     <td contenteditable="true" data-column="date_delivered"></td>
                     <td contenteditable="true" data-column="received_by"></td>
                     <td contenteditable="true" data-column="comments"></td>
@@ -265,10 +266,10 @@
             function updateModifiedRows(row, column, newValue) {
                 let id = row.data('id');
 
-                if (id === "new") {
+                if (id && id.startsWith('new')) {
                     let existingRow = newRows.find(row => row.id === id);
                     if (!existingRow) {
-                        let rowData = { id: "new" };
+                        let rowData = { id: id };
                         rowData[column] = newValue;
                         newRows.push(rowData);
                     } else {
@@ -296,7 +297,7 @@
                 let dataToSave = modifiedRows.concat(newRows);
 
                 if (dataToSave.length > 0) {
-                    alert(dataToSave);
+                    alert(JSON.stringify(dataToSave, null, 2));
                     $.ajax({
                         url: '{{ route("concurrencyUpdate") }}',
                         method: 'POST',
@@ -309,6 +310,7 @@
                                 alert('Data updated successfully');
                                 modifiedRows = []; // Clear modified rows after success
                                 newRows = []; // Clear new rows after success
+                                window.location.reload();
                             } else {
                                 alert('Error: ' + response.message);
                             }

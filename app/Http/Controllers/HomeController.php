@@ -15,6 +15,7 @@ use App\multifacilities;
 use App\concurrency;
 use Auth;
 use DB;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -168,29 +169,37 @@ class HomeController extends Controller
     public function concurrencyUpdate(Request $request)
     {
         $assets = $request->input('assets');
-        // dd($assets);
+        Log::info("Submitted Data:",$assets);
         foreach ($assets as $assetData) {
-
-            dd($assetData);
-
             $asset = concurrency::find($assetData['id']);
-            if ($asset) {
+            if (!empty($asset)) {
                 // Update each column present in the row
                 foreach ($assetData as $column => $value) {
                     if ($column !== 'id') {
                         $asset->$column = $value;
+                    }
+                    if ($column == 'date_of_purchase') {
+                        $asset->$column = date("Y-m-d",strtotime($value));
                     }
                 }
                 $asset->save();
             }else{
-                $asset = concurrency::updateOrCreate(['id'=>$assetData['id']],['other_info'=>'New']);
+                if(!is_numeric($assetData['id'])){
+                    $assetData['id'] = 0;
+                }
+                $newAsset = concurrency::updateOrCreate(['id'=>$assetData['id']],['other_info'=>'New']);
+
                 // Update each column present in the row
                 foreach ($assetData as $column => $value) {
                     if ($column !== 'id') {
-                        $asset->$column = $value;
+
+                        $newAsset->$column = $value;
+                    }
+                    if ($column == 'date_of_purchase') {
+                        $newAsset->$column = date("Y-m-d",strtotime($value));
                     }
                 }
-                $asset->save();
+                $newAsset->save();
             }
         }
         return response()->json(['success' => true]);
