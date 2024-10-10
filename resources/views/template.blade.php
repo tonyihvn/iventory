@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="{{ asset('/css/jquery.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/searchPanes.dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/fixedHeader.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('/css/pmain.scss') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('/css/pmain.scss') }}"> --}}
     <link rel="stylesheet"
         href="{{ asset('https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css') }}">
     <style>

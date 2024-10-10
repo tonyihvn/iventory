@@ -1,0 +1,146 @@
+/* Base Theme Colors */
+body {
+    background-color: #f0f4f8; /* Light blueish background */
+    color: #2e4053; /* Darker blue-gray for text */
+}
+
+/* Override Primary Color */
+.primary, .btn, .btn-large, .btn-floating, .tabs .tab a, .dropdown-content li>a {
+    background-color: #1e88e5 !important; /* Blue primary */
+    color: white !important;
+}
+
+.primary-text, .tabs .tab a:hover, .tabs .tab a.active {
+    color: #1e88e5 !important; /* Blue text */
+}
+
+.secondary, .dropdown-content li>a:hover, .btn:hover, .btn-large:hover {
+    background-color: #1976d2 !important; /* Darker blue for hover */
+}
+
+.secondary-text {
+    color: #1976d2 !important;
+}
+
+/* General Components Styling */
+.navbar {
+    background-color: #1565c0 !important; /* Darker blue for navbar */
+    box-shadow: none !important; /* Remove the shadow for a flat look */
+}
+
+.card {
+    background-color: #e3f2fd !important; /* Light blue card background */
+    border-radius: 10px; /* Softer rounded corners */
+    box-shadow: none; /* Remove shadows for a flat design */
+    color: #1c3c57; /* Dark text for better contrast */
+}
+
+.card-title {
+    color: #0d47a1 !important; /* Strong blue for card titles */
+}
+
+/* Buttons */
+.btn, .btn-large, .btn-floating {
+    border-radius: 25px !important; /* More rounded buttons */
+    box-shadow: none !important; /* Remove box shadow */
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.btn:hover, .btn-large:hover {
+    transform: scale(1.05) !important; /* Slight scaling effect */
+}
+
+.btn-flat {
+    color: #1e88e5 !important;
+    background-color: transparent !important;
+    border: 1px solid #1e88e5 !important; /* Border for flat buttons */
+}
+
+/* Form Inputs */
+input[type=text], textarea, select, input[type=password], input[type=email] {
+    border-bottom: 2px solid #1e88e5 !important;
+    box-shadow: none !important; /* Remove input shadow */
+}
+
+input[type=text]:focus, textarea:focus, select:focus, input[type=password]:focus, input[type=email]:focus {
+    border-bottom: 2px solid #1976d2 !important;
+    box-shadow: none !important; /* Remove focus shadow */
+}
+
+label {
+    color: #1565c0 !important;
+}
+
+/* Dropdown */
+.dropdown-content {
+    background-color: #f0f4f8 !important; /* Light blueish background */
+}
+
+.dropdown-content li>a {
+    color: #1e88e5 !important; /* Blue links */
+}
+
+/* Tables */
+table {
+    border: 1px solid #1e88e5 !important;
+    background-color: #ffffff !important; /* White background for tables */
+}
+
+th {
+    background-color: #1e88e5 !important;
+    color: white !important;
+}
+
+td {
+    color: #0d47a1 !important;
+}
+
+/* Fab Buttons */
+.fab {
+    background-color: #1e88e5 !important;
+}
+
+.fab:hover {
+    background-color: #1976d2 !important;
+}
+
+/* Chips */
+.chip {
+    background-color: #e3f2fd !important;
+    color: #1565c0 !important;
+}
+
+/* Modal */
+.modal {
+    background-color: #ffffff !important;
+    border-radius: 8px !important;
+}
+
+.modal-footer {
+    background-color: #f0f4f8 !important;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: #0d47a1 !important;
+    font-family: 'Roboto', sans-serif; /* Change the font family to something different from Materialize default */
+}
+
+p, li {
+    color: #2e4053 !important;
+}
+
+/* Collapsible */
+.collapsible-header {
+    background-color: #1e88e5 !important;
+    color: white !important;
+}
+
+.collapsible-body {
+    background-color: #e3f2fd !important;
+}
+
+/* Loader */
+.preloader-wrapper {
+    border-color: #1e88e5 !important;
+}
