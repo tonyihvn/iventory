@@ -170,6 +170,9 @@ class HomeController extends Controller
         $assets = $request->input('assets');
         // dd($assets);
         foreach ($assets as $assetData) {
+
+            dd($assetData);
+
             $asset = concurrency::find($assetData['id']);
             if ($asset) {
                 // Update each column present in the row
