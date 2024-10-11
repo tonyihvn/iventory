@@ -30,6 +30,11 @@
             right: 2em;
             z-index: 1000000000000000000;
         }
+
+        .btn{
+            background-color: #889190 !important;
+        }
+
     </style>
 </head>
 
@@ -84,7 +89,7 @@
 
 
             <ul class="side-nav teal darken-2" id="mobile-demo">
-                <li class="teal center"><a href="#"><i class="material-icons">menu</i>I-VENTORY </a></li>
+                <li class="teal center"><a href="#"><i class="material-icons">menu</i>IHVN GF ASSETS </a></li>
                 <li><a class="collapsible-header waves-effect waves-blue" href="{{ url('/') }}"><i
                             class="material-icons">dashboard</i>DASHBOARD</a></li>
 
@@ -382,8 +387,8 @@
                 </div>
             </div>
         </div>
-        <div class="footer-copyright  teal darken-4">
-            <div class="container">Developed by <a href="https://ihvnigeria.org">IHVN, HI</a></div>
+        <div class="footer-copyright  black darken-4">
+            <div class="container">Developed by <a href="https://valueminds.org">Value Minds</a></div>
         </div>
     </footer>
 
@@ -423,6 +428,7 @@
 {{-- <script src="{{ asset('/js/exporting.js') }}"></script> --}}
 <?php if(isset($dashboard)){ ?>
     <script src="{{ asset('/js/highcharts.js') }}"></script>
+
 <script type="text/javascript">
     $(function() {
         var laptops = <?php echo $Laptops ?? ''; ?>;
@@ -434,10 +440,10 @@
 
         $('#basic-area').highcharts({
             chart: {
-                type: 'column'
+                type: 'area'
             },
             title: {
-                text: 'Gadget/Equipment Distribution Accross the State(s)'
+                text: 'Gadget Distribution(s)'
             },
             xAxis: {
                 categories: categoris

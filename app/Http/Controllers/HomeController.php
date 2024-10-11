@@ -13,6 +13,7 @@ use App\dctools;
 use App\items;
 use App\multifacilities;
 use App\concurrency;
+use App\requests;
 use Auth;
 use DB;
 use Illuminate\Support\Facades\Log;
@@ -40,7 +41,9 @@ class HomeController extends Controller
         $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth::id())->get()->toArray();
         $assignedFacilities = facilities::whereIn('id',$otherfacilities)->get();
         $selectedFacility = Auth::user()->facility;
+
         if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
+            $requests = requests::where('request_status','!=','Delivered')->with('user')->paginate(50);
             $usrs = User::select('id','name')->get()->toArray();
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
             ->groupBy('category')
@@ -78,8 +81,10 @@ class HomeController extends Controller
             ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
-            ->with(['allcats'=>$allcats,'audits'=>$audits, 'states'=>$states,'usrs'=>$usrs]);
-        }else if(auth()->user()->role=='Manager'){
+            ->with(['allcats'=>$allcats,'audits'=>$audits, 'states'=>$states,'usrs'=>$usrs])
+            ->with(['requests'=>$requests]);
+        }elseif(auth()->user()->role=='Manager'){
+            $requests = requests::with('user')->where('state',auth()->user()->state)->where('request_status','!=','Delivered')->paginate(50);
             $usrs = User::select('id','name')->where('state',auth()->user()->state)->get()->toArray();
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))->where('state',auth()->user()->state)
             ->groupBy('category')
@@ -117,7 +122,7 @@ class HomeController extends Controller
             ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
-            ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs]);
+            ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs])->with(['requests'=>$requests]);
         }
         else if(auth()->user()->role=="Facility"){
             $categories = category::select('id','category_name')->get();

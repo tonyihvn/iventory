@@ -8,7 +8,7 @@
                         $position = strpos($item->item_name,", :::");
                     @endphp
                     @if (($position === false))
-                        {{$item->item_name}}, Quantity: {{ $item->quantity_requested }}
+                        {{$item->item_name}}, <b>Quantity:</b> {{ $item->quantity_requested }}
                     @else
 
                         @php
@@ -21,7 +21,7 @@
                             $itemQuantities = [];
 
                         @endphp
-                        <table id="products" class="display" style="width:100%;">
+                        <table class="display striped table bordered" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th>Item Name</th>
@@ -42,7 +42,7 @@
                             </tbody>
                         </table>
                     @endif
-
+            <table class="display striped table bordered" style="width:100%;">
 
             <tr>
                 <td colspan="2"><strong>Reason:</strong> <br> {{ $item->request_reason }}</td>
@@ -52,12 +52,12 @@
 
 
             <tr>
-                <td><b>Date Requested: </b>{{ $item->created_at }}</td>
-                <td>Location To Be Used: {{ $item->location }}</td>
+                <td><b>Date Requested: </b> <br> {{ $item->created_at }}</td>
+                <td><b>Location To Be Used:</b> <br> {{ $item->location }}</td>
             </tr>
 
             <tr>
-                <td>Requested By:</td>
+                <td><b>Requested By:</b></td>
                 <td>{{ $item->user->name }} from : {{ $item->state }}</td>
             </tr>
 
@@ -67,7 +67,7 @@
                 <td>Comments:</td>
                 <td>{{ $item->comments }}
                     <hr>
-                    <b>Approval Remarks:</b>
+                    <b>Approval Remarks:</b> <br>
                     {{ $item->remarks }}
                 </td>
             </tr>

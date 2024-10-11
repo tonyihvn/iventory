@@ -20,42 +20,73 @@
         .highcharts-title {
             font-size: 1.5rem !important;
         }
+
+        .page-item a{
+            margin: 2px !important;
+            padding-top: 7px !important;
+            padding-bottom: 12px;
+            /* all: unset !important; */
+        }
+
+
+
     </style>
     <main>
         <div class="row">
-            <div class="text-center" style="text-align: center; margin-top: 10px;">
-                @if (auth()->user()->role != 'Observer')
-                    <a href="{{ url('/concurrency') }}" class="btn btn-large pulse"><i class="material-icons">add</i> Concurrency
-                        Item</a>
-                @endif
-                <a href="{{ url('/concurrency') }}" class="btn btn-large green pulse"><i
-                        class="material-icons">remove_red_eye</i>Inventories</a>
-            </div>
-            <hr>
-
-            <div style="padding: 35px;" align="center" class="card">
+            <div style="padding: 35px;">
                 <div class="row">
-                    <div class="left card-title">
-                        <b>Chart of Inventories</b>
+                    <div class="col m6 card">
+                        <div class="card-title">
+                            Chart
+                        </div>
+                        <hr>
+                        <div id="basic-area" class="card-content"></div>
+
+                    </div>
+                    <div class="col m6 card blue-grey lighten-5">
+                        <div class="card-title">
+                            Requests / Reminders
+                        </div>
+                        <hr>
+                        <div class="card-content">
+                            <table class="table striped display responsive-table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Sender / State</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+
+                                    @foreach ($requests as $req)
+                                        <tr>
+                                            <td>{{ $req->user->name }} / {{$req->user->state}}</td>
+                                            <td>{{date('Y-m-d',strtotime($req->created_at)) }}</td>
+                                            <td>{{ $req->request_status }}</td>
+                                            <td><a href="{{url('request/'.$req->id)}}" class="btn">Attend</a></td>
+
+                                        </tr>
+                                    @endforeach
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div id="basic-area" class="card-panel"></div>
-                </div>
+
             </div>
 
             <div style="padding: 35px;" align="center" class="row card">
                 <div class="col m4">
-                    <div class="row">
+
                         <div class="left card-title">
                             <b>Inventory Categories</b>
                         </div>
-                    </div>
 
-                    <div class="row">
+
+
                         <table id="categories" class="table striped display responsive-table"
-                            style="width:100%; font-size:0.8em !important;">
+                            style="width:100%; font-size:0.7em !important;">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Category</th>
@@ -81,11 +112,10 @@
                                 </tr>
                             </tfoot>
                         </table>
-                    </div>
+
                 </div>
 
                 <div class="col m8">
-                    <div class="row">
                         <div class="left card-title">
                             <b>Latest Activity</b>
                         </div>
@@ -143,17 +173,13 @@
                                 </tfoot>
                             </table>
                             @if (Auth()->user()->role == 'Admin')
-                                <div class="col m6 offset-m3">{{ $audits->links() }}</div>
+                                <div class="row">{{ $audits->links() }}</div>
                             @endif
                         @else
                             <blockquote>No Audit trails found in the database.</blockquote>
                         @endif
 
-                    </div>
 
-                    <div class="row">
-
-                    </div>
                 </div>
             </div>
 
