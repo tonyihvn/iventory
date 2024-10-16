@@ -22,7 +22,7 @@ Route::post('/concurrencyUpdate', 'HomeController@concurrencyUpdate')->name('con
 
 Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
 
-Route::get('/home', 'HomeController@user_dashboard')->name('home')->middleware('auth');
+Route::get('/home', 'HomeController@dashboard')->name('home')->middleware('auth');
 
 Route::get('/register','RegisterController@showRegistrationForm')->name('register')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager');
 
