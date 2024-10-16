@@ -35,18 +35,21 @@
                         </div>
 
                         <div class="input-field col s6">
-                            <input id="serial_no" type="text" class="validate" name="serial_no">
-                            <label for="serial_no">Device ID(s)</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
                             <input id="ihvn_no" type="text" class="validate" value="" name="ihvn_no">
                             <label for="ihvn_no">IHVN Tag Number(s)</label>
                         </div>
+
+
+                    </div>
+                    <div class="row">
+
+                        <div class="input-field col s6">
+                            <input id="serial_no" type="text" class="validate" name="serial_no">
+                            <label for="serial_no">Serial Number(s)</label>
+                        </div>
                         <div class="input-field col s6">
                             <input id="tag_no" type="text" class="validate" name="tag_no">
-                            <label for="tag_no">Serial Number(s)</label>
+                            <label for="tag_no">Device ID(s)</label>
                         </div>
                     </div>
 
@@ -140,12 +143,18 @@
 
                     <div class="input-field">
                         <select name="state" id="state" materialize="material_select">
+                            <option value="{{ Auth()->user()->state }}" selected>Auth()->user()->state</option>
+                            @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
+                                <option value="ANAMBRA">ANAMBRA</option>
+                                <option value="KWARA">KWARA</option>
+                                <option value="EBONYI">EBONYI</option>
+                                <option value="GOMBE">GOMBE</option>
 
-                            <option value="{{ Auth()->user()->state }}" selected>State</option>
-                            <option value="FCT">FCT</option>
-                            <option value="RIVERS">RIVERS</option>
-                            <option value="NASARAWA">NASARAWA</option>
-                            <option value="KATSINA">KATSINA</option>
+                                <option value="FCT">FCT</option>
+                                <option value="RIVERS">RIVERS</option>
+                                <option value="NASARAWA">NASARAWA</option>
+                                <option value="KATSINA">KATSINA</option>
+                            @endif
 
                         </select>
                         <label for="state">Select State</label>
@@ -181,6 +190,7 @@
                         </select>
                         <label>Select Unit</label>
                     </div>
+
                     <div class="row">
                         <div class="input-field col s6">
                             <select name="user[]" id="user" materialize="material_select" class="select2" multiple>
@@ -197,8 +207,11 @@
 
                         <div class="input-field col s6" id="new_username">
                             <input id="new_user" type="text" class="validate" name="new_user">
-                            <label for="new_user">Enter Name</label>
+                            <label for="new_user" class="active">Enter Name</label>
                         </div>
+                    </div>
+
+                    <div class="row">
 
                         <div class="input-field col s6">
                             <select name="added_by" class="initialized" materialize="material_select">
@@ -212,18 +225,36 @@
                             </select>
                             <label>Added By</label>
                         </div>
+
+                        <div class="input-field col s6">
+                            <input id="internal_location" type="text" class="validate" name="internal_location">
+                            <label for="internal_location">Internal Location - e.g ICT Room</label>
+                        </div>
                     </div>
 
-                    <div class="input-field">
-                        <input id="internal_location" type="text" class="validate" name="internal_location">
-                        <label for="internal_location">Internal Location - e.g ICT Room, SI Store 4th Floor</label>
-                    </div>
 
-                    <div class="input-field">
-                        <input id="remarks" type="text" class="validate" name="remarks">
-                        <label for="remarks">Remarks</label>
-                    </div>
+                    <row>
+                        <div class="input-field col s12">
+                            <input id="remarks" type="text" class="validate" name="remarks">
+                            <label for="remarks">Batch No (e.g. Oct2024)</label>
+                        </div>
+                    </row>
 
+                    <row>
+
+                        <div class="input-field col s6">
+                            <input id="concurrency" type="checkbox" class="validate" name="concurrency" value="Yes">
+                            <label for="concurrency">Add to Concurrency Record</label>
+                        </div>
+
+                        @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
+                            <div class="input-field col s6">
+                                <input id="deduct_stock" type="checkbox" class="validate" name="deduct_stock" value="Yes">
+                                <label for="deduct_stock">Deduct from Stock</label>
+                            </div>
+                        @endif
+
+                    </row>
                     <div class="input-field text-right right" style="margin-bottom:20px;">
 
                         <button type="submit" class="btn">

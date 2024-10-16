@@ -32,7 +32,7 @@
         }
 
         .btn{
-            background-color: #889190 !important;
+            background-color: #0d201e !important;
         }
 
     </style>
@@ -136,7 +136,7 @@
                                         <li><a class="waves-effect waves-blue" href="{{ url('/supplies') }}"><i
                                                         class="material-icons">swap_horiz</i>View Supply History</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}"><i
-                                                        class="material-icons">swap_horiz</i>Manage Unique Items</a></li>
+                                                        class="material-icons">swap_horiz</i>Manage Items</a></li>
                                         <li><a  class="waves-effect waves-blue" href="{{ url('/dataquality') }}">
                                             <i class="material-icons">swap_horiz</i>Data Quality Checks</a></li>
                                     </ul>
@@ -440,7 +440,7 @@
 
         $('#basic-area').highcharts({
             chart: {
-                type: 'area'
+                type: 'column'
             },
             title: {
                 text: 'Gadget Distribution(s)'
@@ -487,13 +487,22 @@
 
 <script>
     $('#new_username').hide();
+
+    var optionText = $('#item_id option:selected').text();
+    $('#item_name').val(optionText);
+
     $('#dctool_select').hide();
     $('#user').change(function() {
-        if ($(this).val() == 0) {
-            $('#new_username').toggle();
+        if ($(this).val() == "0") {
+            $('#new_username').show();
         } else {
             $('#new_username').hide();
         }
+    });
+
+    $('#item_id').change(function() {
+        var optionText = $('#item_id option:selected').text();  // Get the text of the selected option
+        $('#item_name').val(optionText);  // Set the text to the item_name input field
     });
 
     $(document).ready(function() {

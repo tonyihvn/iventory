@@ -17,6 +17,7 @@ use App\requests;
 use App\dctools;
 use App\items;
 use App\multifacilities;
+use App\concurrency;
 
 use Auth;
 use File;
@@ -204,7 +205,6 @@ class InventoryController extends Controller
             'item_name' => 'required|min:3'
         ]);
 
-
         if($request->hasFile('file'))
         {
             $files = $request->file('file');
@@ -236,18 +236,12 @@ class InventoryController extends Controller
                 array_push($userid,$user);
             }
         }else{
-
             foreach($request->user as $key=>$newuser){
-
                 array_push($userid,$newuser);
             }
-
         }
 
-
-
         if($request->quantity_added>1){
-
             $serialno = ''; $tagno='';
             if($request->ihvn_no==""){
                 $ihvnno_arr = array_fill(0, $request->quantity_added, 'NA');
@@ -257,7 +251,6 @@ class InventoryController extends Controller
 
             $serial_no_arr = explode(',', $request->serial_no);
             $tag_no_arr = explode(',', $request->tag_no);
-
 
             foreach($ihvnno_arr as $key=>$ihvnno){
                 if(isset($serial_no_arr[$key])){
@@ -296,6 +289,25 @@ class InventoryController extends Controller
                     'remarks'=>$request->remarks,
                     'file'=>$singlefile
                 ])->id;
+
+                if(isset($request->concurrency) && $request->concurrency=="Yes"){
+                    concurrency::updateOrCreate(['tag_number'=>$tagno],[
+                        'state'=>$request->state,
+                        'location'=>$request->facility,
+                        'model'=>$request->item_name,
+                        'serial_number'=>$serialno ?? $ihvnno,
+                        'tag_number'=>$tagno,
+                        'category'=>$request->category,
+                        'batch'=>$request->remarks,
+                        'condition'=>$request->status,
+                        'date_delivered'=>$request->date_purchased,
+                        'received_by'=>$request->supplier,
+                        'comments'=>$request->remarks,
+                        'other_info'=>$request->internal_location,
+                        'user'=>$user_id
+                    ]);
+                }
+
             }
         }else{
             $itemid = inventory::create([
@@ -321,6 +333,24 @@ class InventoryController extends Controller
                 'remarks'=>$request->remarks,
                 'file'=>$singlefile
             ])->id;
+
+            if(isset($request->concurrency) && $request->concurrency=="Yes"){
+                concurrency::updateOrCreate(['tag_number'=>$request->tag_no],[
+                    'state'=>$request->state,
+                    'location'=>$request->facility,
+                    'model'=>$request->item_name,
+                    'serial_number'=>$request->serial_no,
+                    'tag_number'=>$request->tag_no ?? $request->ihvn_no,
+                    'category'=>$request->category,
+                    'batch'=>$request->remarks,
+                    'condition'=>$request->status,
+                    'date_delivered'=>$request->date_purchased,
+                    'received_by'=>$request->supplier,
+                    'comments'=>$request->remarks,
+                    'other_info'=>$request->internal_location,
+                    'user'=>$userid[0]
+                ]);
+            }
         }
 
         if($request->hasFile('file'))
@@ -354,14 +384,24 @@ class InventoryController extends Controller
                 }
             }
 
+        }
 
+        if(isset($request->deduct_stock) && $request->deduct_stock=="Yes"){
+            $itemstock = stocks::where('item_id',$request->item_id)->first();
+            if(isset($itemstock)){
+                $itemstock->decrement('quantity_remaining',$request->quantity_added);
+            }else{
+                stocks::create([
+                    'item_id'=>$request->item_id,
+                    'quantity_remaining'=>$request->quantity_added
+                ]);
+            }
         }
 
         $i = 0;
         if(isset($request->property)){
             foreach ($request->property as $pp){
             // RECORD SPECS
-
                 inventoryspec::create([
                     'property'=>$pp,
                     'value'=>$request->value[$i],
@@ -370,7 +410,6 @@ class InventoryController extends Controller
                     $i++;
             }
         }
-
 
         audit::create([
             'action'=>"Added new inventory item". $itemid,
@@ -475,6 +514,24 @@ class InventoryController extends Controller
                     ]);
                 $i++;
             }
+        }
+
+        if(isset($request->concurrency) && $request->concurrency=="Yes"){
+            concurrency::updateOrCreate(['tag_number'=>$request->tag_no],[
+                'state'=>$request->state,
+                'location'=>$request->facility,
+                'model'=>$request->item_name,
+                'serial_number'=>$request->serial_no,
+                'tag_number'=>$request->tag_no ?? $request->ihvn_no,
+                'category'=>$request->category,
+                'batch'=>$request->remarks,
+                'condition'=>$request->status,
+                'date_delivered'=>$request->date_purchased,
+                'received_by'=>$request->supplier,
+                'comments'=>$request->remarks,
+                'other_info'=>$request->internal_location,
+                'user'=>$userid
+            ]);
         }
 
         audit::create([

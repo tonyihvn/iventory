@@ -71,14 +71,25 @@
                 <tr data-id="{{ $asset->id }}">
                     <td>{{ $asset->id }}</td>
                     <td contenteditable="false" data-column="state">{{ $asset->state }}</td>
+
+
+
                     @if (Auth()->user()->role!=="Facility")
-                        <td class="location-column" data-column="location">{{ $asset->location }}</td>
+                        @php
+                            // Find the facility name by searching through the $facilities
+                            $location = $locations->firstWhere('id', $asset->location);
+                        @endphp
+                        <td class="location-column" data-column="location">{{ $location ? $location->facility_name : 'Unknown Facility' }}</td>
                     @endif
                     <td class="model-column" data-column="model">{{ $asset->model }}</td>
                     {{-- <td contenteditable="true" data-column="model">{{ $asset->model }}</td> --}}
                     <td contenteditable="true" data-column="serial_number">{{ $asset->serial_number }}</td>
                     <td contenteditable="true" data-column="tag_number">{{ $asset->tag_number }}</td>
-                    <td contenteditable="true" data-column="user">{{ $asset->user }}</td>
+                    @php
+                        // Find the facility name by searching through the $facilities
+                        $user = $users->firstWhere('id', $asset->user);
+                    @endphp
+                    <td contenteditable="true" data-column="user">{{ $user ? $user->name : 'Unknown User' }}</td>
                     @if (Auth()->user()->role=="Admin")
                         <td contenteditable="true" data-column="date_of_purchase">{{ $asset->date_of_purchase }}</td>
                     @endif

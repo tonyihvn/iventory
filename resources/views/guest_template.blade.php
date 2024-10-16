@@ -10,6 +10,12 @@
     <link rel="stylesheet" href="{{asset('/css/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/pmain.scss')}}">
     <title>I-ventory | IHVN Inventory Management System</title>
+
+    <style>
+        .btn{
+            background-color:rgb(10, 38, 61);
+        }
+    </style>
 </head>
 
 <body>
@@ -34,7 +40,7 @@
 
 
       <ul class="side-nav teal darken-2" id="mobile-demo">
-      <li class="teal center"><a href="#"><i class="material-icons">menu</i>I-VENTORY </a></li
+      <li class="teal center"><a href="#"><i class="material-icons">menu</i>I-VENTORY </a></li>
         <li class="white"><div class="divider"></div></li>
 
 

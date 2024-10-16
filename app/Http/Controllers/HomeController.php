@@ -156,19 +156,24 @@ class HomeController extends Controller
         $models = concurrency::select('model')->distinct('model')->get();
         if(Auth::user()->role=="Admin"){
             $locations = facilities::select('id','facility_name')->get();
+            $users = User::select('id','name')->get();
             $assets = concurrency::all();
         }elseif(Auth::user()->role=="Manager"){
             $locations = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $users = User::select('id','name')->where('state',auth()->user()->state)->get();
             $assets = concurrency::where('state',$state)->get();
         }elseif(Auth::user()->role=="Facility"){
             $locations = null;
             $assets = concurrency::where('location',Auth::user()->facilityName->facility_name)->get();
+            $users = User::select('id','name')->where('state',auth()->user()->state)->get();
         }else{
             $locations = null;
             $assets = null;
             $state = null;
+            $users = null;
+
         }
-        return view('concurrency', compact('assets','state','locations','models'));
+        return view('concurrency', compact('assets','state','locations','models','users'));
     }
 
     public function concurrencyUpdate(Request $request)

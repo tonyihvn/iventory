@@ -20,7 +20,8 @@
                     <div class="row">
                         <div class="input-field col s12">
                             <select name="item_id" id="item_id" materialize="material_select"  class="select2">
-                                <option value="{{ $item->item_id }}" selected>Change Item Unique Name</option>
+                                <option value="{{ $item->item_id }}">Change Item Unique Name</option>
+                                <option value='{{ $item->uniqueName->id }}' selected>{{ $item->uniqueName->item_name }}</option>
                                 @foreach ($items as $it)
                                     <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
                                 @endforeach
@@ -162,10 +163,17 @@
                         <select name="state" id="state" materialize="material_select">
                             <option value="{{ $item->state }}" selected>{{ $item->state }}</option>
 
-                            <option value="FCT">FCT</option>
-                            <option value="RIVERS">RIVERS</option>
-                            <option value="NASARAWA">NASARAWA</option>
-                            <option value="KATSINA">KATSINA</option>
+                            @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
+                                <option value="ANAMBRA">ANAMBRA</option>
+                                <option value="KWARA">KWARA</option>
+                                <option value="EBONYI">EBONYI</option>
+                                <option value="GOMBE">GOMBE</option>
+
+                                <option value="FCT">FCT</option>
+                                <option value="RIVERS">RIVERS</option>
+                                <option value="NASARAWA">NASARAWA</option>
+                                <option value="KATSINA">KATSINA</option>
+                            @endif
 
                         </select>
                         <label for="facility">Select State</label>
@@ -240,6 +248,19 @@
                                 value="{{ $item->remarks }}">
                             <label for="remarks">Remarks</label>
                         </div>
+
+                        <div class="input-field col s6">
+                            <input id="concurrency" type="checkbox" class="validate" name="concurrency" value="Yes">
+                            <label for="concurrency">Update in Concurrency Table</label>
+                        </div>
+
+                        @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
+                            <div class="input-field col s6">
+                                <input id="deduct_stock" type="checkbox" class="validate" name="deduct_stock" value="Yes">
+                                <label for="deduct_stock">Deduct from Stock</label>
+                            </div>
+                        @endif
+
                     </div>
 
 

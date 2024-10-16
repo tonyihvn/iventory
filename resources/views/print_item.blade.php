@@ -67,12 +67,12 @@
             </tr>
 
             <tr>
-                <td width="40%" style="font-weight: bold;">Date Purchased: {{ $item->date_purchased }}</td>
-                <td>Quantity Purchased: {{ $item->quantity_purchased }}</td>
+                <td width="40%" style="font-weight: bold;">Date Received: {{ $item->date_purchased }}</td>
+                <td>Quantity Received: {{ $item->quantity_purchased }}</td>
             </tr>
 
             <tr>
-                <td style="font-weight: bold;">Supplier:</td>
+                <td style="font-weight: bold;">Recieved By:</td>
                 <td>{{ $item->supplier }}</td>
             </tr>
 
@@ -111,7 +111,7 @@
             </tr>
 
             <tr>
-                <td colspan="2"> <b>Remarks:</b> <br>{{ $item->remarks }}</td>
+                <td colspan="2"> <b>Batch No:</b> <br>{{ $item->remarks }}</td>
             </tr>
         </table>
 

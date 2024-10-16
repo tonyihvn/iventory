@@ -55,6 +55,10 @@
 
                                 <option value="{{ Auth()->user()->state }}" selected>{{ Auth()->user()->state }}</option>
                                 @if (Auth()->user()->role == 'Admin' || Auth()->user()->role=='DCTAdmin')
+                                    <option value="ANAMBRA">ANAMBRA</option>
+                                    <option value="KWARA">KWARA</option>
+                                    <option value="EBONYI">EBONYI</option>
+                                    <option value="GOMBE">GOMBE</option>
                                     <option value="FCT">FCT</option>
                                     <option value="Rivers">RIVERS</option>
                                     <option value="Nasarawa">NASARAWA</option>
