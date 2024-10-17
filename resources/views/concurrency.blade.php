@@ -276,7 +276,6 @@
             // Function to update modifiedRows with changed data
             function updateModifiedRows(row, column, newValue) {
                 let id = row.data('id');
-
                 if (id && String(id).startsWith('new')) {
                     let existingRow = newRows.find(row => row.id === id);
                     if (!existingRow) {
