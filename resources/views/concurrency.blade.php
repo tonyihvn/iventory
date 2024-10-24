@@ -72,14 +72,17 @@
                     <td>{{ $asset->id }}</td>
                     <td contenteditable="false" data-column="state">{{ $asset->state }}</td>
 
-
-
                     @if (Auth()->user()->role!=="Facility")
                         @php
                             // Find the facility name by searching through the $facilities
-                            $location = $locations->firstWhere('id', $asset->location);
+                            if(is_numeric($asset->location)){
+                                $location = $locations->firstWhere('id', $asset->location);
+                            }else{
+                                $location = $asset->location;
+                            }
+
                         @endphp
-                        <td class="location-column" data-column="location">{{ $location ? $location->facility_name : 'Unknown Facility' }}</td>
+                        <td class="location-column" data-column="location">{{ $location ? $location->facility_name : $location }}</td>
                     @endif
                     <td class="model-column" data-column="model">{{ $asset->model }}</td>
                     {{-- <td contenteditable="true" data-column="model">{{ $asset->model }}</td> --}}
@@ -87,9 +90,13 @@
                     <td contenteditable="true" data-column="tag_number">{{ $asset->tag_number }}</td>
                     @php
                         // Find the facility name by searching through the $facilities
-                        $user = $users->firstWhere('id', $asset->user);
+                        if(is_numeric($asset->user)){
+                            $user = $users->firstWhere('id', $asset->user);
+                        }else{
+                            $user = $asset->user;
+                        }
                     @endphp
-                    <td contenteditable="true" data-column="user">{{ $user ? $user->name : 'Unknown User' }}</td>
+                    <td contenteditable="true" data-column="user">{{ $user ? $user->name : $user }}</td>
                     @if (Auth()->user()->role=="Admin")
                         <td contenteditable="true" data-column="date_of_purchase">{{ $asset->date_of_purchase }}</td>
                     @endif
