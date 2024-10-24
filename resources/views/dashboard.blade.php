@@ -55,7 +55,9 @@
                                         <th>Sender / State</th>
                                         <th>Date</th>
                                         <th>Status</th>
-                                        <th>Action</th>
+                                        @if (Auth()->user()->role=="Admin")
+                                            <th>Action</th>
+                                        @endif
                                     </tr>
 
                                     @foreach ($requests as $req)
@@ -63,7 +65,9 @@
                                             <td>{{ $req->user->name }} / {{$req->user->state}}</td>
                                             <td>{{date('Y-m-d',strtotime($req->created_at)) }}</td>
                                             <td>{{ $req->request_status }}</td>
-                                            <td><a href="{{url('request/'.$req->id)}}" class="btn">Attend</a></td>
+                                            @if (Auth()->user()->role=="Admin")
+                                                <td><a href="{{url('request/'.$req->id)}}" class="btn">Attend</a></td>
+                                            @endif
 
                                         </tr>
                                     @endforeach
