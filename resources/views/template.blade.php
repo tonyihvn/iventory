@@ -47,6 +47,14 @@
             background-color: white !important;
         }
 
+        footer .container, footer .container .row{
+            background-color: transparent !important;
+        }
+
+        #card-alert{
+            background-color: green !important;
+        }
+
     </style>
 </head>
 
