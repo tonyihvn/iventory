@@ -142,28 +142,27 @@
                                     @if (Auth()->user()->role == 'Admin')
                                         @foreach ($audits as $au)
                                             @php
-                                                $index = array_search($au->doneby, array_column($usrs, 'id'));
+                                                $usr = $usrs->firstWhere('id',$au->doneby);
                                             @endphp
                                             <tr>
                                                 <td>{{ $au->created_at }}</td>
                                                 <td>{{ $au->action }}</td>
                                                 <td>{{ $au->description }}</td>
-                                                <td>{{ $usrs[$index]['name'] }}</td>
+                                                <td>{{ isset($usr) ? $usr->name : $au->doneby }}</td>
 
                                             </tr>
                                         @endforeach
                                     @else
                                         @foreach ($audits as $au)
-                                            @if ($index = array_search($au->doneby, array_column($usrs, 'id')) == true)
+                                            @php
+                                                $usr = $usrs->firstWhere('id',$au->doneby);
+                                            @endphp
                                                 <tr>
                                                     <td>{{ $au->created_at }}</td>
                                                     <td>{{ $au->action }}</td>
                                                     <td>{{ $au->description }}</td>
-                                                    <td>{{ $usrs[$index]['name'] }}</td>
-
-
+                                                    <td>{{ isset($usr) ? $usr->name : $au->doneby }}</td>
                                                 </tr>
-                                            @endif
                                         @endforeach
                                     @endif
                                 </tbody>

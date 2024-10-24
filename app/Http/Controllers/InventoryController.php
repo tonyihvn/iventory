@@ -537,7 +537,7 @@ class InventoryController extends Controller
         audit::create([
             'action'=>"Updated Item ".$request->item_name,
             'description'=>'An item was updated in the inventory',
-            'doneby'=>"Admin" // Auth::user()->id
+            'doneby'=>Auth::user()->id
         ]);
 
         session()->flash('message','The Item : '.$request->facility_name.' has been updated successfully!');

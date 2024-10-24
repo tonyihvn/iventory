@@ -44,7 +44,7 @@ class HomeController extends Controller
 
         if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
             $requests = requests::where('request_status','!=','Delivered')->with('user')->paginate(50);
-            $usrs = User::select('id','name')->get()->toArray();
+            $usrs = User::select('id','name')->get();
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
             ->groupBy('category')
             ->get();
@@ -85,7 +85,8 @@ class HomeController extends Controller
             ->with(['requests'=>$requests]);
         }elseif(auth()->user()->role=='Manager'){
             $requests = requests::with('user')->where('state',auth()->user()->state)->where('request_status','!=','Delivered')->paginate(50);
-            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get()->toArray();
+            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
+
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))->where('state',auth()->user()->state)
             ->groupBy('category')
             ->get();
@@ -219,6 +220,13 @@ class HomeController extends Controller
                 $newAsset->save();
             }
         }
+
+        audit::create([
+            'action'=>"Concurrency update saved",
+            'description'=>'Updates on: '.json_encode($assets),
+            'doneby'=>Auth::user()->id
+        ]);
+
         return response()->json(['success' => true]);
 
     }
