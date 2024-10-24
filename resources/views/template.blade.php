@@ -35,6 +35,18 @@
             background-color: #0d201e !important;
         }
 
+        body {
+            background-image: url("{{ asset('/public/images/inventorybg.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.9; /* To make the image faint */
+        }
+
+        .card, .row, form, table{
+            background-color: white !important;
+        }
+
     </style>
 </head>
 

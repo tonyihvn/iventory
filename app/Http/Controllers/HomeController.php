@@ -197,6 +197,9 @@ class HomeController extends Controller
                 if(!is_numeric($assetData['id'])){
                     $assetData['id'] = 0;
                 }
+                if (Auth::user()->role!=="Admin"){
+                    $assetData['state'] = Auth::user()->state;
+                }
                 $newAsset = concurrency::updateOrCreate(['id'=>$assetData['id']],['other_info'=>'New']);
 
                 // Update each column present in the row
@@ -205,9 +208,13 @@ class HomeController extends Controller
 
                         $newAsset->$column = $value;
                     }
+
+
                     if ($column == 'date_of_purchase') {
                         $newAsset->$column = date("Y-m-d",strtotime($value));
                     }
+
+
                 }
                 $newAsset->save();
             }
