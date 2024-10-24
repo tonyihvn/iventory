@@ -77,12 +77,10 @@
                             // Find the facility name by searching through the $facilities
                             if(is_numeric($asset->location)){
                                 $location = $locations->firstWhere('id', $asset->location);
-                            }else{
-                                $location = $asset->location;
                             }
 
                         @endphp
-                        <td class="location-column" data-column="location">{{ $location ? $location->facility_name : $location }}</td>
+                        <td class="location-column" data-column="location">{{ isset($location) ? $location->facility_name : $asset->location }}</td>
                     @endif
                     <td class="model-column" data-column="model">{{ $asset->model }}</td>
                     {{-- <td contenteditable="true" data-column="model">{{ $asset->model }}</td> --}}
@@ -92,11 +90,9 @@
                         // Find the facility name by searching through the $facilities
                         if(is_numeric($asset->user)){
                             $user = $users->firstWhere('id', $asset->user);
-                        }else{
-                            $user = $asset->user;
                         }
                     @endphp
-                    <td contenteditable="true" data-column="user">{{ $user ? $user->name : $user }}</td>
+                    <td contenteditable="true" data-column="user">{{ isset($user) ? $user->name : $asset->user }}</td>
                     @if (Auth()->user()->role=="Admin")
                         <td contenteditable="true" data-column="date_of_purchase">{{ $asset->date_of_purchase }}</td>
                     @endif
