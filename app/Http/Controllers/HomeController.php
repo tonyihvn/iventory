@@ -200,7 +200,7 @@ class HomeController extends Controller
                 if (Auth::user()->role!=="Admin"){
                     $assetData['state'] = Auth::user()->state;
                 }
-                $newAsset = concurrency::updateOrCreate(['id'=>$assetData['id']],['other_info'=>'New']);
+                $newAsset = concurrency::updateOrCreate(['id'=>$assetData['id']],['other_info'=>'New','state'=>$assetData['state']]);
 
                 // Update each column present in the row
                 foreach ($assetData as $column => $value) {
