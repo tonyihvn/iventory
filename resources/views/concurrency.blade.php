@@ -76,11 +76,11 @@
                         @php
                             // Find the facility name by searching through the $facilities
                             if(is_numeric($asset->location)){
-                                $location = $locations->firstWhere('id', $asset->location);
+                                $ilocation = $locations->firstWhere('id', $asset->location);
                             }
 
                         @endphp
-                        <td class="location-column" data-column="location">{{ isset($location) ? $location->facility_name : $asset->location }}</td>
+                        <td class="location-column" data-column="location">{{ isset($ilocation) ? $ilocation->facility_name : $asset->location }}</td>
                     @endif
                     <td class="model-column" data-column="model">{{ $asset->model }}</td>
                     {{-- <td contenteditable="true" data-column="model">{{ $asset->model }}</td> --}}
