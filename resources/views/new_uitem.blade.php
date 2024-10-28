@@ -48,7 +48,9 @@
                         <th style="width: 50% !important;">Item Name</th>
                         <th>Specifications</th>
                         <th>Stock Bal.</th>
-                        <th>Actions</th>
+                        @if (auth()->user()->role == 'Admin')
+                            <th>Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -58,39 +60,41 @@
 
                             <td>{{ $dc->item_name }}</td>
                             <td>{{ $dc->specifications }}</td>
+
+                                <td>{{ $dc->stock->quantity_remaining ?? 0 }}</td>
+
+
                             @if (auth()->user()->role == 'Admin')
-                                <td></td>
-                            @endif
+                                <td>
 
-                            <td>
-
-                                <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action"
-                                    style="position: relative !important; float: text-align: center; display: inline-block; bottom: 0px !important; padding: 0px !important">
-                                    <a class="btn-floating btn-small dark-purple waves-effect waves-light"
-                                        style="display: inline-block">
-                                        <i class="small material-icons">menu</i>
-                                    </a>
-                                    <ul style="top: 0px !important">
-                                        @if (Auth()->user()->role == 'Admin')
+                                    <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action"
+                                        style="position: relative !important; float: text-align: center; display: inline-block; bottom: 0px !important; padding: 0px !important">
+                                        <a class="btn-floating btn-small dark-purple waves-effect waves-light"
+                                            style="display: inline-block">
+                                            <i class="small material-icons">menu</i>
+                                        </a>
+                                        <ul style="top: 0px !important">
+                                            @if (Auth()->user()->role == 'Admin')
+                                                <li>
+                                                    <a href="{{ url('/deleteuitem/' . $dc->id) }}"
+                                                        class="btn-floating btn-small waves-effect red waves-light tooltipped"
+                                                        data-position="top" data-tooltip="Remove Item"><i
+                                                            class="material-icons">remove</i></a>
+                                                </li>
+                                            @endif
                                             <li>
-                                                <a href="{{ url('/deleteuitem/' . $dc->id) }}"
-                                                    class="btn-floating btn-small waves-effect red waves-light tooltipped"
-                                                    data-position="top" data-tooltip="Remove Item"><i
-                                                        class="material-icons">remove</i></a>
+                                                <a href="{{ url('/edit_uitem/' . $dc->id) }}"
+                                                    class="btn-floating btn-small waves-effect purple waves-light tooltipped"
+                                                    data-position="top" data-tooltip="Enter Utilization"><i
+                                                        class="material-icons">create</i></a>
                                             </li>
-                                        @endif
-                                        <li>
-                                            <a href="{{ url('/edit_uitem/' . $dc->id) }}"
-                                                class="btn-floating btn-small waves-effect purple waves-light tooltipped"
-                                                data-position="top" data-tooltip="Enter Utilization"><i
-                                                    class="material-icons">create</i></a>
-                                        </li>
 
-                                    </ul>
-                                </div>
+                                        </ul>
+                                    </div>
 
 
-                            </td>
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>
