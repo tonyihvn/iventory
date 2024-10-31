@@ -291,7 +291,7 @@ class InventoryController extends Controller
                 ])->id;
 
                 if(isset($request->concurrency) && $request->concurrency=="Yes"){
-                    concurrency::updateOrCreate(['tag_number'=>$tagno],[
+                    concurrency::updateOrCreate(['tag_number'=>$ihvnno],[
                         'state'=>$request->state,
                         'location'=>$request->facility,
                         'model'=>$request->item_name,
@@ -335,7 +335,7 @@ class InventoryController extends Controller
             ])->id;
 
             if(isset($request->concurrency) && $request->concurrency=="Yes"){
-                concurrency::updateOrCreate(['tag_number'=>$request->tag_no],[
+                concurrency::updateOrCreate(['tag_number'=>$request->ihvn_no],[
                     'state'=>$request->state,
                     'location'=>$request->facility,
                     'model'=>$request->item_name,
