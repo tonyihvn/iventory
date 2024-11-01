@@ -6,10 +6,10 @@
 
         <h4 class=" center">
             @if (auth()->user()->role == 'User')
-                My Inventory
+                My Items Inventory
             @else
-                {{ auth()->user()->role != 'Admin' ? auth()->user()->state : '' }}
-                {{ isset($category) ? $category : ' - List of All Items' }}
+                {{ auth()->user()->role != 'Admin' ? auth()->user()->state. ' - ' : '' }}
+                {{ isset($category) ? "Inventory of " .$category : 'List of All Items' }}
             @endif
 
         </h4>

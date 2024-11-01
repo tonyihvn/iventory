@@ -60,7 +60,7 @@
             width: 100% !important;
         }
 
-        .s12 a.breadcrumb{
+        .s12 a.breadcrumb, .s12 span.breadcrumb{
             padding-left: 10px;
         }
         .breadcrumb, span.breadcrumb::before, a.breadcrumb::before{
@@ -139,15 +139,11 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/inventories') }}"><i
-                                                    class="material-icons">assignment</i>Inventory of Items<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
+                                                    class="material-icons">assignment</i>Inventory of Items</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add_item') }}"><i
-                                                    class="material-icons">library_add</i>Add Item to Inventory<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">library_add</i>Add Item to Inventory</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
-                                                    class="material-icons">transfer_within_a_station</i>Transfer/Movements Report<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">transfer_within_a_station</i>Transfer/Movements Report</a></li>
 
                                         <li><a class="waves-effect waves-blue" href="{{ url('/requests') }}"><i
                                                     class="material-icons">receipt</i>Item Requests</a></li>
@@ -169,16 +165,14 @@
                                         class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}#products"><i
+                                                    class="material-icons">view_list</i>List of All Items</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}"><i
-                                                    class="material-icons">view_list</i>List of All Items<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
+                                                        class="material-icons">add_box</i>Create New Item</span></a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/update-tagnumbers') }}"><i
-                                                    class="material-icons">confirmation_number</i>Change Tag Numbers<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">confirmation_number</i>Change Tag Numbers</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/categories') }}"><i
-                                                    class="material-icons">view_module</i>Item Categories<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">view_module</i>Item Categories</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -198,12 +192,9 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}#products"><i
-                                                    class="material-icons">gradient</i>Item Stock<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
+                                                    class="material-icons">gradient</i>Item / Stock</span></a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/supplies') }}"><i
-                                                    class="material-icons">local_shipping</i>Item Supply / History<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">local_shipping</i>Item Supply / History</a></li>
 
                                     </ul>
                                 </div>
@@ -224,13 +215,10 @@
                                         class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/dataquality') }}#products"><i
-                                                    class="material-icons">border_color</i>Inventory Status Update<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/dataquality') }}"><i
+                                                    class="material-icons">border_color</i>Inventory Status Update</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
-                                                    class="material-icons">playlist_add_check</i>Data Concurrency Tool<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">playlist_add_check</i>Data Concurrency Tool</a></li>
 
                                     </ul>
                                 </div>
@@ -350,15 +338,11 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/inventories') }}"><i
-                                                    class="material-icons">assignment</i>Inventory of Items<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
+                                                    class="material-icons">assignment</i>Inventory of Items</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add_item') }}"><i
-                                                    class="material-icons">library_add</i>Add Item to Inventory<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">library_add</i>Add Item to Inventory</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
-                                                    class="material-icons">transfer_within_a_station</i>Transfer/Movements Report<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">transfer_within_a_station</i>Transfer/Movements Report</a></li>
 
                                         <li><a class="waves-effect waves-blue" href="{{ url('/requests') }}"><i
                                                     class="material-icons">receipt</i>Item Requests</a></li>
@@ -381,8 +365,7 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/update-tagnumbers') }}"><i
-                                                    class="material-icons">confirmation_number</i>Change Tag Numbers<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">confirmation_number</i>Change Tag Numbers</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -403,12 +386,9 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/dataquality') }}#products"><i
-                                                    class="material-icons">border_color</i>Inventory Status Update<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
+                                                    class="material-icons">border_color</i>Inventory Status Update</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
-                                                    class="material-icons">playlist_add_check</i>Data Concurrency Tool<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+                                                    class="material-icons">playlist_add_check</i>Data Concurrency Tool</a></li>
 
                                     </ul>
                                 </div>
@@ -620,46 +600,46 @@
 <?php if(isset($dashboard)){ ?>
     <script src="{{ asset('/js/highcharts.js') }}"></script>
 
-<script type="text/javascript">
-    $(function() {
-        var laptops = <?php echo $Laptops ?? ''; ?>;
-        var phones = <?php echo $Phones ?? ''; ?>;
-        var biometrics = <?php echo $Biometrics ?? ''; ?>;
+    <script type="text/javascript">
+        $(function() {
+            var laptops = <?php echo $Laptops ?? ''; ?>;
+            var phones = <?php echo $Phones ?? ''; ?>;
+            var biometrics = <?php echo $Biometrics ?? ''; ?>;
 
-        var categoris = [<?php echo $states; ?>];
+            var categoris = [<?php echo $states; ?>];
 
 
-        $('#basic-area').highcharts({
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Gadget Distribution(s)'
-            },
-            xAxis: {
-                categories: categoris
-
-            },
-            yAxis: {
-                title: {
-                    text: 'Quantity / Total'
-                }
-            },
-            series: [{
-                    name: 'Phones',
-                    data: phones
-                }, {
-                    name: 'Laptops',
-                    data: laptops
+            $('#basic-area').highcharts({
+                chart: {
+                    type: 'column'
                 },
-                {
-                    name: 'Finger Print Scanners',
-                    data: biometrics
-                }
-            ]
+                title: {
+                    text: 'Gadget Distribution(s)'
+                },
+                xAxis: {
+                    categories: categoris
+
+                },
+                yAxis: {
+                    title: {
+                        text: 'Quantity / Total'
+                    }
+                },
+                series: [{
+                        name: 'Phones',
+                        data: phones
+                    }, {
+                        name: 'Laptops',
+                        data: laptops
+                    },
+                    {
+                        name: 'Finger Print Scanners',
+                        data: biometrics
+                    }
+                ]
+            });
         });
-    });
-</script>
+    </script>
 <?php } ?>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" />
 </script>
@@ -766,6 +746,10 @@
         $("#suser_id"+iid).val(uidd);
         $("#user_id"+iid).val(uidd);
     };
+
+    if (window.location.href.indexOf("#products") > -1) {
+        $("#newitem").hide();
+    }
 
 </script>
 

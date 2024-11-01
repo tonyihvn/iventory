@@ -1,6 +1,6 @@
 @extends('template')
 @section('content')
-    <div class="container">
+    <div class="container" style="background-color: white !important; padding: 10px;">
 
 
 

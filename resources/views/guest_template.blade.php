@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{asset('/css/dataTables.material.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/pmain.scss')}}">
-    <title>I-ventory | IHVN Inventory Management System</title>
+    <title>IHVN Inventory Management System</title>
 
     <style>
         .btn{
@@ -35,7 +35,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="{{url('/')}}" class="brand-logo" target="_blank">I-ventory</a>
+      <a href="{{url('/')}}" class="brand-logo" target="_blank">Inventory System</a>
 
       <ul class="right hide-on-med-and-down">
       <li>
@@ -45,14 +45,12 @@
 
         </li>
 
-        <li><a href="https://codepen.io/collection/nbBqgY/" target="_blank">Help</a></li>
-
       </ul>
 
 
 
       <ul class="side-nav teal darken-2" id="mobile-demo">
-      <li class="teal center"><a href="#"><i class="material-icons">menu</i>I-VENTORY </a></li>
+      <li class="teal center"><a href="#"><i class="material-icons">menu</i>INVENTORY </a></li>
         <li class="white"><div class="divider"></div></li>
 
 

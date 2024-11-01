@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\audit;
 use Illuminate\Http\Request;
+use App\User;
 
 class AuditController extends Controller
 {
@@ -15,7 +16,15 @@ class AuditController extends Controller
     public function index()
     {
         $audits = audit::orderBy('created_at', 'desc')->paginate(50);
-        return view('audits',compact('audits'));
+        if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
+            $usrs = User::select('id','name')->get();
+        }elseif(auth()->user()->role=='Manager'){
+            $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
+        }else{
+            $usrs = null;
+        }
+
+        return view('audits',compact('audits','usrs'));
     }
 
     /**

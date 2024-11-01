@@ -1,10 +1,10 @@
 @extends('template')
 @section('content')
     <div class="container">
-        <div class="row">
+        <div class="row" id="newitem">
             <div class="card col m8 offset-m2" style="margin-top:20px; padding: 35px;">
 
-                <h3 class="card-header text-center" style="text-align:center;">Add New Item</h3>
+                <h3 class="card-header text-center" style="text-align:center;">Create New Item</h3>
 
 
                 <form method="POST" action="{{ route('newuItem') }}" enctype="multipart/form-data">
@@ -13,7 +13,7 @@
 
                     <div class="row">
                         <div class="input-field col s12">
-                            <input id="item_name" type="text" class="validate" name="item_name" required autofocus>
+                            <input id="item_name" type="text" class="validate" name="item_name" required>
                             <label for="item_name">Item Name</label>
                         </div>
                     </div>
@@ -105,4 +105,5 @@
             <blockquote>No items found in the database.</blockquote>
         @endif
     </div>
+
 @endsection

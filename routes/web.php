@@ -100,8 +100,6 @@ Route::put('updateUser', 'CategoryController@updateUser')->name('updateUser')->m
 Route::post('addMoreFacilities', 'InventoryController@addMoreFacilities')->name('addMoreFacilities')->middleware('role:Admin,Super,DCTAdmin,DCTManager');
 Route::post('switchFacility', 'InventoryController@switchFacility')->name('switchFacility')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser');
 
-
-
 // STOCKS
 
 Route::get('uitems', 'InventoryController@uItems')->name('uitems')->middleware('role:Admin,Super');

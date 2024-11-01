@@ -5,6 +5,7 @@
     td {
        vertical-align: top;
     }
+
 </style>
     <div class="row" style="width:98%; margin:auto;">
         <a href="{{ url('/requests') }}" class="btn green right">All Requests</a>
