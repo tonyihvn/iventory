@@ -933,6 +933,4 @@ class InventoryController extends Controller
         return view('dctools',compact('dctools','assignedFacilities','selectedFacility'));
     }
 
-
-
 }

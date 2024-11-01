@@ -9,7 +9,7 @@
                 My Inventory
             @else
                 {{ auth()->user()->role != 'Admin' ? auth()->user()->state : '' }}
-                {{ isset($category) ? $category : 'Inventory' }}
+                {{ isset($category) ? $category : ' - List of All Items' }}
             @endif
 
         </h4>

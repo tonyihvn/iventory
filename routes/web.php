@@ -22,7 +22,7 @@ Route::post('/concurrencyUpdate', 'HomeController@concurrencyUpdate')->name('con
 
 Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
 
-Route::get('/home', 'HomeController@dashboard')->name('home')->middleware('auth');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
 Route::get('/register','RegisterController@showRegistrationForm')->name('register')->middleware('role:Super,Admin,Manager,DCTAdmin,DCTManager');
 
@@ -36,7 +36,7 @@ Route::get('add_supplier', 'SupplierController@create')->name('add_supplier')->m
 Route::get('supplies', 'SuppliesController@index')->name('supplies')->middleware('role:Super,Admin,Super');
 
 // Inventories
-Route::resource('inventories', 'InventoryController')->middleware('auth')->middleware('role:Super,Admin');
+Route::resource('inventories', 'InventoryController')->middleware('role:Super,Admin');
 
 Route::get('inventory', 'InventoryController@index')->name('inventory')->middleware('role:Super,Admin');
 Route::get('inventorycategory/{category}/', 'InventoryController@categoryInventory')->name('inventorycategory')->middleware('auth');

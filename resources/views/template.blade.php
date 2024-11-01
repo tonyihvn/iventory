@@ -55,6 +55,19 @@
             background-color: green !important;
         }
 
+        body .container{
+            color: black !important;
+            width: 100% !important;
+        }
+
+        .s12 a.breadcrumb{
+            padding-left: 10px;
+        }
+        .breadcrumb, span.breadcrumb::before, a.breadcrumb::before{
+            color: rgb(92, 91, 91) !important;
+            font-size: 0.8em;
+            text-decoration: italic;
+        }
     </style>
 </head>
 
@@ -109,14 +122,16 @@
 
 
             <ul class="side-nav teal darken-2" id="mobile-demo">
-                <li class="teal center"><a href="#"><i class="material-icons">menu</i>IHVN GF ASSETS </a></li>
-                <li><a class="collapsible-header waves-effect waves-blue" href="{{ url('/') }}"><i
+                <li class="teal center"><a href="#" style="color: white !important;"><i class="material-icons">menu</i>IHVN GF ASSETS </a></li>
+                <li class="white">
+                    <div class="divider"></div>
+                </li>
+                <li  class="white"><a class="collapsible-header waves-effect waves-blue" href="{{ url('/') }}"><i
                             class="material-icons">dashboard</i>DASHBOARD</a></li>
 
                 @if (auth()->user()->role == 'Admin')
                     <li class="white">
                         <ul class="collapsible collapsible-accordion">
-
                             <li>
                                 <a class="collapsible-header waves-effect waves-blue"><i
                                         class="material-icons">list</i>Inventory Management<i
@@ -124,41 +139,19 @@
                                 <div class="collapsible-body">
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/inventories') }}"><i
-                                                    class="material-icons">fullscreen</i>View All<span
+                                                    class="material-icons">assignment</i>Inventory of Items<span
                                                     class="new badge right yellow grey lighten-1"
                                                     data-badge-caption="updated"></span></a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/add_item') }}"><i
-                                                    class="material-icons">swap_horiz</i>Add New<span
+                                                    class="material-icons">library_add</i>Add Item to Inventory<span
                                                     class="new badge right yellow darken-3"></span></a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
-                                                    class="material-icons">transfer</i>Movements<span
+                                                    class="material-icons">transfer_within_a_station</i>Transfer/Movements Report<span
                                                     class="new badge right yellow darken-3"></span></a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/categories') }}"><i
-                                                    class="material-icons">swap_horiz</i>Categories<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/damaged') }}"><i
-                                                    class="material-icons">fullscreen</i>Damaged<span
-                                                    class="new badge right yellow grey lighten-1"
-                                                    data-badge-caption="updated"></span></a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/lost') }}"><i
-                                                    class="material-icons">swap_horiz</i>Lost<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/archived') }}"><i
-                                                    class="material-icons">swap_horiz</i>Archived<span
-                                                    class="new badge right yellow darken-3"></span></a></li>
+
                                         <li><a class="waves-effect waves-blue" href="{{ url('/requests') }}"><i
-                                                    class="material-icons">swap_horiz</i>Item Request</a></li>
-                                        <li><a class="waves-effect waves-blue"
-                                                href="{{ url('/update-tagnumbers') }}"><i
-                                                    class="material-icons">swap_horiz</i>Change Tag Numbers</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/add-stock') }}"><i
-                                                    class="material-icons">swap_horiz</i>Add New Stock</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/supplies') }}"><i
-                                                        class="material-icons">swap_horiz</i>View Supply History</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}"><i
-                                                        class="material-icons">swap_horiz</i>Manage Items</a></li>
-                                        <li><a  class="waves-effect waves-blue" href="{{ url('/dataquality') }}">
-                                            <i class="material-icons">swap_horiz</i>Data Quality Checks</a></li>
+                                                    class="material-icons">receipt</i>Item Requests</a></li>
+
                                     </ul>
                                 </div>
                             </li>
@@ -167,12 +160,125 @@
                     <li class="white">
                         <div class="divider"></div>
                     </li>
+
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">apps</i>Items Manager<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}"><i
+                                                    class="material-icons">view_list</i>List of All Items<span
+                                                    class="new badge right yellow grey lighten-1"
+                                                    data-badge-caption="updated"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/update-tagnumbers') }}"><i
+                                                    class="material-icons">confirmation_number</i>Change Tag Numbers<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/categories') }}"><i
+                                                    class="material-icons">view_module</i>Item Categories<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
                     <li class="white">
                         <ul class="collapsible collapsible-accordion">
 
                             <li>
                                 <a class="collapsible-header waves-effect waves-blue"><i
-                                        class="material-icons">list</i>DCTools Management<i
+                                        class="material-icons">network_check</i>Supply / Stock Manager<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/uitems') }}#products"><i
+                                                    class="material-icons">gradient</i>Item Stock<span
+                                                    class="new badge right yellow grey lighten-1"
+                                                    data-badge-caption="updated"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/supplies') }}"><i
+                                                    class="material-icons">local_shipping</i>Item Supply / History<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">assignment_turned_in</i>Data Quality Tools<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/dataquality') }}#products"><i
+                                                    class="material-icons">border_color</i>Inventory Status Update<span
+                                                    class="new badge right yellow grey lighten-1"
+                                                    data-badge-caption="updated"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
+                                                    class="material-icons">playlist_add_check</i>Data Concurrency Tool<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+                            <li class="white">
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">remove_from_queue</i>System Management<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
+                                                    class="material-icons">people</i>Users</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/facilities') }}"><i
+                                                    class="material-icons">home</i>Facilities</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/departments') }}"><i
+                                                    class="material-icons">domain</i>Departments</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/units') }}"><i
+                                                    class="material-icons">crop_din</i>Units</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/audits') }}"><i
+                                                    class="material-icons">dehaze</i>Audit Trail</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/edit_settings/1') }}"><i
+                                                    class="material-icons">settings</i>System Settings</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">assignment</i>DCTools Management<i
                                         class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
@@ -209,8 +315,10 @@
                                     <ul>
                                         <li><a class="waves-effect waves-blue" href="{{ url('dctools') }}"><i
                                                     class="material-icons">swap_horiz</i>All DCTools</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
-                                                    class="material-icons">swap_horiz</i>Add DCTools</a></li>
+                                            @if(auth()->user()->role == 'DCTAdmin')
+                                                <li><a class="waves-effect waves-blue" href="{{ url('/add-dctool') }}"><i
+                                                            class="material-icons">swap_horiz</i>Add DCTools</a></li>
+                                            @endif
                                         <li><a class="waves-effect waves-green"
                                                 href="{{ url('confirm-delivery') }}"><i
                                                     class="material-icons">swap_horiz</i>Confirm Item Delivery</a></li>
@@ -221,72 +329,60 @@
                                         <li><a class="waves-effect waves-blue" href="{{ url('/distribution-report') }}"><i
                                             class="material-icons">swap_horiz</i>DCT Distribution Report</a></li>
                                         </li>
-                                                    @if(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager')
-                                                    <li><a class="waves-effect waves-blue" href="{{ url('/register') }}"><i
-                                                        class="material-icons">swap_horiz</i>Create Users</a></li>
-                                                        <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
-                                                            class="material-icons">swap_horiz</i>Users</a></li>
-                                                    @endif
+                                            @if(auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'DCTManager')
+                                                <li><a class="waves-effect waves-blue" href="{{ url('/register') }}"><i
+                                                    class="material-icons">swap_horiz</i>Create Users</a></li>
+                                                    <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
+                                                        class="material-icons">swap_horiz</i>Users</a></li>
+                                            @endif
                                     </ul>
                                 </div>
                             </li>
                         </ul>
                     </li>
                 @elseif(auth()->user()->role == 'Manager')
-                    <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
-                                class="material-icons">fullscreen</i>Concurrency Check<span
-                                class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a>
-                    </li>
-                    <li><a class="waves-effect waves-blue" href="{{ url('/inventories') }}"><i
-                                class="material-icons">fullscreen</i>View All<span
-                                class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a>
-                    </li>
-                    <li><a class="waves-effect waves-blue" href="{{ url('/add_item') }}"><i
-                                class="material-icons">swap_horiz</i>Add New<span
-                                class="new badge right yellow darken-3"></span></a></li>
-                    <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
-                                class="material-icons">transfer</i>Movements<span
-                                class="new badge right yellow darken-3"></span></a></li>
-                    <li><a class="waves-effect waves-blue" href="{{ url('/facilities') }}"><i
-                                class="material-icons">swap_horiz</i>Facilities</a></li>
-                    <li><a class="waves-effect waves-blue" href="{{ url('/departments') }}"><i
-                                class="material-icons">fullscreen</i>Departments</a></li>
-                    <li><a class="waves-effect waves-blue" href="{{ url('/units') }}"><i
-                                class="material-icons">swap_horiz</i>Units</a></li>
-                    <li class="white"><a href="{{ url('/home') }}">My Inventories</a></li>
-                    <li class="white"><a href="{{ url('/dataquality') }}">Data Quality Checks</a></li>
-
-                    <li class="white"><a href="{{ url('/categories') }}">Categories</a></li>
-                    <li class="white"><a href="{{ url('/requests') }}">Item Request</a></li>
-                    <li class="white"><a href="{{ url('/users') }}">State Users</a></li>
-                @endif
-                <li class="white">
-                    <div class="divider"></div>
-                </li>
-
-                @if (auth()->user()->role == 'Admin')
                     <li class="white">
                         <ul class="collapsible collapsible-accordion">
-                            <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
-                                        class="material-icons">fullscreen</i>Concurrency Check<span
-                                        class="new badge right yellow grey lighten-1" data-badge-caption="updated"></span></a>
-                            </li>
                             <li>
                                 <a class="collapsible-header waves-effect waves-blue"><i
-                                        class="material-icons">folder_open</i>System Management<i
+                                        class="material-icons">assignment</i>Inventory Management<i
                                         class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
                                 <div class="collapsible-body">
                                     <ul>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
-                                                    class="material-icons">fullscreen</i>Users</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/facilities') }}"><i
-                                                    class="material-icons">swap_horiz</i>Facilities</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/departments') }}"><i
-                                                    class="material-icons">fullscreen</i>Departments</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/units') }}"><i
-                                                    class="material-icons">swap_horiz</i>Units</a></li>
-                                        <li><a class="waves-effect waves-blue" href="{{ url('/audits') }}"><i
-                                                    class="material-icons">swap_horiz</i>Audit Trail</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/inventories') }}"><i
+                                                    class="material-icons">assignment</i>Inventory of Items<span
+                                                    class="new badge right yellow grey lighten-1"
+                                                    data-badge-caption="updated"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/add_item') }}"><i
+                                                    class="material-icons">library_add</i>Add Item to Inventory<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
+                                                    class="material-icons">transfer_within_a_station</i>Transfer/Movements Report<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/requests') }}"><i
+                                                    class="material-icons">receipt</i>Item Requests</a></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">apps</i>Items Manager<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/update-tagnumbers') }}"><i
+                                                    class="material-icons">confirmation_number</i>Change Tag Numbers<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -297,15 +393,90 @@
                         <div class="divider"></div>
                     </li>
 
-                    <li class="white"><a class="waves-effect waves-blue" href="{{ url('/reports') }}"><i
-                                class="material-icons">swap_horiz</i>Inventory Report</a></li>
-                    <li class="white"><a href="{{ url('/edit_settings/1') }}"><i
-                                class="material-icons">settings</i>Settings</a></li>
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">assignment_turned_in</i>Data Quality Tools<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/dataquality') }}#products"><i
+                                                    class="material-icons">border_color</i>Inventory Status Update<span
+                                                    class="new badge right yellow grey lighten-1"
+                                                    data-badge-caption="updated"></span></a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/concurrency') }}"><i
+                                                    class="material-icons">playlist_add_check</i>Data Concurrency Tool<span
+                                                    class="new badge right yellow darken-3"></span></a></li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="white">
                         <div class="divider"></div>
                     </li>
-                @endif
 
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+                            <li class="white">
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">remove_from_queue</i>System Management<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/users') }}"><i
+                                                    class="material-icons">people</i>Users</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/facilities') }}"><i
+                                                    class="material-icons">home</i>Facilities</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/departments') }}"><i
+                                                    class="material-icons">domain</i>Departments</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/units') }}"><i
+                                                    class="material-icons">crop_din</i>Units</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="white">
+                        <div class="divider"></div>
+                    </li>
+
+                    <li class="white">
+                        <ul class="collapsible collapsible-accordion">
+
+                            <li>
+                                <a class="collapsible-header waves-effect waves-blue"><i
+                                        class="material-icons">library_books</i>DCTools Management<i
+                                        class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('dctools') }}"><i
+                                                    class="material-icons">swap_horiz</i>All DCTools</a></li>
+
+                                        <li><a class="waves-effect waves-green"
+                                                href="{{ url('confirm-delivery') }}"><i
+                                                    class="material-icons">swap_horiz</i>Confirm Item Delivery</a></li>
+                                        <li><a class="waves-effect waves-green" href="{{ url('requests') }}"><i
+                                                    class="material-icons">swap_horiz</i>Request for DCTools</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/distribution-report') }}"><i
+                                            class="material-icons">swap_horiz</i>DCT Distribution Report</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/new-dctreport') }}"><i
+                                                    class="material-icons">swap_horiz</i>Generate DCT Report</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+                <li class="white">
+                    <div class="divider"></div>
+                </li>
                 <li class="white"><a href="{{ url('/help') }}"><i class="material-icons">help</i>Help</a></li>
                 <li class="green">
                     <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#"
@@ -325,12 +496,12 @@
                 </li>
             </ul>
 
-
-
         </div>
     </nav>
 
+
     <div class="container">
+        {{ Breadcrumbs::render() }}
         <p>@include('/alerts')</p>
     </div>
 

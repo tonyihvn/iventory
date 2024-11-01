@@ -231,9 +231,9 @@ class HomeController extends Controller
 
     }
 
-    // public function user_dashboard()
-    // {
-    //     return redirect()->route('dashboard');
-    // }
+    public function user_dashboard()
+    {
+        return redirect()->route('dashboard');
+    }
 
 }
