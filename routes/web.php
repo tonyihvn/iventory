@@ -46,7 +46,7 @@ Route::get('inventorycategory/{category}/', 'InventoryController@categoryInvento
 Route::get('user_items/{userid}/', 'InventoryController@userItems')->name('user_items')->middleware('auth');
 Route::get('dataquality', 'InventoryController@dataQuality')->name('dataquality')->middleware('role:Super,Admin,Manager');
 Route::post('updateInventory','InventoryController@updateInventory')->name('updateInventory')->middleware('role:Super,Admin,Manager');
-Route::get('state-inventory/{state}/', 'InventoryController@stateInventory')->name('state-inventory')->middleware('role:Super,Admin,Observer');
+Route::get('state-inventory/{state}/', 'InventoryController@stateInventory')->name('state-inventory')->middleware('role:Super,Admin,Observer')->where('state', '.*');
 
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
