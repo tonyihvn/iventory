@@ -12,7 +12,7 @@
                         <div class="input-field col s6">
                             <input type="hidden" name="itemid" value="{{ $item->id }}">
                             <input type="hidden" name="old"
-                                value="{{ \App\User::select('name')->where('id', $item->user_id)->first()->name .' - ' .$item->unit->unit_name .', ' .$item->department->department_name .', ' .$item->facilities->facility_name }}">
+                                value="{{ \App\User::select('name')->where('id', $item->user_id)->first()->name ?? '' .' - ' .$item->unit->unit_name .', ' .$item->department->department_name  ?? '' .', ' .$item->facilities->facility_name ?? ''  }}">
 
                             <input type="text" class="validate" value="{{ $item->item_name }}" readonly>
                         </div>
@@ -62,8 +62,7 @@
                     <hr>
 
                     <div class="input-field">
-                        <select name="facility" class="initialized">
-                            <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name }}
+                        <select name="facility" id="facility" materialize="material_select" class="select2">
                             </option>
                             @foreach ($facilities as $facility)
                                 <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
@@ -74,7 +73,6 @@
 
                     <div class="input-field">
                         <select name="department" class="initialized">
-                            <option selected value='{{ $item->department_id }}'>{{ $item->department->department_name }}
                             </option>
                             @foreach ($departments as $department)
                                 <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
@@ -85,7 +83,6 @@
 
                     <div class="input-field">
                         <select name="unit" class="initialized">
-                            <option selected value='{{ $item->unit_id }}'>{{ $item->unit->unit_name }}</option>
                             @foreach ($units as $unit)
                                 <option value='{{ $unit->id }}'>{{ $unit->unit_name }}</option>
                             @endforeach
@@ -95,7 +92,7 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <select name="user" class="initialized">
-                                <option selected value='{{ $item->user->id }}'>{{ $item->user->name }}</option>
+                                <option selected value='{{ $item->user->id }}'>{{ $item->user->name ?? ''  }}</option>
                                 @foreach ($users as $user)
                                     <option value='{{ $user->id }}'>{{ $user->name }}</option>
                                 @endforeach
@@ -106,7 +103,7 @@
                         <div class="input-field col s6">
                             <select name="approved_by" class="initialized">
                                 @auth
-                                    <option value='{{ auth()->user()->id }}' selected>{{ auth()->user()->name }}</option>
+                                    <option value='{{ auth()->user()->id }}' selected>{{ auth()->user()->name ?? ''  }}</option>
                                 @endauth
                                 @guest
                                     <option value="1" selected>Added By</option>

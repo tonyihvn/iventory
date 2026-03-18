@@ -13,6 +13,8 @@ use App\dctools;
 use App\items;
 use App\multifacilities;
 use App\concurrency;
+use App\stocks;
+use App\dcstocks;
 use App\requests;
 use Auth;
 use DB;
@@ -43,46 +45,70 @@ class HomeController extends Controller
         $selectedFacility = Auth::user()->facility;
 
         if(auth()->user()->role=='Admin' || auth()->user()->role=='Observer'){
-            $requests = requests::where('request_status','!=','Delivered')->with('user')->paginate(50);
+            $requests = requests::where('request_status','!=','Delivered')->orderBy('created_at','DESC')->with('user')->paginate(5);
             $usrs = User::select('id','name')->get();
+            $inv_stock = stocks::select('item_id', 'quantity_remaining')->paginate(20);
+            $dc_stocks = dcstocks::select('item_id', 'quantity_remaining')->paginate(20);
             $allcats = inventory::select('category', \DB::raw('COUNT(id) as quantity'))
             ->groupBy('category')
             ->get();
 
-            $audits = audit::orderBy('created_at','desc')->paginate(10);
+            $audits = audit::orderBy('created_at','desc')->paginate(20);
 
-            $laptopscount = inventory ::select(DB::raw("count(*) as count"))
-            ->where('category','Laptops')
-            ->groupBy(DB::raw("state"))
-            ->orderBy("state")
-            ->get()->toArray();
+           $statelist = inventory::select('state')->distinct()->orderBy("state")->pluck('state')->toArray();
+            $states = "'" . implode("','", $statelist) . "'";
 
-            $laptops = array_column($laptopscount, 'count');
+            // Step 1: Get all distinct states (sorted)
+$statelist = Inventory::select('state')
+    ->distinct()
+    ->orderBy('state')
+    ->pluck('state')
+    ->toArray();
 
-            $phonescount = inventory ::select(DB::raw("count(*) as count"))
-            ->where('category','Phones')
-            ->groupBy(DB::raw("state"))
-            ->orderBy("state")
-            ->get()->toArray();
+// Step 2: Define categories you want to count
+$categories = ['Laptops', 'Phones', 'Biometrics', 'Desktop Computers', 'Vehicles'];
 
-            $phones = array_column($phonescount, 'count');
+// Step 3: Fetch all counts grouped by state and category
+$rawCounts = Inventory::select('state', 'category', DB::raw('COUNT(*) as count'))
+    ->whereIn('category', $categories)
+    ->groupBy('state', 'category')
+    ->get();
 
-            $biometricscount = inventory ::select(DB::raw("count(*) as count"))
-            ->where('category','Biometrics')
-            ->groupBy(DB::raw("state"))
-            ->orderBy("state")
-            ->get()->toArray();
+// Step 4: Organize results into a lookup array like: $counts[state][category] = number
+$counts = [];
+foreach ($rawCounts as $row) {
+    $counts[$row->state][$row->category] = $row->count;
+}
 
-            $biometrics = array_column($biometricscount, 'count');
-            $states = "'FCT','KATSINA','NASARAWA','RIVERS'";
-            // dd($laptops);
+// Step 5: Build aligned arrays with zeros where missing
+$laptops = [];
+$phones = [];
+$biometrics = [];
+$desktops = [];
+$vehicles = [];
 
+foreach ($statelist as $state) {
+    $laptops[]    = $counts[$state]['Laptops'] ?? 0;
+    $phones[]     = $counts[$state]['Phones'] ?? 0;
+    $biometrics[] = $counts[$state]['Biometrics'] ?? 0;
+    $desktops[]   = $counts[$state]['Desktop Computers'] ?? 0;
+    $vehicles[]   = $counts[$state]['Vehicles'] ?? 0;
+}
+
+            // dd($states);
+        
             return view('dashboard')
             ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
+            ->with('Desktops',json_encode($desktops,JSON_NUMERIC_CHECK))
+            ->with('Vehicles',json_encode($vehicles,JSON_NUMERIC_CHECK))
             ->with(['allcats'=>$allcats,'audits'=>$audits, 'states'=>$states,'usrs'=>$usrs])
-            ->with(['requests'=>$requests]);
+            ->with(['requests'=>$requests])
+            ->with(['inv_stock'=>$inv_stock])
+            ->with(['dc_stocks'=>$dc_stocks])
+            ->with(['statelist'=>$statelist]);
+
         }elseif(auth()->user()->role=='Manager'){
             $requests = requests::with('user')->where('state',auth()->user()->state)->where('request_status','!=','Delivered')->paginate(50);
             $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
@@ -123,6 +149,7 @@ class HomeController extends Controller
             ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
+            ->with('Vehicles',json_encode($vehicles,JSON_NUMERIC_CHECK))
             ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs])->with(['requests'=>$requests]);
         }
         else if(auth()->user()->role=="Facility"){
@@ -150,6 +177,7 @@ class HomeController extends Controller
             return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
         }
     }
+
 
     public function concurrency(){
 

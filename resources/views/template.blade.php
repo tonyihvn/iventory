@@ -1,5 +1,5 @@
 <head>
-    <title>IHVN Inventory Management System - I-ventory</title>
+    <title>INVENTORY</title>
     <link rel="stylesheet" href="{{ asset('/css/materialize.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/material-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('/css/animate.min.css') }}">
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('/css/fixedHeader.dataTables.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('/css/pmain.scss') }}"> --}}
     <link rel="stylesheet"
-        href="{{ asset('https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css') }}">
+        href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
     <style>
         nav {
             background-color: white !important;
@@ -36,7 +36,7 @@
         }
 
         body {
-            background-image: url("{{ asset('/public/images/inventorybg.jpg') }}");
+            background-image: url("{{ asset('/images/inventorybg.jpg') }}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -86,7 +86,7 @@
                     <form action="{{ route('item_search') }}" method="POST" style="position: relative;"
                         id="searchform" class="row">
                         @csrf
-                        <input type="text" placeholder="Search Inventory" class="searchbox col s8" name="keyword">
+                        <input type="text" placeholder="Search Inventory" class="searchbox col s8" name="keyword" style="color: black">
                         <button class="btn btn-small btn-floating tooltipped col s2" data-position="top"
                             data-tooltip="Search with IHVN Tag No, Item Name, etc" style="margin-top: 10px;"><i
                                 class="material-icons" style="margin-top:-10px !important;">search</i></button>
@@ -481,7 +481,10 @@
 
 
     <div class="container">
-        {{ Breadcrumbs::render() }}
+        @if(Breadcrumbs::exists(Route::currentRouteName()))
+            {{ Breadcrumbs::render(Route::currentRouteName()) }}
+        @endif
+
         <p>@include('/alerts')</p>
     </div>
 
@@ -559,7 +562,7 @@
             </div>
         </div>
         <div class="footer-copyright  black darken-4">
-            <div class="container">Developed by <a href="https://valueminds.org">Value Minds</a></div>
+            <div class="container">Developed by <a href="https://valueminds.ng">ValueMinds</a></div>
         </div>
     </footer>
 
@@ -596,51 +599,274 @@
 <script src="{{ asset('/js/pmain.js') }}"></script>
 
 
-{{-- <script src="{{ asset('/js/exporting.js') }}"></script> --}}
+<script src="{{ asset('/js/highcharts.js') }}"></script>
+<script src="{{ asset('/js/exporting.js') }}"></script>
+<!-- Leaflet map library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
 <?php if(isset($dashboard)){ ?>
-    <script src="{{ asset('/js/highcharts.js') }}"></script>
-
     <script type="text/javascript">
-        $(function() {
-            var laptops = <?php echo $Laptops ?? ''; ?>;
-            var phones = <?php echo $Phones ?? ''; ?>;
-            var biometrics = <?php echo $Biometrics ?? ''; ?>;
-
-            var categoris = [<?php echo $states; ?>];
-
-
-            $('#basic-area').highcharts({
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: 'Gadget Distribution(s)'
-                },
-                xAxis: {
-                    categories: categoris
-
-                },
-                yAxis: {
-                    title: {
-                        text: 'Quantity / Total'
-                    }
-                },
-                series: [{
-                        name: 'Phones',
-                        data: phones
-                    }, {
-                        name: 'Laptops',
-                        data: laptops
-                    },
-                    {
-                        name: 'Finger Print Scanners',
-                        data: biometrics
-                    }
-                ]
-            });
+        // Initialize dashboard when document is ready
+        $(document).ready(function() {
+            initDashboard();
         });
+
+        // Initialize dashboard
+        function initDashboard() {
+            // Ensure Highcharts is available for the column chart
+            if (typeof Highcharts === 'undefined') {
+                console.error('Highcharts not loaded');
+                return;
+            }
+
+            var laptops = <?php echo $Laptops ?? '[]'; ?>;
+            var phones = <?php echo $Phones ?? '[]'; ?>;
+            var biometrics = <?php echo $Biometrics ?? '[]'; ?>;
+            var desktops = <?php echo $Desktops ?? '[]'; ?>;
+            var vehicles = <?php echo isset($Vehicles) ? $Vehicles : '[]'; ?>;
+
+            var categoris = [<?php echo $states ?? ''; ?>];
+          
+            console.log('Dashboard data loaded', {phones: phones, laptops: laptops});
+
+            // Initialize column chart (works with core Highcharts)
+            if ($('#basic-area').length > 0 && typeof Highcharts !== 'undefined') {
+                $('#basic-area').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Gadget Distribution(s)'
+                    },
+                    xAxis: {
+                        categories: categoris
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Quantity / Total'
+                        }
+                    },
+                    series: [{
+                            name: 'Phones',
+                            data: phones
+                        }, {
+                            name: 'Laptops',
+                            data: laptops
+                        }, {
+                            name: 'Desktop Computers',
+                            data: desktops
+                        }, {
+                            name: 'Finger Print Scanners',
+                            data: biometrics
+                        },
+                        {
+                            name: 'Vehicles',
+                            data: vehicles
+                        }
+                    ]
+                });
+            }
+
+            // Initialize Leaflet map
+            if ($('#nigeria-map').length > 0 && typeof L !== 'undefined') {
+                initLeafletMap(categoris, laptops, phones, desktops, biometrics, vehicles);
+            }
+        }
+
+        // Leaflet map initialization
+        function initLeafletMap(states, laptops, phones, desktops, biometrics, vehicles) {
+            // State name mapping
+            var stateNameMap = {
+                'ABIA': 'Abia',
+                'ADAMAWA': 'Adamawa',
+                'AKWA IBOM': 'Akwa Ibom',
+                'ANAMBRA': 'Anambra',
+                'BAUCHI': 'Bauchi',
+                'BAYELSA': 'Bayelsa',
+                'BENUE': 'Benue',
+                'BORNO': 'Borno',
+                'CROSS RIVER': 'Cross River',
+                'DELTA': 'Delta',
+                'EBONYI': 'Ebonyi',
+                'EDO': 'Edo',
+                'EKITI': 'Ekiti',
+                'ENUGU': 'Enugu',
+                'FCT': 'Federal Capital Territory',
+                'GOMBE': 'Gombe',
+                'IMO': 'Imo',
+                'JIGAWA': 'Jigawa',
+                'KADUNA': 'Kaduna',
+                'KANO': 'Kano',
+                'KATSINA': 'Katsina',
+                'KEBBI': 'Kebbi',
+                'KOGI': 'Kogi',
+                'KWARA': 'Kwara',
+                'LAGOS': 'Lagos',
+                'NASARAWA': 'Nassarawa',
+                'NIGER': 'Niger',
+                'OGUN': 'Ogun',
+                'ONDO': 'Ondo',
+                'OSUN': 'Osun',
+                'OYO': 'Oyo',
+                'PLATEAU': 'Plateau',
+                'RIVERS': 'Rivers',
+                'SOKOTO': 'Sokoto',
+                'TARABA': 'Taraba',
+                'YOBE': 'Yobe',
+                'ZAMFARA': 'Zamfara'
+            };
+
+            // State coordinates (representative point for each state) - Corrected for Nigeria's borders
+            var stateCoordinates = {
+                'Abia': [5.53, 7.73],
+                'Adamawa': [9.22, 12.44],
+                'Akwa Ibom': [4.91, 7.97],
+                'Anambra': [6.08, 7.00],
+                'Bauchi': [10.31, 9.84],
+                'Bayelsa': [5.24, 5.39],
+                'Benue': [7.75, 7.67],
+                'Borno': [11.50, 12.89],
+                'Cross River': [5.02, 8.29],
+                'Delta': [5.70, 5.94],
+                'Ebonyi': [6.25, 8.23],
+                'Edo': [6.49, 5.98],
+                'Ekiti': [7.63, 5.27],
+                'Enugu': [6.42, 7.50],
+                'Federal Capital Territory': [9.08, 7.40],
+                'Gombe': [10.29, 10.28],
+                'Imo': [5.48, 7.04],
+                'Jigawa': [12.22, 9.92],
+                'Kaduna': [10.52, 7.44],
+                'Kano': [12.00, 8.98],
+                'Katsina': [12.16, 7.62],
+                'Kebbi': [11.50, 4.20],
+                'Kogi': [7.80, 6.74],
+                'Kwara': [8.80, 5.60],
+                'Lagos': [6.45, 3.39],
+                'Nassarawa': [8.88, 8.91],
+                'Niger': [9.62, 5.87],
+                'Ogun': [6.92, 3.15],
+                'Ondo': [7.24, 5.07],
+                'Osun': [7.78, 4.57],
+                'Oyo': [8.98, 3.93],
+                'Plateau': [9.30, 9.20],
+                'Rivers': [4.70, 7.01],
+                'Sokoto': [13.00, 5.24],
+                'Taraba': [8.75, 10.45],
+                'Yobe': [11.62, 11.13],
+                'Zamfara': [12.17, 6.54]
+            };
+
+            // Create map centered on Nigeria
+            var map = L.map('nigeria-map').setView([9.08, 8.68], 6);
+
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Function to get color based on total devices
+            function getMarkerColor(total) {
+                if (total > 100) return '#d32f2f'; // Red
+                if (total > 50) return '#f57c00'; // Orange
+                if (total > 20) return '#fbc02d'; // Yellow
+                return '#7cb342'; // Light green
+            }
+
+            // Function to create marker size based on device count
+            function getMarkerSize(total) {
+                return Math.min(50, 20 + (total / 5));
+            }
+
+            // Add markers for each state
+            for (var i = 0; i < states.length; i++) {
+                var stateCode = states[i];
+                var stateName = stateNameMap[stateCode] || stateCode;
+                var coords = stateCoordinates[stateName];
+
+                if (coords) {
+                    var total = (laptops[i] || 0) + (phones[i] || 0) + (desktops[i] || 0) + (biometrics[i] || 0) + (vehicles[i] || 0);
+                    var color = getMarkerColor(total);
+                    var size = getMarkerSize(total);
+
+                    // Create custom HTML for marker
+                    var markerHtml = '<div style="' +
+                        'background-color: ' + color + '; ' +
+                        'border: 2px solid white; ' +
+                        'border-radius: 50%; ' +
+                        'width: ' + size + 'px; ' +
+                        'height: ' + size + 'px; ' +
+                        'display: flex; ' +
+                        'align-items: center; ' +
+                        'justify-content: center; ' +
+                        'color: white; ' +
+                        'font-weight: bold; ' +
+                        'font-size: 12px; ' +
+                        'box-shadow: 0 2px 4px rgba(0,0,0,0.3); ' +
+                        '">' + total + '</div>';
+
+                    var icon = L.divIcon({
+                        html: markerHtml,
+                        iconSize: [size, size],
+                        className: 'custom-marker'
+                    });
+
+                    // Create popup content
+                    var popupContent = '<div style="font-size: 12px; min-width: 200px;">' +
+                        '<h4 style="margin: 5px 0; color: #333;">' + stateName + '</h4>' +
+                        '<table style="width: 100%; border-collapse: collapse;">' +
+                        '<tr style="border-bottom: 1px solid #ddd;">' +
+                        '<td style="padding: 5px; text-align: right;"><strong>Laptops:</strong></td>' +
+                        '<td style="padding: 5px; text-align: right; font-weight: bold;">' + (laptops[i] || 0) + '</td>' +
+                        '</tr>' +
+                        '<tr style="border-bottom: 1px solid #ddd;">' +
+                        '<td style="padding: 5px; text-align: right;"><strong>Phones:</strong></td>' +
+                        '<td style="padding: 5px; text-align: right; font-weight: bold;">' + (phones[i] || 0) + '</td>' +
+                        '</tr>' +
+                        '<tr style="border-bottom: 1px solid #ddd;">' +
+                        '<td style="padding: 5px; text-align: right;"><strong>Desktops:</strong></td>' +
+                        '<td style="padding: 5px; text-align: right; font-weight: bold;">' + (desktops[i] || 0) + '</td>' +
+                        '</tr>' +
+                        '<tr style="border-bottom: 1px solid #ddd;">' +
+                        '<td style="padding: 5px; text-align: right;"><strong>Biometrics:</strong></td>' +
+                        '<td style="padding: 5px; text-align: right; font-weight: bold;">' + (biometrics[i] || 0) + '</td>' +
+                        '</tr>' +
+                        '<tr style="border-bottom: 1px solid #ddd;">' +
+                        '<td style="padding: 5px; text-align: right;"><strong>Vehicles:</strong></td>' +
+                        '<td style="padding: 5px; text-align: right; font-weight: bold;">' + (vehicles[i] || 0) + '</td>' +
+                        '</tr>' +
+                        '<tr style="background: #f0f0f0;">' +
+                        '<td style="padding: 5px; text-align: right;"><strong>Total:</strong></td>' +
+                        '<td style="padding: 5px; text-align: right; font-weight: bold; color: ' + color + ';">' + total + '</td>' +
+                        '</tr>' +
+                        '</table></div>';
+
+                    // Add marker to map
+                    L.marker(coords, { icon: icon })
+                        .bindPopup(popupContent)
+                        .addTo(map);
+                }
+            }
+
+            console.log('Leaflet map initialized successfully');
+        }
     </script>
 <?php } ?>
+
+<!-- Error handling for missing image resources -->
+<script type="text/javascript">
+    // Suppress 404 errors for missing image files
+    document.addEventListener('error', function(e) {
+        if (e.target.tagName === 'IMG' && e.target.src) {
+            console.warn('Failed to load image:', e.target.src);
+            // Set a transparent placeholder
+            e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1" height="1"%3E%3C/svg%3E';
+        }
+    }, true);
+</script>
+
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" />
 </script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" />
@@ -678,6 +904,21 @@
 
     $(document).ready(function() {
         $('.select2').select2();
+
+        $('#state').change(function() {
+            var state = $(this).val();
+            $.ajax({
+                url: '{{url("get-facilities")}}/' + state,
+                type: 'GET',
+                success: function(data) {
+                    $('#facility').empty();
+                    $('#facility').append('<option value="" disabled selected>Facility</option>');
+                    $.each(data, function(index, facility) {
+                        $('#facility').append('<option value="' + facility.id + '">' + facility.facility_name + '</option>');
+                    });
+                }
+            });
+        });
     });
 
     $("#type").change(function() {

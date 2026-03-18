@@ -39,7 +39,7 @@ Breadcrumbs::for('settings.index', function (BreadcrumbTrail $trail) {
 });
 
 // Home > Settings > Edit
-Breadcrumbs::for('edit_settings', function (BreadcrumbTrail $trail, $id) {
+Breadcrumbs::for('edit_settings/{id}', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('system-admin');
     $trail->push("Edit App Setting", route('edit_settings', $id));
 });
@@ -74,7 +74,7 @@ Breadcrumbs::for('inventories.index', function (BreadcrumbTrail $trail) {
 });
 
 // Home > Inventory
-Breadcrumbs::for('inventorycategory', function (BreadcrumbTrail $trail,$category) {
+Breadcrumbs::for('inventorycategory/{category}/', function (BreadcrumbTrail $trail,$category) {
     $trail->parent('inventory');
     $trail->push("Inventory of $category", route('inventorycategory', $category));
 });
@@ -99,7 +99,7 @@ Breadcrumbs::for('requests', function (BreadcrumbTrail $trail) {
 });
 
 // Home > Item > Requests
-Breadcrumbs::for('request', function (BreadcrumbTrail $trail,$id) {
+Breadcrumbs::for('request/{id}', function (BreadcrumbTrail $trail,$id) {
     $trail->parent('requests');
     $trail->push("Attend to a Request", route('request',$id));
 });

@@ -17,11 +17,82 @@
                     <input name="_method" type="hidden" value="PUT">
 
                     <input type="hidden" name="id" value="{{ $item->id }}">
+                  
+                  	<h5>Facility / User Location</h5>
+                    <hr>
+                  
+                  	<div class="input-field">
+                        <select name="sr" id="sr" materialize="material_select" class="select2">
+                            <option value="{{$sr}}" selected>{{$sr}}</option>
+                            @foreach ($srs as $sr)
+                                <option value='{{ $sr->id }}'>{{ $sr->facility_no }}</option>
+                            @endforeach
+                        </select>
+                        <label for="sr" class="active">Select SR</label>
+                    </div>
+                  
+                  	
+
+
+                    <div class="input-field">
+                        <select name="state" id="state" materialize="material_select">
+                            <option value="{{ $item->state }}" selected>{{ $item->state }}</option>
+
+                            @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
+                                <option value="ANAMBRA">ANAMBRA</option>
+                                <option value="KWARA">KWARA</option>
+                                <option value="EBONYI">EBONYI</option>
+                                <option value="GOMBE">GOMBE</option>
+
+                                <option value="FCT">FCT</option>
+                                <option value="RIVERS">RIVERS</option>
+                                <option value="NASARAWA">NASARAWA</option>
+                                <option value="KATSINA">KATSINA</option>
+                            @endif
+
+                        </select>
+                        <label for="facility">Select State</label>
+                    </div>
+
+                    <div class="input-field">
+                        <select name="facility"  materialize="material_select" class="select2">
+                            <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name }}
+                            </option>
+                            @foreach ($facilities as $facility)
+                                <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
+                            @endforeach
+                        </select>
+                        <label for="facility" class="active">Select Facility</label>
+                    </div>
+
+                    <div class="input-field">
+                        <select name="department" class="initialized">
+                            <option selected value='{{ $item->department_id }}'>{{ $item->department->department_name }}
+                            </option>
+                            @foreach ($departments as $department)
+                                <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
+                            @endforeach
+                        </select>
+                        <label>Select Department</label>
+                    </div>
+
+                    <div class="input-field">
+                        <select name="unit" class="initialized">
+                            <option selected value='{{ $item->unit_id }}'>{{ $item->unit->unit_name }}</option>
+                            @foreach ($units as $unit)
+                                <option value='{{ $unit->id }}'>{{ $unit->unit_name }}</option>
+                            @endforeach
+                        </select>
+                        <label>Select Unit</label>
+                    </div>
+                    
+                  
                     <div class="row">
                         <div class="input-field col s12">
                             <select name="item_id" id="item_id" materialize="material_select"  class="select2">
                                 <option value="{{ $item->item_id }}">Change Item Unique Name</option>
-                                <option value='{{ $item->uniqueName->id }}' selected>{{ $item->uniqueName->item_name }}</option>
+                                <option value='{{ $item->uniqueName ? $item->uniqueName->id : "" }}' selected>{{ $item->uniqueName ? $item->uniqueName->item_name : "" }}</option>
+
                                 @foreach ($items as $it)
                                     <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
                                 @endforeach
@@ -155,61 +226,6 @@
                         </a>
                     </div>
 
-                    <h5>Facility / User Location</h5>
-                    <hr>
-
-
-                    <div class="input-field">
-                        <select name="state" id="state" materialize="material_select">
-                            <option value="{{ $item->state }}" selected>{{ $item->state }}</option>
-
-                            @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
-                                <option value="ANAMBRA">ANAMBRA</option>
-                                <option value="KWARA">KWARA</option>
-                                <option value="EBONYI">EBONYI</option>
-                                <option value="GOMBE">GOMBE</option>
-
-                                <option value="FCT">FCT</option>
-                                <option value="RIVERS">RIVERS</option>
-                                <option value="NASARAWA">NASARAWA</option>
-                                <option value="KATSINA">KATSINA</option>
-                            @endif
-
-                        </select>
-                        <label for="facility">Select State</label>
-                    </div>
-
-                    <div class="input-field">
-                        <select name="facility"  materialize="material_select" class="select2">
-                            <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name }}
-                            </option>
-                            @foreach ($facilities as $facility)
-                                <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
-                            @endforeach
-                        </select>
-                        <label for="facility" class="active">Select Facility</label>
-                    </div>
-
-                    <div class="input-field">
-                        <select name="department" class="initialized">
-                            <option selected value='{{ $item->department_id }}'>{{ $item->department->department_name }}
-                            </option>
-                            @foreach ($departments as $department)
-                                <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
-                            @endforeach
-                        </select>
-                        <label>Select Department</label>
-                    </div>
-
-                    <div class="input-field">
-                        <select name="unit" class="initialized">
-                            <option selected value='{{ $item->unit_id }}'>{{ $item->unit->unit_name }}</option>
-                            @foreach ($units as $unit)
-                                <option value='{{ $unit->id }}'>{{ $unit->unit_name }}</option>
-                            @endforeach
-                        </select>
-                        <label>Select Unit</label>
-                    </div>
                     <div class="row">
                         <div class="input-field col s6">
                             <select name="user"  materialize="material_select" class="select2" id="user">

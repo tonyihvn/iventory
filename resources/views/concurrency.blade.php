@@ -1,7 +1,7 @@
 
 @extends('template')
 @section('content')
-<link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+{{-- <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet"> --}}
     <style>
         .edited-cell {
             background-color: lightgreen !important;
@@ -11,14 +11,46 @@
         }
     </style>
     <div class="row" style="padding: 5px;">
-        <h3 style="text-align: center">Assets Table {{$state}}</h3>
-        <div class="row" style="text-align: center">
-            <div>
-                <a id="addRowButton" href="#" class="btn btn-small btn-floating left pulse tooltipped"
-                    data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
+        <div class="row">
+            <div class="col s8">
+           <h3 style="text-align: center">Assets Table {{$state}}</h3> 
+        </div>
+        
+            <a href="{{ route('concurrencies.export') }}" class="btn btn-primary col s1">
+                Edit in Excel
+            </a>
+           
+            <form action="{{ route('concurrencies.import') }}" method="POST" enctype="multipart/form-data" class="form-inline">
+                @csrf
+                
+                    <input type="file" name="file" accept=".xlsx,.xls,.csv" class="form-control col s1" required>
+                
+                <button type="submit" class="col s2 btn btn-success">Upload Excel (Import)</button>
+            </form>
+        </div>
+        
+         @if(session('success'))
+            <div class="alert alert-danger">{{ session('success') }}</div>
+        @endif
 
-            </div>
-            <button id="updateButton" class="btn btn-primary">Update Assets</button>
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
+
+    
+        <hr>
+        <div class="row" style="text-align: center">
+            
+                <div>
+                    <a id="addRowButton" href="#" class="btn btn-small btn-floating left pulse tooltipped"
+                        data-position="top" data-tooltip="Add New Item"><i class="material-icons">add</i></a>
+
+                </div>
+                <button id="updateButton" class="btn btn-primary">Update Assets</button>   
+            
+
+           
+            
 
             <!-- Datalist for preloading locations -->
             <datalist id="locationList">
@@ -316,7 +348,7 @@
                 let dataToSave = modifiedRows.concat(newRows);
 
                 if (dataToSave.length > 0) {
-                    alert(JSON.stringify(dataToSave, null, 2));
+                    // alert(JSON.stringify(dataToSave, null, 2));
                     $.ajax({
                         url: '{{ route("concurrencyUpdate") }}',
                         method: 'POST',

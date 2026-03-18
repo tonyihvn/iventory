@@ -63,7 +63,7 @@ class DctoolsController extends Controller
      */
     public function show(dctools $dctools)
     {
-        //
+        return view('show_dctool',compact('dctools'));
     }
 
     /**
@@ -72,9 +72,10 @@ class DctoolsController extends Controller
      * @param  \App\dctools  $dctools
      * @return \Illuminate\Http\Response
      */
-    public function edit(dctools $dctools)
+    public function edit($tid)
     {
-        //
+        $dctool = dctools::find($tid);
+        return view('edit_dctool',compact('dctool'));
     }
 
     /**
@@ -84,9 +85,16 @@ class DctoolsController extends Controller
      * @param  \App\dctools  $dctools
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, dctools $dctools)
+    public function update(Request $request)
     {
-        //
+        dctools::where('id',$request->id)->update([
+            'tool_name'=>$request->tool_name,
+            'description'=>$request->description,
+            'category'=>$request->category
+        ]);
+
+        session()->flash('message','The DCTool has been updated successfully! <br>');
+        return redirect()->route('dctools');
     }
 
     /**
@@ -261,7 +269,7 @@ class DctoolsController extends Controller
         // dd($otherfacilities);
 
         $dctool = dctools::where('id',$dcid)->first();
-        if(Auth()->user()->role=="DCTManager"){
+        if(Auth()->user()->role=="DCTManager" || Auth()->user()->role=="Manager"){
             $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
 
         }if(Auth()->user()->role=="DCTUser"){
@@ -314,7 +322,7 @@ class DctoolsController extends Controller
         $dctools = dctools::select('id','tool_name','category')->get();
         $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth()->user()->id)->get()->toArray();
         // dd(Auth()->user()->facility);
-        if(Auth()->user()->role=="DCTManager"){
+        if(Auth()->user()->role=="DCTManager" || Auth()->user()->role=="Manager"){
             $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
 
         }if(Auth()->user()->role=="DCTUser"){
@@ -356,7 +364,7 @@ class DctoolsController extends Controller
     }
 
     public function bulkToolAction(Request $request){
-        if(Auth()->user()->role=="DCTManager"){
+        if(Auth()->user()->role=="DCTManager" || Auth()->user()->role=="Manager"){
             $facilities = facilities::select('id','facility_name','state')->where('state',Auth()->user()->state)->get();
 
         }if(Auth()->user()->role=="DCTUser"){
@@ -381,7 +389,7 @@ class DctoolsController extends Controller
     public function confirmDelivery(){
         $otherfacilities = multifacilities::select('facility_id')->where('user_id',Auth()->user()->id)->get()->toArray();
 
-        if(Auth()->user()->role=="DCTManager"){
+        if(Auth()->user()->role=="DCTManager" || Auth()->user()->role=="Manager"){
             $distribution = dcdistributions::where('sentto_state',Auth()->user()->state)->get();
 
         }elseif(Auth()->user()->role=="DCTUser"){
@@ -426,13 +434,20 @@ class DctoolsController extends Controller
     public function DCTDistributionReport(){
         $distribution = dcdistributions::all();
 
-        if(Auth()->user()->role=="DCTManager"){
+        if(Auth()->user()->role=="DCTManager"  || Auth()->user()->role=="Manager"){
             $distribution = $distribution->where('sentto_state',Auth()->user()->state);
         }
 
         return view('dcdistribution-report', compact('distribution'));
 
 
+    }
+  
+  public function DeleteDCTool($tid){
+        dctools::where('id',$tid)->delete();
+
+        session()->flash('message','The DCTool has been deleted successfully! <br>');
+        return redirect()->back();
     }
 
 }

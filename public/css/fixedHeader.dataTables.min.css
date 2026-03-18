@@ -1,0 +1,33 @@
+/*!
+ * FixedHeader 3.1.5
+ * Minimal CSS for DataTables FixedHeader plugin
+ */
+
+.fixedHeader-floating {
+    position: fixed !important;
+    top: 0;
+}
+
+.fixedHeader-floating.bottom {
+    bottom: 0;
+    top: auto !important;
+}
+
+.fixedHeader-locked {
+    position: absolute;
+}
+
+.fixedHeader-locked.bottom {
+    position: absolute;
+    bottom: 0;
+    top: auto;
+}
+
+table.fixedHeader-floating {
+    z-index: 1003;
+}
+
+.fixedHeader-floating > thead > tr,
+.fixedHeader-floating > tbody > tr {
+    height: 37px;
+}

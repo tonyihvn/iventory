@@ -25,8 +25,8 @@ use DB;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\SendEmail;
 use Illuminate\Support\Facades\Mail;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class InventoryController extends Controller
 {
@@ -41,13 +41,28 @@ class InventoryController extends Controller
         $categories = category::select('id','category_name')->get();
         $items = items::select('id','item_name')->get();
 
+        // ensure $srs is defined for all branches
+        $srs = collect();
+
         if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get();
-            $facilities = facilities::select('id','facility_name')->get();
-            $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->orderBy('item_name', 'asc')->get();
+
+            // cache full facilities list for 60 minutes
+            $facilities = Cache::remember('facilities_list', 60, function () {
+                return facilities::select('id', 'facility_name', 'lga')->get();
+            });
+
+            // cache srs list for 60 minutes
+            $srs = Cache::remember('srs_list', 60, function () {
+                return facilities::select('id','facility_no')->distinct()->get();
+            });
+
+            $inventories = inventory::select('id','supplier','type','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->orderBy('item_name', 'asc')->get();
+
         }else if(auth()->user()->role=="Manager"){
             $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
-            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $facilities = facilities::select('id','facility_name','lga')->where('state',auth()->user()->state)->get();
+            $srs = facilities::select('id','facility_no')->distinct()->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('state',auth()->user()->state)->orderBy('item_name', 'asc')->get();
         }else if(auth()->user()->role=="Facility"){
 
@@ -59,14 +74,51 @@ class InventoryController extends Controller
             $facilityIds[] = $customFacilityId;
 
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
-            $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $facilities = facilities::select('id','facility_name','lga')->where('state',auth()->user()->state)->get();
+            $srs = facilities::select('id','facility_no')->distinct()->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->whereIn('facility_id',$facilityIds)->orderBy('item_name', 'asc')->get();
         }else{
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            $srs = facilities::select('id','facility_no')->distinct()->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
         }
-        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items,'srs'=>$srs]);
+    }
+  public function stateInventory($state)
+    {
+
+        $categories = category::select('id','category_name')->get();
+        $items = items::select('id','item_name')->get();
+        $statelist = inventory::select('state')->distinct()->pluck('state')->toArray();
+
+        // ensure $srs is defined for all branches
+        $srs = collect();
+
+        if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
+            $usrs = User::select('id','name')->get();
+
+            // cache full facilities list for 60 minutes
+            $facilities = Cache::remember('facilities_list', 60, function () use ($state) {
+                return facilities::select('id', 'facility_name', 'lga')->where('state',$state)->get();
+            });
+
+            // cache srs list for 60 minutes
+            $srs = Cache::remember('srs_list', 60, function () {
+                return facilities::select('id','facility_no')->distinct()->get();
+            });
+
+            $inventories = inventory::select('id','supplier','type','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('state',$state)->orderBy('item_name', 'asc')->get();
+
+        }
+        return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items,'srs'=>$srs,'statelist'=>$statelist]);
+    }
+
+    public function getFacilitiesByState(Request $request)
+    {
+        $state = ucwords(strtolower($request->state));
+        $facilities = facilities::where('state', $state)->get();
+        return response()->json($facilities);
     }
 
     public function dataQuality()
@@ -177,9 +229,12 @@ class InventoryController extends Controller
     public function create()
     {
         $items = items::select('id','item_name')->get();
+
         // $ihvn_no = "IHVN".substr(md5(uniqid(mt_rand(), true).microtime(true)),0, 8);
         if(Auth()->user()->role=="Admin"){
-            $facilities = facilities::select('id','facility_name')->get();
+            $facilities = facilities::select('id','facility_name','state','lga','facility_no')->get();
+            // $srs = facilities::select('id','facility_no')->groupBy('facility_no')->get();
+
             $users = User::select('id','name','facility','department','unit')->get();
         }else{
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
@@ -201,6 +256,7 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'item_name' => 'required|min:3'
         ]);
@@ -290,8 +346,8 @@ class InventoryController extends Controller
                     'file'=>$singlefile
                 ])->id;
 
-                if(isset($request->concurrency) && $request->concurrency=="Yes"){
-                    concurrency::updateOrCreate(['tag_number'=>$ihvnno],[
+                // if(isset($request->concurrency) && $request->concurrency=="Yes"){
+                    concurrency::create([
                         'state'=>$request->state,
                         'location'=>$request->facility,
                         'model'=>$request->item_name,
@@ -304,9 +360,10 @@ class InventoryController extends Controller
                         'received_by'=>$request->supplier,
                         'comments'=>$request->remarks,
                         'other_info'=>$request->internal_location,
-                        'user'=>$user_id
+                        'user'=>$user_id,
+                        'iid'=>$itemid
                     ]);
-                }
+                // }
 
             }
         }else{
@@ -334,8 +391,8 @@ class InventoryController extends Controller
                 'file'=>$singlefile
             ])->id;
 
-            if(isset($request->concurrency) && $request->concurrency=="Yes"){
-                concurrency::updateOrCreate(['tag_number'=>$request->ihvn_no],[
+            // if(isset($request->concurrency) && $request->concurrency=="Yes"){
+                concurrency::create([
                     'state'=>$request->state,
                     'location'=>$request->facility,
                     'model'=>$request->item_name,
@@ -348,9 +405,10 @@ class InventoryController extends Controller
                     'received_by'=>$request->supplier,
                     'comments'=>$request->remarks,
                     'other_info'=>$request->internal_location,
-                    'user'=>$userid[0]
+                    'user'=>$userid[0],
+                    'iid'=>$itemid
                 ]);
-            }
+            // }
         }
 
         if($request->hasFile('file'))
@@ -444,13 +502,20 @@ class InventoryController extends Controller
         $item = inventory::where('id','=',$id)->with('inventoryspec')->first();
         $items = items::select('id','item_name')->get();
         $facilities = facilities::select('id','facility_name')->get();
+        $srs = facilities::select('id','facility_no')->distinct()->get();
+        $srCheck = facilities::select('facility_no')->where('facility_name','=',$item->facility)->first();
+        if(isset($srCheck)){
+            $sr = $srCheck->facility_no;
+        }else{
+            $sr = "";
+        }
         $departments = department::select('id','department_name')->get();
         $units = unit::select('id','unit_name')->get();
         $users = User::select('id','name','facility','department','unit')->get();
         $categories = category::select('id','category_name')->get();
 
 
-        return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities,'items'=>$items]);
+        return view('item',compact('item'), ['departments'=>$departments,'units'=>$units,'users'=>$users,'categories'=>$categories,'facilities'=>$facilities,'items'=>$items,'srs'=>$srs,'sr'=>$sr]);
     }
 
     /**
@@ -516,8 +581,8 @@ class InventoryController extends Controller
             }
         }
 
-        if(isset($request->concurrency) && $request->concurrency=="Yes"){
-            concurrency::updateOrCreate(['tag_number'=>$request->tag_no],[
+        // if(isset($request->concurrency) && $request->concurrency=="Yes"){
+            concurrency::updateOrCreate(['iid'=>$request->id],[
                 'state'=>$request->state,
                 'location'=>$request->facility,
                 'model'=>$request->item_name,
@@ -532,7 +597,7 @@ class InventoryController extends Controller
                 'other_info'=>$request->internal_location,
                 'user'=>$userid
             ]);
-        }
+        // }
 
         audit::create([
             'action'=>"Updated Item ".$request->item_name,
@@ -547,6 +612,24 @@ class InventoryController extends Controller
 
     public function fixItems(Request $request)
     {
+        if(isset($request->state)){
+            $i = 0;
+
+
+            foreach ($request->tid as $itemid){
+
+                $it = inventory::where('id',$itemid)->first();
+                // RECORD SALES
+                $it->update([
+                    'state'=>$request->state
+                    ]);
+                
+                concurrency::where('iid',$it->id)->update([
+                    'state'=>$request->state
+                    ]);
+                $i++;
+            }
+        }
 
         if(isset($request->facility)){
             $i = 0;
@@ -558,6 +641,10 @@ class InventoryController extends Controller
                 // RECORD SALES
                 $it->update([
                     'facility_id'=>$request->facility
+                    ]);
+                
+                concurrency::where('iid',$it->id)->update([
+                    'location'=>$request->facility
                     ]);
                 $i++;
             }
@@ -572,7 +659,11 @@ class InventoryController extends Controller
                 $it->update([
                     'category'=>$request->category
                     ]);
-                $i++;
+               
+                concurrency::where('iid',$it->id)->update([
+                    'category'=>$request->category
+                    ]); 
+                    $i++;
             }
         }
 
@@ -584,6 +675,9 @@ class InventoryController extends Controller
                 // RECORD SALES
                 $it->update([
                     'status'=>$request->status
+                    ]);
+                concurrency::where('iid',$it->id)->update([
+                    'condition'=>$request->status
                     ]);
                 $i++;
             }
@@ -600,12 +694,17 @@ class InventoryController extends Controller
                     'item_name'=>$item->item_name,
                     'item_id'=>$request->item_id
                     ]);
+                concurrency::where('iid',$it->id)->update([
+                    'model'=>$item->item_name
+                    ]);
                 $i++;
             }
         }
 
         if(isset($request->delete_items)){
+            concurrency::whereIn('iid',$request->tid)->delete();
             inventory::whereIn('id',$request->tid)->delete();
+            
         }
 
         audit::create([
@@ -671,6 +770,16 @@ class InventoryController extends Controller
                 'remarks' => DB::raw("CONCAT(`remarks`,'$changedIHVNNo')")
              ]);
 
+            concurrency::where('iid',$inv->id)->update([
+                'serial_number' => $request->sserial_no[$key],
+                'tag_number' => $request->sihvn_no[$key],
+                'location'=>$request->sfacility_id[$key],
+                'condition'=>$request->sstatus[$key],
+                'comments' => DB::raw("CONCAT(`comments`,'$changedIHVNNo')"),
+                'user' => $request->suser_id[$key]
+
+             ]);
+
         }
 
         session()->flash('message','The selected items have been updated and saved!');
@@ -686,6 +795,7 @@ class InventoryController extends Controller
     public function destroy(Request $request, $id)
     {
         inventory::findOrFail($id)->delete();
+        concurrency::where('iid',$id)->delete();
 
         audit::create([
             'action'=>"Deleted Item ".$request->id,
@@ -736,6 +846,10 @@ class InventoryController extends Controller
                 inventory::where('ihvn_no',$pp)->update([
                     'ihvn_no'=>$request->newtag[$i],
                     'remarks' => DB::raw("CONCAT('Old Tag Changed: $pp', `remarks`)")
+                    ]);
+                concurrency::where('tag_number',$pp)->update([
+                    'tag_number'=>$request->newtag[$i],
+                    'comments' => DB::raw("CONCAT('Old Tag Changed: $pp', `comments`)")
                     ]);
                 $i++;
             }

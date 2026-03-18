@@ -9,7 +9,7 @@
 </style>
     <div class="row" style="width:98%; margin:auto;">
         <a href="{{ url('/requests') }}" class="btn green right">All Requests</a>
-        @if (auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTAdmin')
+        @if (auth()->user()->role == 'DCTManager' || auth()->user()->role == 'DCTAdmin' || auth()->user()->role == 'Manager'  || auth()->user()->role == 'Admin')
             <div class="col s12 l10 offset-l1">
                 <h3 class="card-header text-center" style="text-align:center;">New Item Request Form</h3>
 

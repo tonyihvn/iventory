@@ -135,6 +135,26 @@ $(document).ready(function(){
         }
     });
 
+    // CREATE SELECT ALL ITEMS - Use event delegation for compatibility with DataTables
+    $(document).on('click', '#select-all', function(event) {
+        var isChecked = this.checked;
+        $('.iselect').each(function() {
+            this.checked = isChecked;
+        });
+    });
+
+    // Uncheck "select-all" if any individual checkbox is unchecked
+    $(document).on('click', '.iselect', function() {
+        var totalCheckboxes = $('.iselect').length;
+        var checkedCheckboxes = $('.iselect:checked').length;
+        
+        if(checkedCheckboxes === 0) {
+            $('#select-all')[0].checked = false;
+        } else if(checkedCheckboxes === totalCheckboxes) {
+            $('#select-all')[0].checked = true;
+        }
+    });
+
     // PREVENT SUBMIT ON ENTER
     $(window).keydown(function(event){
         if(event.target.tagName != 'TEXTAREA') {

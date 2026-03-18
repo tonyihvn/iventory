@@ -148,17 +148,23 @@ $(document).ready(function(){
         }
     });
 
-    // CREATE SELECT ALL ITEMS
-    $('#select-all').click(function(event) {
-        if(this.checked) {
-            // Iterate each checkbox
-            $('.iselect').each(function() {
-                this.checked = true;
-            });
-        } else {
-            $('.iselect').each(function() {
-                this.checked = false;
-            });
+    // CREATE SELECT ALL ITEMS - Use event delegation for compatibility with DataTables
+    $(document).on('click', '#select-all', function(event) {
+        var isChecked = this.checked;
+        $('.iselect').each(function() {
+            this.checked = isChecked;
+        });
+    });
+
+    // Uncheck "select-all" if any individual checkbox is unchecked
+    $(document).on('click', '.iselect', function() {
+        var totalCheckboxes = $('.iselect').length;
+        var checkedCheckboxes = $('.iselect:checked').length;
+        
+        if(checkedCheckboxes === 0) {
+            $('#select-all')[0].checked = false;
+        } else if(checkedCheckboxes === totalCheckboxes) {
+            $('#select-all')[0].checked = true;
         }
     });
 
@@ -261,7 +267,7 @@ function addItem(item){
 
     $(".add_item").prop('id', new_class);
 
-    $("table tbody#item_list").append("<tr scope='row' class='row"+new_class+"'><td class='input-field'><input type='text' name='property[]' value='' placeholder='e.g. Color, Brand etc'></td><td class='input-field'><td class='input-field'><input type='text' name='value[]' value='' placeholder='e.g. Red, HP etc'></td><td><a href='#' class='btn-floating red btn-small delpos' onClick='delRow("+new_class+")'><i class='small material-icons'>remove</i></a></td></tr>");
+    $("table tbody#item_list").append("<tr scope='row' class='row"+new_class+"'><td class='input-field'><input type='text' name='property[]' value='' placeholder='e.g. Old Tag Number'></td><td class='input-field'><td class='input-field'><input type='text' name='value[]' value='' placeholder='e.g. New Tag Number'></td><td><a href='#' class='btn-floating red btn-small delpos' onClick='delRow("+new_class+")'><i class='small material-icons'>remove</i></a></td></tr>");
 
 };
 

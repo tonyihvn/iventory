@@ -1,17 +1,39 @@
 @extends('guest_template')
 @section('content')
+<style>
+    #gflogin {
+            background-image: url("{{ asset('/public/images/gfbg.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.9; /* To make the image faint */
+        }
+</style>
 <div class="container">
-    <div class="row">
-        <div class="card col m6 offset-m3" style="margin-top:20px;">
+    <div class="row" style="padding-left: 10px !important;">
+
+            <div class="card blue-grey darken-1 col m6" id="gflogin" style="height: 100%;">
+                <div class="card-content white-text">
+                <span class="card-title" style="text-align: center; font-weight: bold; text-shadow: 2px 2px black;">IHVN GF Inventory</span>
+                <p style="text-align: center; padding-top: 20%">
+                    <a class="btn btn-link" style="background-color: red; border: double 2px white;"    href="{{ url('/') }}">
+                        Login to GF Inventory
+                    </a>
+                </p>
+                </div>
+
+            </div>
+
+            <div class="col m6">
 
                 <h3 class="card-header text-center" style="text-align:center;">{{ __('Login') }}</h3>
+                {{-- <h5 style="text-align: center; color: darkblue;">GF Inventory</h5> --}}
 
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="input-field">
-
 
 
                                 <input id="email" type="email" class="validate initialized @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -64,7 +86,10 @@
 
                         </div>
                     </form>
-        </div>
+            </div>
+
+
+
     </div>
 </div>
 @endsection

@@ -81,6 +81,7 @@
                             <th>Select</th>
                             <th style="width: 50% !important;">Tool Name</th>
                             <th>Category</th>
+                            <th>Program Area</th>
                             <th>Stock Bal.</th>
                             <th>Actions</th>
                         </tr>
@@ -95,7 +96,9 @@
                                 </td>
                                 <td>{{ $dc->tool_name }}</td>
                                 <td>{{ $dc->category }}</td>
-                                @if (auth()->user()->role == 'DCTManager')
+                                <td>{{ $dc->description }}</td>
+                              
+                                @if (auth()->user()->role == 'DCTManager' || auth()->user()->role == 'Manager')
                                     <td>{{ isset($dc->distributions) ?  $dc->distributions->where('sentto_state', auth()->user()->state)->sum('quantity_received') - $dc->distributions->where('sentfrom_state', auth()->user()->state)->sum('quantity_sent')  : 0 }}
                                     </td>
                                 @elseif (auth()->user()->role == 'DCTUser')
@@ -104,6 +107,7 @@
                                 @elseif (auth()->user()->role == 'Admin' || auth()->user()->role == 'DCTAdmin')
                                     <td>{{ $dc->stock->quantity_remaining ?? 0 }}</td>
                                 @endif
+                      
 
                                 <td>
 
@@ -120,6 +124,18 @@
                                                         class="btn-floating btn-small waves-effect blue waves-light tooltipped"
                                                         data-position="top" data-tooltip="Add to Stock"><i
                                                             class="material-icons">add</i></a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ url('/edit-dctool/' . $dc->id) }}"
+                                                        class="btn-floating btn-small waves-effect green waves-light tooltipped"
+                                                        data-position="top" data-tooltip="Edit DCTool"><i
+                                                            class="material-icons">edit</i></a>
+                                                </li>
+                                                <li>
+                                                    <a href="{{ url('/del-dct/' . $dc->id) }}"
+                                                        class="btn-floating btn-small waves-effect red waves-light tooltipped"
+                                                        data-position="top" data-tooltip="Delete DCTool"><i
+                                                            class="material-icons">remove</i></a>
                                                 </li>
                                             @endif
                                             <li>

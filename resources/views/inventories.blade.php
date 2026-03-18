@@ -31,6 +31,50 @@
                         <div class="input-field col s1">
                             <label>With Selected:</label>
                         </div>
+                         <div class="input-field col s2">
+
+                            <select name="state" id="state" materialize="material_select" class="select2">
+                                <option value="" disabled selected>Change State</option>
+                                <option value="ABIA">ABIA</option>
+                                <option value="ADAMAWA">ADAMAWA</option>
+                                <option value="AKWA IBOM">AKWA IBOM</option>
+                                <option value="ANAMBRA">ANAMBRA</option>
+                                <option value="BAUCHI">BAUCHI</option>
+                                <option value="BAYELSA">BAYELSA</option>
+                                <option value="BENUE">BENUE</option>
+                                <option value="BORNO">BORNO</option>
+                                <option value="CROSS RIVER">CROSS RIVER</option>
+                                <option value="DELTA">DELTA</option>
+                                <option value="EBONYI">EBONYI</option>
+                                <option value="EDO">EDO</option>
+                                <option value="EKITI">EKITI</option>
+                                <option value="ENUGU">ENUGU</option>
+                                <option value="GOMBE">GOMBE</option>
+                                <option value="IMO">IMO</option>
+                                <option value="JIGAWA">JIGAWA</option>
+                                <option value="KADUNA">KADUNA</option>
+                                <option value="KANO">KANO</option>
+                                <option value="KATSINA">KATSINA</option>
+                                <option value="KEBBI">KEBBI</option>
+                                <option value="KOGI">KOGI</option>
+                                <option value="KWARA">KWARA</option>
+                                <option value="LAGOS">LAGOS</option>
+                                <option value="NASARAWA">NASARAWA</option>
+                                <option value="NIGER">NIGER</option>
+                                <option value="OGUN">OGUN</option>
+                                <option value="ONDO">ONDO</option>
+                                <option value="OSUN">OSUN</option>
+                                <option value="OYO">OYO</option>
+                                <option value="PLATEAU">PLATEAU</option>
+                                <option value="RIVERS">RIVERS</option>
+                                <option value="SOKOTO">SOKOTO</option>
+                                <option value="TARABA">TARABA</option>
+                                <option value="YOBE">YOBE</option>
+                                <option value="ZAMFARA">ZAMFARA</option>
+                                <option value="FCT">FCT</option>                               
+                            </select>
+
+                        </div>
                         <div class="input-field col s2">
 
                             <select name="facility" id="facility" materialize="material_select" class="select2">
@@ -100,11 +144,14 @@
                                 <input type="checkbox" name="all" id="select-all">
                                 <label for="select-all">All</label>
                             </th>
+                          <th class="filter">SR</th>
                             <th class="filter">State</th>
+                          <th class="filter">LGA</th>
+                          <th class="filter">Facility</th>
                             <th class="filter">Item Name</th>
                             <th class="filter">ID/IHVN/TAG No</th>
                             <th class="filter">Category</th>
-                            <th class="filter">Facility</th>
+                            
 
                             <th class="filter">Assigned To/User</th>
                             <th class="filter">Status</th>
@@ -120,13 +167,16 @@
                                     <input type="checkbox" class="iselect" name="tid[]" id="t{{ $inv->id }}"
                                         value="{{ $inv->id }}"><label for="t{{ $inv->id }}"></label>
                                 </td>
+                              <td>{{ $inv->supplier }}</td>
                                 <td>{{ $inv->state }}</td>
+                                  <td>{{ $inv->facility_id == 2 ? $inv->type : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['lga'] }}</td>
+                              <td>
+                                    {{ $inv->facility_id == 2 ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
+                                </td>
                                 <td>{{ $inv->item_name }}</td>
                                 <td>{{ $inv->serial_no }} / {{ $inv->ihvn_no }} / {{ $inv->tag_no }}</td>
                                 <td>{{ $inv->category }}</td>
-                                <td>
-                                    {{ $inv->facility_id == 2 ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
-                                </td>
+                                
                                 <td>{{ $inv->user_id == 2 ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name'] }}
                                 </td>
                                 <td>{{ $inv->status }}</td>

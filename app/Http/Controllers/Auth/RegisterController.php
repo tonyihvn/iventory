@@ -71,20 +71,20 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
 
-        try{
+       try{
+
             // SEND E-MAILS
-                // $userEmail = [$data['email']];
-                $AdminEmails = ['anwokoma@ihvnigeria.org','sdabban@ihvnigeria.org'];
-                // $emails = array_merge($userEmail,$AdminEmails);
+            $userEmail = [$data['email']];
+            $AdminEmails = ['anwokoma@ihvnigeria.org'];
+            $emails = array_merge($userEmail,$AdminEmails);
 
 
-                Mail::to($data['email'])->cc($AdminEmails)->send(new accountEmail($data['name'],$data['password'],$data['email']));
+            Mail::to($data['email'])->cc($AdminEmails)->send(new accountEmail($data['name'],$data['password'],$data['email']));
 
 
-            }//catch exception
-            catch(Exception $e) {
-                echo 'Message: ' .$e->getMessage();
-            }
+        } catch(\Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+		}
         User::create([
             'name' => $data['name'],
             'email' => $data['email'],

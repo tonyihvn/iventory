@@ -17,7 +17,7 @@ class FacilitiesController extends Controller
     public function index()
     {
         if(auth()->user()->role=="Admin"){
-            $facilities = facilities::orderBy('facility_name', 'asc')->get();
+            $facilities = facilities::orderBy('facility_name', 'asc')->paginate(100);
         }else{
             $facilities = facilities::orderBy('facility_name', 'asc')->where('state',auth()->user()->state)->get();
         }

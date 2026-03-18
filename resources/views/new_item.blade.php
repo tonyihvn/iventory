@@ -6,9 +6,72 @@
 
                 <h3 class="card-header text-center" style="text-align:center;">Add New Item</h3>
 
-
                 <form method="POST" action="{{ route('inventories.store') }}" enctype="multipart/form-data">
                     @csrf
+
+                    <h5>Facility / User Location</h5>
+                    <hr>
+
+                    <!-- Multilayer selects: SR -> State -> LGA -> Facility -->
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <select name="sr" id="sr" class="browser-default">
+                                <option value="" disabled selected>Select SR</option>
+                                {{-- build unique SR list from the single $facilities variable --}}
+                                @foreach ($facilities->pluck('facility_no')->unique()->filter()->values() as $sr)
+                                    <option value="{{ $sr }}">{{ $sr }}</option>
+                                @endforeach
+                            </select>
+                            <label for="sr" class="active" style="color: black !important;">Select SR</label>
+                        </div>
+
+                        <div class="input-field col s12 m6">
+                            <select name="state" id="state" class="browser-default ">
+                                <option value="" disabled selected>Select State</option>
+                            </select>
+                            <label for="state" class="active">State</label>
+                        </div>
+
+                        <div class="input-field col s12 m6">
+                            <select name="lga" id="lga" class="browser-default ">
+                                <option value="" disabled selected>Select LGA</option>
+                            </select>
+                            <label for="lga" class="active">LGA</label>
+                        </div>
+
+                        <div class="input-field col s12 m6">
+                            <select name="facility" id="facility" class="browser-default">
+                                <option value="" disabled selected>Select Facility</option>
+                            </select>
+                            <label for="facility" class="active">Select Facility</label>
+                        </div>
+                    </div>
+
+                    <!-- existing selects continue below -->
+                    <div class="input-field col s6">
+                        <select name="department" id="department" materialize="material_select">
+                            <option value="" disabled selected>Department</option>
+                            @foreach ($departments as $department)
+                                <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
+                            @endforeach
+                        </select>
+                        <label>Select Department</label>
+                    </div>
+
+                    <div class="input-field col s6">
+                        <select name="unit" id="unit" materialize="material_select">
+                            <option value="" disabled selected>Unit</option>
+                            @foreach ($units as $unit)
+                                <option value='{{ $unit->id }}'>{{ $unit->unit_name }}</option>
+                            @endforeach
+                        </select>
+                        <label>Select Unit</label>
+                    </div>
+
+                    
+
+                    <!-- rest of the form remains unchanged -->
+                    <hr>
                     <small style="color: green; text-align: center;"><i>For multiple device entry seperate IHVN Tag No,
                             Serial Number, Device ID by commas</i></small>
                     <div class="row">
@@ -38,9 +101,8 @@
                             <input id="ihvn_no" type="text" class="validate" value="" name="ihvn_no">
                             <label for="ihvn_no">IHVN Tag Number(s)</label>
                         </div>
-
-
                     </div>
+
                     <div class="row">
 
                         <div class="input-field col s6">
@@ -117,8 +179,6 @@
                         </div>
                     @endif
 
-
-
                     <table class="table">
                         <thead>
                             <tr class="spechead">
@@ -137,79 +197,7 @@
                         Add Specifications / Properties
                         <i class="material-icons">add</i>
                     </a>
-
-                    <h5>Facility / User Location</h5>
                     <hr>
-
-                    <div class="input-field">
-                        <select name="state" id="state" materialize="material_select">
-                            <option value="{{ Auth()->user()->state }}" selected>{{Auth()->user()->state}}</option>
-                            @if (Auth()->user()->role=="Admin" || Auth()->user()->role=="Super")
-                                <option value="ANAMBRA">ANAMBRA</option>
-                                <option value="KWARA">KWARA</option>
-                                <option value="EBONYI">EBONYI</option>
-                                <option value="GOMBE">GOMBE</option>
-
-                                <option value="FCT">FCT</option>
-                                <option value="RIVERS">RIVERS</option>
-                                <option value="NASARAWA">NASARAWA</option>
-                                <option value="KATSINA">KATSINA</option>
-                            @endif
-
-                        </select>
-                        <label for="state">Select State</label>
-                    </div>
-
-
-                    <div class="input-field">
-                        <select name="facility" id="facility" materialize="material_select" class="select2">
-                            <option value="" disabled selected>Facility</option>
-                            @foreach ($facilities as $facility)
-                                <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
-                            @endforeach
-                        </select>
-                        <label for="facility" class="active">Select Facility</label>
-                    </div>
-
-                    <div class="input-field">
-                        <select name="department" id="department" materialize="material_select">
-                            <option value="" disabled selected>Department</option>
-                            @foreach ($departments as $department)
-                                <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
-                            @endforeach
-                        </select>
-                        <label>Select Department</label>
-                    </div>
-
-                    <div class="input-field">
-                        <select name="unit" id="unit" materialize="material_select">
-                            <option value="" disabled selected>Unit</option>
-                            @foreach ($units as $unit)
-                                <option value='{{ $unit->id }}'>{{ $unit->unit_name }}</option>
-                            @endforeach
-                        </select>
-                        <label>Select Unit</label>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <select name="user[]" id="user" materialize="material_select" class="select2" multiple>
-                                <option value="{{ Auth()->user()->id }}" selected>{{ Auth()->user()->name }}</option>
-                                @if (Auth()->user()->role != 'User')
-                                    @foreach ($users as $user)
-                                        <option value='{{ $user->id }}'>{{ $user->name }}</option>
-                                    @endforeach
-                                @endif
-                                <option value="0">Not Listed - Add User's Name</option>
-                            </select>
-                            <label for="user" class="active">Select User</label>
-                        </div>
-
-                        <div class="input-field col s6" id="new_username">
-                            <input id="new_user" type="text" class="validate" name="new_user">
-                            <label for="new_user" class="active">Enter Name</label>
-                        </div>
-                    </div>
 
                     <div class="row">
 
@@ -232,13 +220,32 @@
                         </div>
                     </div>
 
-
                     <row>
                         <div class="input-field col s12">
                             <input id="remarks" type="text" class="validate" name="remarks">
                             <label for="remarks">Batch No (e.g. Oct2024)</label>
                         </div>
                     </row>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <select name="user[]" id="user" materialize="material_select" class="select2" multiple>
+                                <option value="{{ Auth()->user()->id }}" selected>{{ Auth()->user()->name }}</option>
+                                @if (Auth()->user()->role != 'User')
+                                    @foreach ($users as $user)
+                                        <option value='{{ $user->id }}'>{{ $user->name }}</option>
+                                    @endforeach
+                                @endif
+                                <option value="0">Not Listed - Add User's Name</option>
+                            </select>
+                            <label for="user" class="active">Select User</label>
+                        </div>
+
+                        <div class="input-field col s6" id="new_username">
+                            <input id="new_user" type="text" class="validate" name="new_user">
+                            <label for="new_user" class="active">Enter Name</label>
+                        </div>
+                    </div>
 
                     <row>
 
@@ -255,6 +262,7 @@
                         @endif
 
                     </row>
+
                     <div class="input-field text-right right" style="margin-bottom:20px;">
 
                         <button type="submit" class="btn">
@@ -268,4 +276,130 @@
             </div>
         </div>
     </div>
+
+    {{-- Embed facilities data for client-side filtering --}}
+    <script>
+        // use server-loaded facilities array (ensure $facilities is passed to the view)
+        const facilities = @json($facilities->toArray());
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const $sr = document.getElementById('sr');
+            const $state = document.getElementById('state');
+            const $lga = document.getElementById('lga');
+            const $facility = document.getElementById('facility');
+            if (!$sr || !$state || !$lga || !$facility) return;
+
+            const unique = arr => Array.from(new Set(arr));
+
+            function clearSelect(sel, placeholder) {
+                sel.innerHTML = '';
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.disabled = true;
+                opt.selected = true;
+                opt.textContent = placeholder;
+                sel.appendChild(opt);
+            }
+
+            function populatePrimitive(sel, values) {
+                values.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v;
+                    opt.textContent = v;
+                    sel.appendChild(opt);
+                });
+                refreshSelects();
+            }
+
+            function populateObjects(sel, items, valueKey, textKey) {
+                items.forEach(item => {
+                    const opt = document.createElement('option');
+                    opt.value = item[valueKey];
+                    opt.textContent = item[textKey];
+                    sel.appendChild(opt);
+                });
+                refreshSelects();
+            }
+
+            function refreshSelects() {
+                if (window.jQuery && jQuery.fn.select2) {
+                    jQuery('.select2').each(function () {
+                        if (jQuery(this).hasClass('select2-hidden-accessible')) {
+                            jQuery(this).trigger('change.select2');
+                        } else {
+                            jQuery(this).select2({ width: '100%' });
+                        }
+                    });
+                }
+                if (window.M && M.FormSelect) {
+                    M.FormSelect.init(document.querySelectorAll('select'));
+                }
+            }
+
+            // SR -> States
+            function onSrChange(e) {
+                const selectedSr = (e && e.target && e.target.value) || $sr.value;
+                clearSelect($state, 'Select State');
+                clearSelect($lga, 'Select LGA');
+                clearSelect($facility, 'Select Facility');
+                if (!selectedSr) return;
+
+                const states = facilities
+                    .filter(f => String(f.facility_no) === String(selectedSr))
+                    .map(f => (f.state || '').toString().trim())
+                    .filter(Boolean);
+
+                populatePrimitive($state, unique(states).sort());
+            }
+
+            // State -> LGAs
+            function onStateChange(e) {
+                const selectedSr = String($sr.value);
+                const selectedState = (e && e.target && e.target.value) || $state.value;
+                clearSelect($lga, 'Select LGA');
+                clearSelect($facility, 'Select Facility');
+                if (!selectedSr || !selectedState) return;
+
+                const lgas = facilities
+                    .filter(f => String(f.facility_no) === selectedSr && String(f.state) === selectedState)
+                    .map(f => (f.lga || '').toString().trim())
+                    .filter(Boolean);
+
+                populatePrimitive($lga, unique(lgas).sort());
+            }
+
+            // LGA -> Facilities
+            function onLgaChange(e) {
+                const selectedSr = String($sr.value);
+                const selectedState = String($state.value);
+                const selectedLga = (e && e.target && e.target.value) || $lga.value;
+                clearSelect($facility, 'Select Facility');
+                if (!selectedSr || !selectedState || !selectedLga) return;
+
+                const facs = facilities
+                    .filter(f => String(f.facility_no) === selectedSr && String(f.state) === selectedState && String(f.lga) === selectedLga)
+                    .map(f => ({ id: f.id, name: f.facility_name }));
+
+                // dedupe by id
+                const uniq = [];
+                const seen = new Set();
+                facs.forEach(f => { if (!seen.has(f.id)) { seen.add(f.id); uniq.push(f); } });
+
+                populateObjects($facility, uniq, 'id', 'name');
+            }
+
+            $sr.addEventListener('change', onSrChange);
+            $state.addEventListener('change', onStateChange);
+            $lga.addEventListener('change', onLgaChange);
+
+            // also listen for jQuery/select2 change events if used
+            if (window.jQuery) {
+                jQuery(document).on('change', '#sr', onSrChange);
+                jQuery(document).on('change', '#state', onStateChange);
+                jQuery(document).on('change', '#lga', onLgaChange);
+            }
+
+            refreshSelects();
+        });
+    </script>
 @endsection

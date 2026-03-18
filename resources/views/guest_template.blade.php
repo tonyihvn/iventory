@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{asset('/css/dataTables.material.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/pmain.scss')}}">
-    <title>IHVN Inventory Management System</title>
+    <title>IHVN GC7 - Inventory Management System</title>
 
     <style>
         .btn{
@@ -17,11 +17,13 @@
         }
 
         body {
-            background-image: url("{{ asset('/public/images/inventorybg.jpg') }}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.9; /* To make the image faint */
+            /*background-image: url("{{ asset('/public/images/inventorybg.jpg') }}");*/
+            /*background-size: cover;*/
+            /*background-position: center;*/
+            /*background-repeat: no-repeat;*/
+            /*opacity: 0.9;*/
+            
+            background-color: #1a192a;
         }
 
         .card, .row, form, table{
@@ -35,7 +37,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="{{url('/')}}" class="brand-logo" target="_blank">Inventory System</a>
+      <a href="{{url('/')}}" class="brand-logo" target="_blank">IHVN GF N-THRIP- Inventory Management System</a>
 
       <ul class="right hide-on-med-and-down">
       <li>
@@ -50,7 +52,7 @@
 
 
       <ul class="side-nav teal darken-2" id="mobile-demo">
-      <li class="teal center"><a href="#"><i class="material-icons">menu</i>INVENTORY </a></li>
+      <li class="teal center"><a href="#"><i class="material-icons">menu</i>GC7 INVENTORY </a></li>
         <li class="white"><div class="divider"></div></li>
 
 

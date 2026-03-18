@@ -64,6 +64,13 @@
                     <td>{{$facility->id}}</td>
                 </tr>
                 @endforeach
+                <tr>
+                    <td colspan="7">
+
+                                {{ $facilities->links() }}
+
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>

@@ -1,0 +1,101 @@
+═══════════════════════════════════════════════════════════════
+  QUICK UPLOAD CHECKLIST - IHVN Inventory System
+═══════════════════════════════════════════════════════════════
+
+STEP 1: CREATE ZIP FILE
+───────────────────────────────────────────────────────────────
+✓ Go to: C:\xampp\htdocs\ihvninve\ihvninventory.ng\
+✓ Select ALL folders EXCEPT:
+  ❌ vendor/ folder
+  ❌ .env file
+  ❌ node_modules/ (if exists)
+✓ Right-click → Compress to ZIP
+✓ Name it: ihvninventory.zip
+
+
+STEP 2: UPLOAD & EXTRACT
+───────────────────────────────────────────────────────────────
+✓ Login to hosting File Manager
+✓ Upload ihvninventory.zip
+✓ Extract the ZIP file
+✓ You now have the application folder
+
+
+STEP 3: INSTALL DEPENDENCIES (via SSH/Terminal)
+───────────────────────────────────────────────────────────────
+cd public_html/ihvninventory.ng
+composer install --no-dev --optimize-autoloader
+
+
+STEP 4: CREATE .env FILE ON SERVER
+───────────────────────────────────────────────────────────────
+✓ In File Manager, create new file: .env
+✓ Copy your local .env content
+✓ CHANGE THESE VALUES:
+  
+  APP_ENV=production          (was: local)
+  APP_DEBUG=false             (was: true)
+  APP_URL=https://yourdomain.com  (was: http://localhost/...)
+  
+  DB_DATABASE=your_production_db_name
+  DB_USERNAME=your_production_db_user
+  DB_PASSWORD=your_production_db_password
+
+
+STEP 5: GENERATE KEY (via SSH/Terminal)
+───────────────────────────────────────────────────────────────
+cd public_html/ihvninventory.ng
+php artisan key:generate
+
+
+STEP 6: SET PERMISSIONS (in File Manager)
+───────────────────────────────────────────────────────────────
+✓ storage/ folder → 755
+✓ bootstrap/cache/ folder → 755
+✓ public/uploads/ folder → 755
+
+
+STEP 7: IMPORT DATABASE
+───────────────────────────────────────────────────────────────
+✓ Export from local phpMyAdmin
+✓ Import to server phpMyAdmin
+
+
+STEP 8: POINT DOMAIN TO public/ FOLDER
+───────────────────────────────────────────────────────────────
+✓ In cPanel: Point domain to: public_html/ihvninventory.ng/public
+✓ OR create subdomain pointing to public/ folder
+
+
+STEP 9: RUN MIGRATIONS (via SSH/Terminal)
+───────────────────────────────────────────────────────────────
+cd public_html/ihvninventory.ng
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+
+
+STEP 10: TEST
+───────────────────────────────────────────────────────────────
+✓ Visit: https://yourdomain.com
+✓ Should see login page
+✓ Login and test features
+
+
+═══════════════════════════════════════════════════════════════
+  WHAT TO CHANGE IN .env FOR PRODUCTION:
+═══════════════════════════════════════════════════════════════
+
+FROM (Local)                    TO (Production)
+───────────────────────────────────────────────────────────────
+APP_ENV=local            →      APP_ENV=production
+APP_DEBUG=true           →      APP_DEBUG=false
+APP_URL=http://localhost/...   →      APP_URL=https://yourdomain.com
+DB_DATABASE=ihvn_inventory      →      DB_DATABASE=your_prod_db
+DB_USERNAME=root         →      DB_USERNAME=your_prod_user
+DB_PASSWORD=            →      DB_PASSWORD=your_prod_password
+
+Everything else stays the same!
+
+═══════════════════════════════════════════════════════════════
+

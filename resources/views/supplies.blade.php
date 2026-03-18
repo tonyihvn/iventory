@@ -26,7 +26,7 @@
 
                     @foreach ($supplies as $sup)
                         <tr>
-                            <td>{{ $sup->Item->item_name }}</td>
+                            <td>{{ $sup->Item->item_name ?? "" }}</td>
                             <td>{{ $sup->quantity_supplied }}</td>
                             <td>{{ $sup->date_supplied }}</td>
                             <td>{{ $sup->supplied_to }}</td>

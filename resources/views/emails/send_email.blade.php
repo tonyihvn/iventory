@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Email Title</title>
+    <title>Requests</title>
 </head>
 <body>
     <h1>Hello Admin,</h1>
     <p>A request for DC Tool(s) has been sent from {{$name}}. Find below, the reason for this request.</p>
     <hr>
     <p>{{$reason}}</p>
-    <p>Please, visit click <a href="http://172.16.12.39:90/iventory/requests" class="btn btn-primary btn-inline">Here</a> to Visit the SI Inventory Management System for action. </p>
-    <p>If you are outside the IHVN Network Click <a href="http://41.223.44.116:90/iventory/requests" class="btn btn-primary btn-inline">Here</a>.</p>
+    <p>Please, visit click <a href="https://ihvninventory.ng/requests" class="btn btn-primary btn-inline">Here</a> to Visit the SI Inventory Management System for action. </p>
 
     <p>
         Regards, <br><br>
