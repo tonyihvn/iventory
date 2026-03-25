@@ -72,6 +72,10 @@ Route::get('add_facility', 'FacilitiesController@create')->name('add_facility')-
 Route::get('facility/{id}', 'FacilitiesController@edit')->middleware('role:Admin,Manager');
 Route::get('facilityitems/{fid}', 'InventoryController@facilityItems')->middleware('role:Super,Admin,Manager');
 Route::get('/get-facilities/{state}', 'InventoryController@getFacilitiesByState')->middleware('role:Super,Admin,Manager');
+
+// State Facilities
+Route::get('/state-facilities/{state}', 'StateFacilitiesController@index')->name('state-facilities')->middleware('role:Admin,Manager');
+Route::get('/state-facilities-data/{state}', 'StateFacilitiesController@getFacilitiesData');
 // Movements
 Route::resource('movements', 'MovementController')->middleware('role:Super,Admin,Manager');
 Route::get('move_item/{id}', 'MovementController@edit')->name('move_item')->middleware('role:Super,Admin,Manager');
