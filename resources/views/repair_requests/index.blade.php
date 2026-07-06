@@ -492,9 +492,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Handle form submission
+    let isSubmitting = false;
     document.getElementById('requestForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
+        // Prevent duplicate submissions (double-click, Enter key, slow network).
+        if (isSubmitting) {
+            return;
+        }
+
+        const submitButton = this.querySelector('button[type="submit"]');
         const stateSelectEl = document.getElementById('rr_state');
         const state = stateSelectEl ? stateSelectEl.value : '';
         const facility = document.getElementById('rr_facility').value;
@@ -544,6 +551,11 @@ document.addEventListener('DOMContentLoaded', function() {
             requests.push(payload);
         }
 
+        isSubmitting = true;
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+
         fetch('/repair-requests/store', {
             method: 'POST',
             headers: {
@@ -569,10 +581,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 showToast(data.message || 'Requests submitted successfully.');
                 setTimeout(() => location.reload(), 1000);
             } else {
+                isSubmitting = false;
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
                 showToast('Error: ' + (data.message || 'Unable to submit requests.'));
             }
         })
         .catch(error => {
+            isSubmitting = false;
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
             console.error('Error:', error);
             showToast(error.message || 'An error occurred while submitting requests.');
         });

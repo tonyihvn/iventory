@@ -180,9 +180,3 @@ Route::get('error-reports/{id}', 'ErrorReportController@show')->name('error-repo
 Route::get('help', 'HelpPageController@show')->name('help.show');
 Route::get('help-edit', 'HelpPageController@edit')->name('help.edit')->middleware('role:Super,Admin');
 Route::post('help-update', 'HelpPageController@update')->name('help.update')->middleware('role:Super,Admin');
-
-// TEMP DEBUG LOGIN - REMOVE
-Route::get('__testlogin/{id}', function ($id) {
-    Auth::loginUsingId((int) $id);
-    return redirect('/repair-requests');
-});
