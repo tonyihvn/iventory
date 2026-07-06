@@ -44,6 +44,8 @@
                         <th>LGA</th>
                         <th>Town</th>
                         <th>Phone No.</th>
+                        <th>Principal</th>
+                        <th>Sub</th>
                         <th>Actions</th>
                         <th>S/N</th>
                     </tr>
@@ -57,6 +59,8 @@
                         <td>{{$facility->lga}}</td>
                         <td>{{$facility->town}}</td>
                         <td>{{$facility->phone_number}}</td>
+                        <td>{{$facility->principal ?? 'N/A'}}</td>
+                        <td>{{$facility->sub ?? 'N/A'}}</td>
 
                         <td>
                             <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action" style="position: relative !important; float: text-align: center; display: inline-block; bottom: 0px !important; padding: 0px !important">
@@ -107,6 +111,8 @@
                         <th>LGA</th>
                         <th>Town</th>
                         <th>Phone No.</th>
+                        <th>Principal</th>
+                        <th>Sub</th>
                         <th>Actions</th>
                         <th>S/N</th>
                     </tr>

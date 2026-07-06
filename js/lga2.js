@@ -1,6 +1,9 @@
 ﻿function getLGA(){
 
     let lgaList = {
+        CENTRAL: [
+            "CENTRAL"
+        ],
         Abia: [
           "Aba North",
           "Aba South",

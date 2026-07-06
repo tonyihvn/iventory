@@ -101,6 +101,17 @@
                         <label for="contact_person">Contact Person</label>
                     </div>
 
+                    <div class="input-field">
+                        <input id="principal" type="text" class="validate" name="principal"
+                            value="{{ $facility->principal }}">
+                        <label for="principal">Principal</label>
+                    </div>
+
+                    <div class="input-field">
+                        <input id="sub" type="text" class="validate" name="sub"
+                            value="{{ $facility->sub }}">
+                        <label for="sub">Sub</label>
+                    </div>
 
                     <div class="input-field text-right right" style="margin-bottom:20px;">
 

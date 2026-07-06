@@ -134,6 +134,7 @@
                         @foreach ($statelist as $selected_state)
                             <a href="{{ url('state-inventory/'.$selected_state) }}" class="btn ">{{$selected_state}}</a>
                         @endforeach
+                        <a href="{{ url('no-state-inventory') }}" class="btn red">No State / Unassigned</a>
                     @endif
                 </div>
             </div>

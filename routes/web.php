@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Welcome and Home Pages
-Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
+Route::get('/', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser,IT');
 
 Route::get('/concurrency', 'HomeController@concurrency')->name('concurrency')->middleware('role:Super,Admin,Manager,Facility,User,Observer');
 Route::post('/concurrencyUpdate', 'HomeController@concurrencyUpdate')->name('concurrencyUpdate')->middleware('role:Super,Admin,Manager,Facility,User,Observer');
@@ -23,7 +23,7 @@ Route::get('/concurrencies', 'ConcurrencyController@index')->name('concurrencies
 Route::get('/concurrencies/export', 'ConcurrencyController@export')->name('concurrencies.export')->middleware('role:Super,Admin,Manager,Facility,User,Observer');
 Route::post('/concurrencies/import', 'ConcurrencyController@import')->name('concurrencies.import')->middleware('role:Super,Admin,Manager,Facility,User,Observer');
 
-Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser');
+Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('role:Super,Admin,Manager,Facility,User,Observer,DCTAdmin,DCTManager,DCTUser,IT');
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
@@ -47,12 +47,15 @@ Route::get('user_items/{userid}/', 'InventoryController@userItems')->name('user_
 Route::get('dataquality', 'InventoryController@dataQuality')->name('dataquality')->middleware('role:Super,Admin,Manager');
 Route::post('updateInventory','InventoryController@updateInventory')->name('updateInventory')->middleware('role:Super,Admin,Manager');
 Route::get('state-inventory/{state}/', 'InventoryController@stateInventory')->name('state-inventory')->middleware('role:Super,Admin,Observer')->where('state', '.*');
+Route::get('no-state-inventory', 'InventoryController@noStateInventory')->name('no-state-inventory')->middleware('role:Super,Admin,Observer');
+Route::get('item-inventory/{id}', 'InventoryController@itemInventory')->name('item-inventory')->middleware('role:Super,Admin,Observer');
 
 
 Route::get('add_item', 'InventoryController@create')->name('add_item')->middleware('auth');
 Route::get('item/{id}', 'InventoryController@edit')->name('item')->middleware('auth');
 Route::get('print_item/{id}', 'InventoryController@show')->name('print_item')->middleware('auth');
 Route::get('reports', 'InventoryController@reports')->name('reports')->middleware('auth');
+Route::get('item_search', function() { return redirect()->route('inventory'); })->middleware('auth');
 Route::post('item_search','InventoryController@item_search')->name('item_search')->middleware('auth');
 Route::post('fixItems', 'InventoryController@fixItems')->name('fixItems')->middleware('auth');
 Route::get('update-tagnumbers', 'InventoryController@updateTagnumbers')->name('update-tagnumbers')->middleware('auth');
@@ -144,8 +147,42 @@ Route::get('confirm-delivery', 'DctoolsController@confirmDelivery')->name('confi
 Route::post('saveConfirmation', 'DctoolsController@saveConfirmation')->name('saveConfirmation')->middleware('role:Admin,Super,DCTAdmin,DCTManager,DCTUser,Manager');
 Route::get('del-dct/{tid}', 'DctoolsController@DeleteDCTool')->name('del-dct')->middleware('role:DCTAdmin,DCTManager,Admin,Super,Manager');
 
+// ITEM DISTRIBUTION
+Route::get('distribution', 'DistributionController@index')->name('distribution.index')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::post('distribution/store', 'DistributionController@store')->name('distribution.store')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('distribution/{id}', 'DistributionController@show')->name('distribution.show')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('get-facilities-by-state', 'DistributionController@getFacilitiesByState')->name('get-facilities-by-state')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('get-items-by-location', 'DistributionController@getItemsByLocation')->name('get-items-by-location')->middleware('role:Super,Admin,Manager,Facility,User');
+
+// REPAIR & MAINTENANCE REQUESTS
+Route::get('repair-requests', 'RepairRequestController@index')->name('repair-requests.index')->middleware('role:Super,Admin,Manager,Facility,User,Observer,IT');
+Route::post('repair-requests/store', 'RepairRequestController@store')->name('repair-requests.store')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('repair-requests/facilities-by-state', 'RepairRequestController@getFacilitiesByState')->name('repair-requests.facilities-by-state')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('repair-requests/items-by-location', 'RepairRequestController@getItemsByLocation')->name('repair-requests.items-by-location')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::put('repair-requests/{id}/status', 'RepairRequestController@updateStatus')->name('repair-requests.status')->middleware('role:Super,Admin');
+Route::put('repair-requests/{id}/it-review', 'RepairRequestController@updateITReview')->name('repair-requests.it-review')->middleware('role:Super,Admin,IT');
+Route::delete('repair-requests/{id}', 'RepairRequestController@destroy')->name('repair-requests.destroy')->middleware('role:Super,Admin');
+Route::get('repair-requests/{id}', 'RepairRequestController@show')->name('repair-requests.show')->middleware('auth');
+
+// FILE MANAGEMENT
+Route::get('file-management', 'FileManagementController@index')->name('file-management.index')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::post('file-management/store', 'FileManagementController@store')->name('file-management.store')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('file-management/{id}/download', 'FileManagementController@download')->name('file-management.download')->middleware('auth');
+Route::delete('file-management/{id}', 'FileManagementController@delete')->name('file-management.delete')->middleware('role:Super,Admin,Manager,Facility,User');
+Route::get('file-management/facilities-by-state', 'FileManagementController@getFacilitiesByState')->middleware('role:Super,Admin,Manager,Facility,User');
+
+// ERROR REPORTING
+Route::post('error-report', 'ErrorReportController@store')->name('error-report.store')->middleware('auth');
+Route::get('error-reports', 'ErrorReportController@index')->name('error-reports.index')->middleware('role:Super,Admin');
+Route::get('error-reports/{id}', 'ErrorReportController@show')->name('error-reports.show')->middleware('role:Super,Admin');
 
 // HELP LINK
-Route::get('help', function(){
-    return View('help');
+Route::get('help', 'HelpPageController@show')->name('help.show');
+Route::get('help-edit', 'HelpPageController@edit')->name('help.edit')->middleware('role:Super,Admin');
+Route::post('help-update', 'HelpPageController@update')->name('help.update')->middleware('role:Super,Admin');
+
+// TEMP DEBUG LOGIN - REMOVE
+Route::get('__testlogin/{id}', function ($id) {
+    Auth::loginUsingId((int) $id);
+    return redirect('/repair-requests');
 });

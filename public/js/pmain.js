@@ -1,16 +1,52 @@
-// SIDEBAR
-$(document).ready(function(){
-    $("#item").focus();
+// Wait for libraries to be ready before initializing
+document.addEventListener('librariesReady', function() {
+    console.log('librariesReady event received - calling initializeApp');
+    initializeApp();
+});
 
-    $('.button-collapse').sideNav({
-        menuWidth: 300, // Default is 300
-        edge: 'left', // Choose the horizontal origin
-        closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-        draggable: true // Choose whether you can drag to open on touch screens
-      }
-    );
-    // START OPEN
-    $('.button-collapse').sideNav('hide');
+// Also run initialization if event already fired (libraries loaded before this script)
+if (typeof jQuery !== 'undefined' && jQuery.fn.select2 !== undefined) {
+    console.log('jQuery and Select2 already loaded - dispatching librariesReady');
+    document.dispatchEvent(new Event('librariesReady'));
+} else {
+    console.log('Waiting for librariesReady event - jQuery available:', typeof jQuery !== 'undefined');
+}
+
+function initializeApp() {
+    console.log('initializeApp called');
+    // Wrap everything in a document ready to ensure DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', runApp);
+    } else {
+        console.log('DOM already ready - calling runApp');
+        runApp();
+    }
+}
+
+function runApp() {
+    console.log('runApp() started');
+    try {
+// SIDEBAR - with fallback for when Materialize is not available
+        $("#item").focus();
+
+        try {
+            if (typeof jQuery.fn.sideNav !== 'undefined') {
+                // Materialize sideNav available
+                $('.button-collapse').sideNav({
+                    menuWidth: 300,
+                    edge: 'left',
+                    closeOnClick: false,
+                    draggable: true
+                });
+            } else {
+                // Fallback: Manual sidebar toggle
+                console.log('sideNav not available, using fallback');
+                initFallbackSidebar();
+            }
+        } catch(e) {
+            console.log('Materialize sideNav not available, using fallback');
+            initFallbackSidebar();
+        }
 
     // CONTROL ITEM SPECS HEADING
     $(".spechead").hide();
@@ -21,14 +57,49 @@ $(document).ready(function(){
     });
 
     //INITIALIZE SELECT2
-
-    $('#search_product').select2({width: "100%"});
-
-    $('#keyword').select2({width: "100%"});
+    try {
+        if (jQuery.fn.select2 !== undefined) {
+            $('#search_product').select2({width: "100%"});
+            $('#keyword').select2({width: "100%"});
+            
+            // Initialize/reinitialize all select2 dropdowns with proper configuration
+            $('.select2').each(function() {
+                try {
+                    const $this = $(this);
+                    // Destroy any existing Select2 instance first
+                    if ($this.hasClass('select2-hidden-accessible')) {
+                        $this.select2('destroy');
+                    }
+                    // Reinitialize with proper configuration
+                    $this.select2({
+                        width: '100%',
+                        allowClear: true,
+                        placeholder: 'Select an option',
+                        minimumResultsForSearch: 0
+                    });
+                } catch(e) {
+                    console.log('Select2 init error on element:', e);
+                }
+            });
+        }
+    } catch(e) {
+        console.log('Select2 not available yet');
+    }
 
     // $('select').material_select();
 
-    setTimeout(function(){$('select').material_select();},1000);
+    setTimeout(function(){
+        try {
+            if (jQuery.fn.material_select !== undefined) {
+                // Do NOT run Materialize's material_select on Select2 elements,
+                // otherwise both widgets stack on the same <select> and their
+                // values get out of sync (fields appear empty on submit).
+                $('select').not('.select2').not('.select2-hidden-accessible').material_select();
+            }
+        } catch(e) {
+            console.log('material_select not available');
+        }
+    }, 1000);
 
     // $('select').formSelect();
 
@@ -61,7 +132,7 @@ $(document).ready(function(){
         "paging": false,
         "pageLength": 50,
         "filter": true,
-        "ordering": false,
+        "ordering": true,
         deferRender: true,
         dom: 'Bfrtip',
         buttons: [
@@ -93,7 +164,13 @@ $(document).ready(function(){
 
 
     // INITIALIZE TOOL TIP
-    $('.tooltipped').tooltip();
+    try {
+        if (jQuery.fn.tooltip !== undefined) {
+            $('.tooltipped').tooltip();
+        }
+    } catch(e) {
+        console.log('Tooltip not available');
+    }
 
 
     // NEW SALES ITEM
@@ -117,100 +194,124 @@ $(document).ready(function(){
         $('.dtsp-panesContainer').remove();
     });
 
-
-
-    $("#quantity").on('keyup', function (e) {
-        if (e.keyCode == 13) {
-            addItem("");
-            reCalc();
-            $("#search_product").focus();
+    // MODAL HANDLING
+    try {
+        if (jQuery.fn.modal !== undefined) {
+            $('.modal').modal();
         }
-    });
+    } catch(e) {
+        console.log('Modal not available');
+    }
 
-    $("#unit_cost").on('input','keyup', function (e) {
-        if (e.keyCode == 13) {
-            addItem("");
-            reCalc();
-            $("#search_product").focus();
+    // CHARACTER COUNTER
+    try {
+        if (jQuery.fn.characterCounter !== undefined) {
+            $('textarea#message').characterCounter();
         }
-    });
+    } catch(e) {
+        console.log('Character counter not available');
+    }
 
-    // CREATE SELECT ALL ITEMS - Use event delegation for compatibility with DataTables
-    $(document).on('click', '#select-all', function(event) {
-        var isChecked = this.checked;
-        $('.iselect').each(function() {
-            this.checked = isChecked;
-        });
-    });
+    // DATEPICKER
+    try {
+        if (jQuery.fn.pickadate !== undefined) {
+            $('.datepicker').pickadate({
+                selectMonths: true, // Creates a dropdown to control month
+                selectYears: 15, // Creates a dropdown of 15 years to control year,
+                today: 'Today',
+                clear: 'Clear',
+                close: 'Ok',
+                isRTL: true,
+                format: 'yyyy-mm-dd',
+                closeOnSelect: true // Close upon selecting a date,
+            });
 
-    // Uncheck "select-all" if any individual checkbox is unchecked
-    $(document).on('click', '.iselect', function() {
-        var totalCheckboxes = $('.iselect').length;
-        var checkedCheckboxes = $('.iselect:checked').length;
-        
-        if(checkedCheckboxes === 0) {
-            $('#select-all')[0].checked = false;
-        } else if(checkedCheckboxes === totalCheckboxes) {
-            $('#select-all')[0].checked = true;
+            $('.datepicker').on('mousedown',function(event){
+                event.preventDefault();
+            });
         }
-    });
-
-    // PREVENT SUBMIT ON ENTER
-    $(window).keydown(function(event){
-        if(event.target.tagName != 'TEXTAREA') {
-            if(event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-            }
-        }
-    });
-
-
-
-    $("#tax").on('input', function(){
-        var tax = $("#tax").val();
-        var sum = $("#total_due").val();
-        var total_discount = $("#total_discount").val();
-        if(total_discount==""){total_discount=0}
-        if(tax==""){tax=0}
-        var new_total = (parseFloat(sum)+parseFloat(tax)) - parseFloat(total_discount);
-
-        $("#total_due").val(new_total.toFixed(2));
-        reCalc();
-    });
-
-    $("#notearea").toggle();
-
-    $("#add_notes").click(function(){
-        $("#notearea").toggle();
-    });
-    $('.modal').modal();
-
-    $('textarea#message').characterCounter();
-
-
-    $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15, // Creates a dropdown of 15 years to control year,
-        today: 'Today',
-        clear: 'Clear',
-        close: 'Ok',
-        isRTL: true,
-        format: 'yyyy-mm-dd',
-        closeOnSelect: true // Close upon selecting a date,
-   });
-
-   $('.datepicker').on('mousedown',function(event){
-        event.preventDefault();
-    });
+    } catch(e) {
+        console.log('Datepicker not available');
+    }
 
     $('#sales_form').each(function(){
         this.reset();
     });
 
+    } catch(e) {
+        console.log('Error in runApp:', e);
+    }
+} // END runApp function
 
-
-}); // END DOCUMENT READY
+// Fallback sidebar handler using vanilla JavaScript
+function initFallbackSidebar() {
+    const menuButton = document.querySelector('.button-collapse');
+    const sidebar = document.getElementById('mobile-demo');
+    let sidebarOpen = false;
+    
+    if (!menuButton || !sidebar) {
+        console.log('Sidebar elements not found');
+        return;
+    }
+    
+    console.log('Sidebar fallback initialized');
+    
+    // Add click handler to menu button
+    menuButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (!sidebarOpen) {
+            // Open sidebar
+            sidebar.style.setProperty('transform', 'translateX(0)', 'important');
+            sidebar.style.setProperty('z-index', '9999', 'important');
+            
+            // Add overlay
+            let overlay = document.querySelector('.sidenav-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'sidenav-overlay';
+                overlay.style.cssText = `
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    bottom: 0 !important;
+                    background: rgba(0,0,0,0.5) !important;
+                    z-index: 998 !important;
+                    cursor: pointer !important;
+                `;
+                overlay.addEventListener('click', function() {
+                    menuButton.click();
+                });
+                document.body.appendChild(overlay);
+            }
+            sidebarOpen = true;
+            console.log('Sidebar opened');
+        } else {
+            // Close sidebar
+            sidebar.style.setProperty('transform', 'translateX(-300px)', 'important');
+            
+            // Remove overlay
+            const overlay = document.querySelector('.sidenav-overlay');
+            if (overlay) {
+                overlay.parentNode.removeChild(overlay);
+            }
+            sidebarOpen = false;
+            console.log('Sidebar closed');
+        }
+    });
+    
+    // Close sidebar when clicking links
+    const sidebarLinks = sidebar.querySelectorAll('a');
+    sidebarLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (sidebarOpen && !link.classList.contains('collapsible-header')) {
+                menuButton.click();
+            }
+        });
+    });
+}
 
 function delItem(id,table){
     $.ajax({

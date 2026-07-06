@@ -40,23 +40,45 @@
                     </div>
 
                     <div class="row">
-                        <input name="from_user" id="from_user" type="hidden" value='{{ $item->user->id }}'>
                         <div class="input-field col s6">
-                            <input id="from_user" class="validate initialized" value='From: {{ $item->user->name }}'
-                                readonly>
-
-                        </div>
-
-                        <div class="input-field col s6">
-                            <select name="to_user" class="initialized">
+                            <select name="from_user" id="from_user" class="select2">
                                 <option selected value='{{ $item->user->id }}'>{{ $item->user->name }}</option>
                                 @foreach ($users as $user)
                                     <option value='{{ $user->id }}'>{{ $user->name }}</option>
                                 @endforeach
+                                @if (auth()->user()->role == 'Admin')
+                                    <option value="0">Not Listed - Add New User</option>
+                                @endif
                             </select>
-                            <label>To User</label>
+                            <label class="active">From User</label>
+                        </div>
+
+                        <div class="input-field col s6">
+                            <select name="to_user" id="to_user" class="select2">
+                                <option selected value='{{ $item->user->id }}'>{{ $item->user->name }}</option>
+                                @foreach ($users as $user)
+                                    <option value='{{ $user->id }}'>{{ $user->name }}</option>
+                                @endforeach
+                                @if (auth()->user()->role == 'Admin')
+                                    <option value="0">Not Listed - Add New User</option>
+                                @endif
+                            </select>
+                            <label class="active">To User</label>
                         </div>
                     </div>
+
+                    @if (auth()->user()->role == 'Admin')
+                        <div class="row">
+                            <div class="input-field col s6" id="new_from_user_field" style="display:none;">
+                                <input id="new_from_user" type="text" class="validate" name="new_from_user" value="">
+                                <label for="new_from_user" class="active">Enter New "From" User Name</label>
+                            </div>
+                            <div class="input-field col s6" id="new_to_user_field" style="display:none;">
+                                <input id="new_to_user" type="text" class="validate" name="new_to_user" value="">
+                                <label for="new_to_user" class="active">Enter New "To" User Name</label>
+                            </div>
+                        </div>
+                    @endif
 
                     <h5>New Facility / User Location</h5>
                     <hr>
@@ -131,4 +153,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Reveal the "new user name" input when the Admin picks
+        // "Not Listed - Add New User" (value 0) in the From/To user dropdowns.
+        (function initMoveUserFields() {
+            if (typeof jQuery === 'undefined') {
+                setTimeout(initMoveUserFields, 100);
+                return;
+            }
+            jQuery(function ($) {
+                function toggle(selectId, fieldId) {
+                    var isNew = String($('#' + selectId).val()) === '0';
+                    var $field = $('#' + fieldId);
+                    if (!$field.length) return;
+                    if (isNew) {
+                        $field.show();
+                    } else {
+                        $field.hide();
+                        $field.find('input').val('');
+                    }
+                }
+
+                $('#from_user').on('change', function () { toggle('from_user', 'new_from_user_field'); });
+                $('#to_user').on('change', function () { toggle('to_user', 'new_to_user_field'); });
+            });
+        })();
+    </script>
 @endsection

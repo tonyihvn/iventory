@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="input-field">
-                        <select name="facility"  materialize="material_select" class="select2">
+                        <select name="facility"  materialize="material_select" class="select2" @if (Auth()->user()->role!=="Admin" && Auth()->user()->role!=="Super" && Auth()->user()->role!=="Manager") disabled @endif>
                             <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name }}
                             </option>
                             @foreach ($facilities as $facility)
@@ -67,7 +67,7 @@
 
                     <div class="input-field">
                         <select name="department" class="initialized">
-                            <option selected value='{{ $item->department_id }}'>{{ $item->department->department_name }}
+                            <option selected value='{{ $item->department_id }}'>{{ optional($item->department)->department_name ?? 'Select Department' }}
                             </option>
                             @foreach ($departments as $department)
                                 <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
@@ -78,7 +78,7 @@
 
                     <div class="input-field">
                         <select name="unit" class="initialized">
-                            <option selected value='{{ $item->unit_id }}'>{{ $item->unit->unit_name }}</option>
+                            <option selected value='{{ $item->unit_id }}'>{{ optional($item->unit)->unit_name ?? 'Select Unit' }}</option>
                             @foreach ($units as $unit)
                                 <option value='{{ $unit->id }}'>{{ $unit->unit_name }}</option>
                             @endforeach
@@ -89,7 +89,7 @@
                   
                     <div class="row">
                         <div class="input-field col s12">
-                            <select name="item_id" id="item_id" materialize="material_select"  class="select2">
+                            <select name="item_id" id="item_id" materialize="material_select"  class="select2" @if (Auth()->user()->role!=="Admin" && Auth()->user()->role!=="Super") disabled @endif>
                                 <option value="{{ $item->item_id }}">Change Item Unique Name</option>
                                 <option value='{{ $item->uniqueName ? $item->uniqueName->id : "" }}' selected>{{ $item->uniqueName ? $item->uniqueName->item_name : "" }}</option>
 
@@ -266,7 +266,7 @@
                         </div>
 
                         <div class="input-field col s6">
-                            <input id="concurrency" type="checkbox" class="validate" name="concurrency" value="Yes">
+                            <input id="concurrency" type="checkbox" class="validate" name="concurrency" value="Yes" checked>
                             <label for="concurrency">Update in Concurrency Table</label>
                         </div>
 

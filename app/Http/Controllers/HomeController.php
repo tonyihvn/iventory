@@ -55,12 +55,11 @@ class HomeController extends Controller
 
             $audits = audit::orderBy('created_at','desc')->paginate(20);
 
-           $statelist = inventory::select('state')->distinct()->orderBy("state")->pluck('state')->toArray();
-            $states = "'" . implode("','", $statelist) . "'";
-
-            // Step 1: Get all distinct states (sorted)
-$statelist = Inventory::select('state')
+            // Step 1: Get all distinct states (sorted) - exclude empty states, normalize casing
+$statelist = Inventory::selectRaw('UPPER(state) as state')
     ->distinct()
+    ->where('state', '!=', '')
+    ->where('state', '!=', null)
     ->orderBy('state')
     ->pluck('state')
     ->toArray();
@@ -68,9 +67,11 @@ $statelist = Inventory::select('state')
 // Step 2: Define categories you want to count
 $categories = ['Laptops', 'Phones', 'Biometrics', 'Desktop Computers', 'Vehicles'];
 
-// Step 3: Fetch all counts grouped by state and category
-$rawCounts = Inventory::select('state', 'category', DB::raw('COUNT(*) as count'))
+// Step 3: Fetch all counts grouped by state and category - exclude empty categories, normalize state casing
+$rawCounts = Inventory::selectRaw('UPPER(state) as state, category, COUNT(*) as count')
     ->whereIn('category', $categories)
+    ->where('category', '!=', '')
+    ->where('category', '!=', null)
     ->groupBy('state', 'category')
     ->get();
 
@@ -88,12 +89,16 @@ $desktops = [];
 $vehicles = [];
 
 foreach ($statelist as $state) {
+    $state = trim($state); // Ensure no whitespace issues
     $laptops[]    = $counts[$state]['Laptops'] ?? 0;
     $phones[]     = $counts[$state]['Phones'] ?? 0;
     $biometrics[] = $counts[$state]['Biometrics'] ?? 0;
     $desktops[]   = $counts[$state]['Desktop Computers'] ?? 0;
     $vehicles[]   = $counts[$state]['Vehicles'] ?? 0;
 }
+
+// Step 6: Construct the states string for template (after statelist is finalized)
+$states = "'" . implode("','", $statelist) . "'";
 
             // dd($states);
         
@@ -157,14 +162,18 @@ foreach ($statelist as $state) {
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
-            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
+            $perPageOptions = [50, 100, 200, 500];
+            $currentPerPage = 50;
+            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items,'perPageOptions'=>$perPageOptions,'currentPerPage'=>$currentPerPage]);
         }
         else if(auth()->user()->role=="User"){
             $categories = category::select('id','category_name')->get();
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('facility_id',auth()->user()->facility)->orderBy('item_name', 'asc')->get();
-            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
+            $perPageOptions = [50, 100, 200, 500];
+            $currentPerPage = 50;
+            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items,'perPageOptions'=>$perPageOptions,'currentPerPage'=>$currentPerPage]);
         }else if(auth()->user()->role=="DCTAdmin" || auth()->user()->role=="DCTManager" || auth()->user()->role=="DCTUser"){
             $dctools = dctools::with('distributions')->get();
 
@@ -174,7 +183,9 @@ foreach ($statelist as $state) {
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
             $inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')->where('user_id',auth()->user()->id)->orderBy('item_name', 'asc')->get();
-            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items]);
+            $perPageOptions = [50, 100, 200, 500];
+            $currentPerPage = 50;
+            return view('inventories', compact('inventories'), ['facilities'=>$facilities,'categories'=>$categories,'usrs'=>$usrs,'items'=>$items,'perPageOptions'=>$perPageOptions,'currentPerPage'=>$currentPerPage]);
         }
     }
 

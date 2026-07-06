@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{asset('/css/dataTables.material.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{asset('/css/pmain.scss')}}">
-    <title>IHVN GC7 - Inventory Management System</title>
+    <title>IHVN - Inventory Management System</title>
 
     <style>
         .btn{
@@ -37,7 +37,7 @@
 <nav>
     <div class="nav-wrapper teal">
       <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-      <a href="{{url('/')}}" class="brand-logo" target="_blank">IHVN GF N-THRIP- Inventory Management System</a>
+      <a href="{{url('/')}}" class="brand-logo" target="_blank">Inventory Management System</a>
 
       <ul class="right hide-on-med-and-down">
       <li>

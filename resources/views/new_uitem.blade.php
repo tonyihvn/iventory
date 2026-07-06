@@ -48,6 +48,7 @@
                         <th style="width: 50% !important;">Item Name</th>
                         <th>Specifications</th>
                         <th>Stock Bal.</th>
+                        <th>Total Distributed</th>
                         @if (auth()->user()->role == 'Admin')
                             <th>Actions</th>
                         @endif
@@ -62,6 +63,7 @@
                             <td>{{ $dc->specifications }}</td>
 
                                 <td>{{ $dc->stock->quantity_remaining ?? 0 }}</td>
+                                <td>{{ $dc->total_distributed ?? 0 }}</td>
 
 
                             @if (auth()->user()->role == 'Admin')
@@ -87,6 +89,13 @@
                                                     class="btn-floating btn-small waves-effect purple waves-light tooltipped"
                                                     data-position="top" data-tooltip="Enter Utilization"><i
                                                         class="material-icons">create</i></a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{ url('/item-inventory/' . $dc->id) }}"
+                                                    class="btn-floating btn-small waves-effect blue waves-light tooltipped"
+                                                    data-position="top" data-tooltip="View Items"><i
+                                                        class="material-icons">visibility</i></a>
                                             </li>
 
                                         </ul>

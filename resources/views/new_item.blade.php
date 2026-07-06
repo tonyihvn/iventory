@@ -18,7 +18,7 @@
                             <select name="sr" id="sr" class="browser-default">
                                 <option value="" disabled selected>Select SR</option>
                                 {{-- build unique SR list from the single $facilities variable --}}
-                                @foreach ($facilities->pluck('facility_no')->unique()->filter()->values() as $sr)
+                                @foreach ($facilities->pluck('sub')->unique()->filter()->values() as $sr)
                                     <option value="{{ $sr }}">{{ $sr }}</option>
                                 @endforeach
                             </select>
@@ -71,7 +71,7 @@
                     
 
                     <!-- rest of the form remains unchanged -->
-                    <hr>
+                    
                     <small style="color: green; text-align: center;"><i>For multiple device entry seperate IHVN Tag No,
                             Serial Number, Device ID by commas</i></small>
                     <div class="row">
@@ -250,7 +250,7 @@
                     <row>
 
                         <div class="input-field col s6">
-                            <input id="concurrency" type="checkbox" class="validate" name="concurrency" value="Yes">
+                            <input id="concurrency" type="checkbox" class="validate" name="concurrency" value="Yes" checked>
                             <label for="concurrency">Add to Concurrency Record</label>
                         </div>
 
@@ -308,7 +308,6 @@
                     opt.textContent = v;
                     sel.appendChild(opt);
                 });
-                refreshSelects();
             }
 
             function populateObjects(sel, items, valueKey, textKey) {
@@ -318,7 +317,6 @@
                     opt.textContent = item[textKey];
                     sel.appendChild(opt);
                 });
-                refreshSelects();
             }
 
             function refreshSelects() {
@@ -336,6 +334,12 @@
                 }
             }
 
+            function refreshCascadeSelects() {
+                if (window.M && M.FormSelect) {
+                    M.FormSelect.init([$sr, $state, $lga, $facility]);
+                }
+            }
+
             // SR -> States
             function onSrChange(e) {
                 const selectedSr = (e && e.target && e.target.value) || $sr.value;
@@ -345,11 +349,12 @@
                 if (!selectedSr) return;
 
                 const states = facilities
-                    .filter(f => String(f.facility_no) === String(selectedSr))
+                    .filter(f => String(f.sub) === String(selectedSr))
                     .map(f => (f.state || '').toString().trim())
                     .filter(Boolean);
 
                 populatePrimitive($state, unique(states).sort());
+                refreshCascadeSelects();
             }
 
             // State -> LGAs
@@ -361,11 +366,12 @@
                 if (!selectedSr || !selectedState) return;
 
                 const lgas = facilities
-                    .filter(f => String(f.facility_no) === selectedSr && String(f.state) === selectedState)
+                    .filter(f => String(f.sub) === selectedSr && String(f.state) === selectedState)
                     .map(f => (f.lga || '').toString().trim())
                     .filter(Boolean);
 
                 populatePrimitive($lga, unique(lgas).sort());
+                refreshCascadeSelects();
             }
 
             // LGA -> Facilities
@@ -377,7 +383,7 @@
                 if (!selectedSr || !selectedState || !selectedLga) return;
 
                 const facs = facilities
-                    .filter(f => String(f.facility_no) === selectedSr && String(f.state) === selectedState && String(f.lga) === selectedLga)
+                    .filter(f => String(f.sub) === selectedSr && String(f.state) === selectedState && String(f.lga) === selectedLga)
                     .map(f => ({ id: f.id, name: f.facility_name }));
 
                 // dedupe by id
@@ -386,6 +392,7 @@
                 facs.forEach(f => { if (!seen.has(f.id)) { seen.add(f.id); uniq.push(f); } });
 
                 populateObjects($facility, uniq, 'id', 'name');
+                refreshCascadeSelects();
             }
 
             $sr.addEventListener('change', onSrChange);

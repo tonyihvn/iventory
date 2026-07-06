@@ -63,45 +63,52 @@ $(document).ready(function(){
         }
       });
 
-    let table = $('#products').DataTable( {
-        orderCellsTop: true,
-        fixedHeader: true,
-        "order": [[ 0, "asc" ]],
-        "paging": true,
-        "pageLength": 100,
-        "filter": true,
-        "ordering": true,
-        deferRender: true,
-        dom: 'Bfrtip',
+    let table = null;
+    if (typeof jQuery !== 'undefined' && !jQuery.fn.dataTable.isDataTable('#products')) {
+        table = $('#products').DataTable( {
+            orderCellsTop: true,
+            fixedHeader: true,
+            "order": [[ 0, "asc" ]],
+            "paging": true,
+            "pageLength": 100,
+            "filter": true,
+            "ordering": true,
+            deferRender: true,
+            dom: 'Bfrtip',
         footer: false,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     } );
+    } else if (jQuery.fn.dataTable.isDataTable('#products')) {
+        table = jQuery('#products').DataTable();
+    }
 
     // TABLES WITH FILTERS
-    $('#products thead tr').clone(true).appendTo( '#products thead' );
-    $('#products thead tr:eq(1) th').each( function (i) {
+    if (table) {
+        $('#products thead tr').clone(true).appendTo( '#products thead' );
+        $('#products thead tr:eq(1) th').each( function (i) {
 
-        var title = $(this).text();
+            var title = $(this).text();
 
-        // var title = titl.replace(/ +?/g, '');
+            // var title = titl.replace(/ +?/g, '');
 
-        if(i==0 || title!='Actions'){
-            $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
+            if(i==0 || title!='Actions'){
+                $(this).html( '<input type="text" placeholder="Search '+title+'" value="" />' );
 
-            $( 'input', this ).on( 'keyup change', function () {
-                if ( table.column(i).search() !== this.value ) {
-                    table
-                        .column(i)
-                        .search( this.value )
-                        .draw();
-                }
-            } );
-        }
-    } );
+                $( 'input', this ).on( 'keyup change', function () {
+                    if ( table.column(i).search() !== this.value ) {
+                        table
+                            .column(i)
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            }
+        } );
+    }
 
-    if( $('#enable').length )         // use this if you are using id to check
+    if( $('#enable').length && table )         // use this if you are using id to check
     {
         document.querySelector('#enable').addEventListener('click', function () {
             table.fixedHeader.enable();

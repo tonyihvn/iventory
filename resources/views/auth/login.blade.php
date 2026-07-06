@@ -2,7 +2,11 @@
 @section('content')
 <style>
     #gflogin {
-            background-image: url("{{ asset('/public/images/gfbg.jpg') }}");
+            @if($site_settings && $site_settings->login_bg_image)
+                background-image: url("{{ asset('uploads/backgrounds/' . $site_settings->login_bg_image) }}");
+            @else
+                background-image: url("{{ asset('/public/images/gfbg.jpg') }}");
+            @endif
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -14,7 +18,8 @@
 
             <div class="card blue-grey darken-1 col m6" id="gflogin" style="height: 100%;">
                 <div class="card-content white-text">
-                <span class="card-title" style="text-align: center; font-weight: bold; text-shadow: 2px 2px black;">IHVN GF Inventory</span>
+                <span class="card-title" style="text-align: center; font-weight: bold; text-shadow: 2px 2px black;">IHVN 
+                     Inventory</span>
                 <p style="text-align: center; padding-top: 20%">
                     <a class="btn btn-link" style="background-color: red; border: double 2px white;"    href="{{ url('/') }}">
                         Login to GF Inventory

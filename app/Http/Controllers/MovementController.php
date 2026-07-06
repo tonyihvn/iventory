@@ -12,6 +12,7 @@ use App\movement;
 use App\files;
 use Auth;
 use File;
+use Illuminate\Support\Facades\Hash;
 
 
 use Illuminate\Http\Request;
@@ -51,6 +52,11 @@ class MovementController extends Controller
             'itemid' => 'required|min:1'
         ]);
 
+        // Allow an Admin to create a brand new user for the "From" / "To" fields
+        // when they pick "Not Listed - Add New User" (value 0) in the dropdowns.
+        $fromUser = $this->resolveMovementUser($request->from_user, $request->new_from_user, $request) ?? $request->from_user;
+        $toUser = $this->resolveMovementUser($request->to_user, $request->new_to_user, $request) ?? $request->to_user;
+
         if($request->hasFile('file'))
         {
             $files = $request->file('file');
@@ -67,9 +73,9 @@ class MovementController extends Controller
         movement::create([
             'inventories_id'=>$request->itemid,
             'from'=>$request->old,
-            'to'=>$request->to_user,
-            'from_user'=>$request->from_user,
-            'to_user'=>$request->to_user,
+            'to'=>$toUser,
+            'from_user'=>$fromUser,
+            'to_user'=>$toUser,
             'reason'=>$request->reason,
             'user_id'=>$request->approved_by,
             'date_moved'=>$request->date_moved,
@@ -116,7 +122,7 @@ class MovementController extends Controller
         
         $inventory = inventory::where('id','=', $request->itemid);
         $inventory->update([
-            'user_id'=>$request->to_user,
+            'user_id'=>$toUser,
             'department_id'=>$request->department,
             'unit_id'=>$request->unit,
             'facility_id'=>$request->facility,
@@ -131,6 +137,38 @@ class MovementController extends Controller
         session()->flash('message','The Movement Transaction was successfully!');
         
         return redirect()->back();
+    }
+
+    /**
+     * Create a new user on the fly (Admin only) when "Not Listed - Add New User"
+     * is selected for the From/To user. Returns the new user id, the existing
+     * selected id, or null when nothing usable was supplied.
+     */
+    private function resolveMovementUser($selectedId, $newName, Request $request)
+    {
+        // A real user was picked from the dropdown.
+        if ($selectedId !== null && $selectedId !== '' && (string) $selectedId !== '0') {
+            return $selectedId;
+        }
+
+        // "Not Listed" was chosen - only an Admin may create a new user.
+        $newName = trim((string) $newName);
+        if ($selectedId !== null && (string) $selectedId === '0' && $newName !== ''
+            && Auth::check() && Auth::user()->role === 'Admin') {
+
+            return User::create([
+                'name'       => $newName,
+                'email'      => strtolower(str_replace(' ', '', $newName)) . uniqid() . '@ihvnigeria.org',
+                'password'   => Hash::make('nopassword'),
+                'state'      => Auth::user()->state,
+                'facility'   => $request->facility,
+                'department' => $request->department,
+                'unit'       => $request->unit,
+                'role'       => 'User',
+            ])->id;
+        }
+
+        return null;
     }
 
     /**

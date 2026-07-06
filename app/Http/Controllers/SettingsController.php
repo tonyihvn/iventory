@@ -46,7 +46,6 @@ class SettingsController extends Controller
             $logoname = $request->file('logo')->getClientOriginalName();
             $file = request()->file('logo');
             $file->move('uploads', $logoname);
-            // $file->store($logoname, ['disk' => 'uploads']);
         } else {
             $logoname = "";
         }
@@ -57,13 +56,51 @@ class SettingsController extends Controller
             'logo'=>$logoname,
             'address'=>$request->address,
             'phone_number'=>$request->phone_number,                
-            'copyright'=>$request->copyright
+            'copyright'=>$request->copyright,
+            'disable_pagination'=>$request->has('disable_pagination') ? 1 : 0,
+            // Site Builder - Theme
+            'theme_mode'=>$request->theme_mode ?? 'light',
+            // Site Builder - Colors
+            'primary_color'=>$request->primary_color ?? '#2196F3',
+            'secondary_color'=>$request->secondary_color ?? '#FFC107',
+            'background_color'=>$request->background_color ?? '#FFFFFF',
+            'sidebar_color'=>$request->sidebar_color ?? '#263238',
+            'topbar_color'=>$request->topbar_color ?? '#009688',
+            'footer_color'=>$request->footer_color ?? '#00695c',
+            'footer_bottom_color'=>$request->footer_bottom_color ?? '#000000',
+            'text_color'=>$request->text_color ?? '#333333',
+            'text_light_color'=>$request->text_light_color ?? '#777777',
+            // Site Builder - Typography
+            'font_family'=>$request->font_family ?? 'Roboto',
+            'heading_size'=>$request->heading_size ?? 32,
+            'body_size'=>$request->body_size ?? 14,
+            'small_size'=>$request->small_size ?? 12,
+            // Site Builder - Dashboard Components
+            'show_dashboard_stats'=>$request->has('show_dashboard_stats') ? 1 : 0,
+            'show_dashboard_charts'=>$request->has('show_dashboard_charts') ? 1 : 0,
+            'show_recent_activities'=>$request->has('show_recent_activities') ? 1 : 0,
+            'show_quick_actions'=>$request->has('show_quick_actions') ? 1 : 0,
+            'show_notifications'=>$request->has('show_notifications') ? 1 : 0,
+            // Site Builder - Layout
+            'dashboard_layout'=>$request->dashboard_layout ?? 'grid',
+            'sidebar_width'=>$request->sidebar_width ?? 250,
+            'sticky_navbar'=>$request->has('sticky_navbar') ? 1 : 0,
+            'show_breadcrumbs'=>$request->has('show_breadcrumbs') ? 1 : 0,
+            // Site Builder - Effects
+            'enable_animations'=>$request->has('enable_animations') ? 1 : 0,
+            'animation_speed'=>$request->animation_speed ?? 'normal',
+            'enable_shadows'=>$request->has('enable_shadows') ? 1 : 0,
+            // Site Builder - Advanced UI
+            'card_style'=>$request->card_style ?? 'material',
+            'border_radius'=>$request->border_radius ?? 4,
+            'table_style'=>$request->table_style ?? 'striped',
+            'show_table_hover'=>$request->has('show_table_hover') ? 1 : 0
             ]);
         
         audit::create([
-            'action'=>"System Settings By ", //. Auth::user()->name,
+            'action'=>"System Settings By ", 
             'description'=>'System settings',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin"
         ]);
         session()->flash('message','The New Settings has been saved successfully!');
         
@@ -111,9 +148,24 @@ class SettingsController extends Controller
             $logoname = $request->file('logo')->getClientOriginalName();
             $file = request()->file('logo');
             $file->move('uploads', $logoname);
-            // $file->store($logoname, ['disk' => 'uploads']);
         } else {
             $logoname = $request->oldlogo;
+        }
+
+        // Handle login background image
+        if ($request->hasFile('login_bg_image')) {
+            $login_bg_name = time() . '_login_bg.' . $request->file('login_bg_image')->getClientOriginalExtension();
+            $request->file('login_bg_image')->move('uploads/backgrounds', $login_bg_name);
+        } else {
+            $login_bg_name = $request->old_login_bg ?? null;
+        }
+
+        // Handle app background image
+        if ($request->hasFile('app_bg_image')) {
+            $app_bg_name = time() . '_app_bg.' . $request->file('app_bg_image')->getClientOriginalExtension();
+            $request->file('app_bg_image')->move('uploads/backgrounds', $app_bg_name);
+        } else {
+            $app_bg_name = $request->old_app_bg ?? null;
         }
 
         $settings = settings::where('id','=', $request->id);
@@ -121,17 +173,57 @@ class SettingsController extends Controller
             'organization_name'=>$request->organization_name,
             'description'=>$request->description,
             'logo'=>$logoname,
+            'login_bg_image'=>$login_bg_name,
+            'app_bg_image'=>$app_bg_name,
             'address'=>$request->address,
             'phone_number'=>$request->phone_number,                
-            'copyright'=>$request->copyright
+            'copyright'=>$request->copyright,
+            'disable_pagination'=>$request->has('disable_pagination') ? 1 : 0,
+            // Site Builder - Theme
+            'theme_mode'=>$request->theme_mode ?? 'light',
+            // Site Builder - Colors
+            'primary_color'=>$request->primary_color ?? '#2196F3',
+            'secondary_color'=>$request->secondary_color ?? '#FFC107',
+            'background_color'=>$request->background_color ?? '#FFFFFF',
+            'sidebar_color'=>$request->sidebar_color ?? '#263238',
+            'topbar_color'=>$request->topbar_color ?? '#009688',
+            'footer_color'=>$request->footer_color ?? '#00695c',
+            'footer_bottom_color'=>$request->footer_bottom_color ?? '#000000',
+            'text_color'=>$request->text_color ?? '#333333',
+            'text_light_color'=>$request->text_light_color ?? '#777777',
+            // Site Builder - Typography
+            'font_family'=>$request->font_family ?? 'Roboto',
+            'heading_size'=>$request->heading_size ?? 32,
+            'body_size'=>$request->body_size ?? 14,
+            'small_size'=>$request->small_size ?? 12,
+            // Site Builder - Dashboard Components
+            'show_dashboard_stats'=>$request->has('show_dashboard_stats') ? 1 : 0,
+            'show_dashboard_charts'=>$request->has('show_dashboard_charts') ? 1 : 0,
+            'show_recent_activities'=>$request->has('show_recent_activities') ? 1 : 0,
+            'show_quick_actions'=>$request->has('show_quick_actions') ? 1 : 0,
+            'show_notifications'=>$request->has('show_notifications') ? 1 : 0,
+            // Site Builder - Layout
+            'dashboard_layout'=>$request->dashboard_layout ?? 'grid',
+            'sidebar_width'=>$request->sidebar_width ?? 250,
+            'sticky_navbar'=>$request->has('sticky_navbar') ? 1 : 0,
+            'show_breadcrumbs'=>$request->has('show_breadcrumbs') ? 1 : 0,
+            // Site Builder - Effects
+            'enable_animations'=>$request->has('enable_animations') ? 1 : 0,
+            'animation_speed'=>$request->animation_speed ?? 'normal',
+            'enable_shadows'=>$request->has('enable_shadows') ? 1 : 0,
+            // Site Builder - Advanced UI
+            'card_style'=>$request->card_style ?? 'material',
+            'border_radius'=>$request->border_radius ?? 4,
+            'table_style'=>$request->table_style ?? 'striped',
+            'show_table_hover'=>$request->has('show_table_hover') ? 1 : 0
             ]);
         
         audit::create([
-            'action'=>"System Settings Updated By ", //.Auth::user()->name,
+            'action'=>"System Settings Updated By ",
             'description'=>'System settings was modified',
-            'doneby'=>"Admin" // Auth::user()->id           
+            'doneby'=>"Admin"
         ]);
-        session()->flash('message','The New Settings has been saved successfully!');
+        session()->flash('message','The Settings have been updated successfully!');
         
         return redirect()->back();
     }

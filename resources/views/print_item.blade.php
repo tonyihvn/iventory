@@ -94,20 +94,20 @@
 
             <tr>
                 <td style="font-weight: bold;">Department: </td>
-                <td>{{ $item->department->department_name }}</td>
+                <td>{{ optional($item->department)->department_name ?? 'N/A' }}</td>
             </tr>
 
             <tr>
                 <td style="font-weight: bold;">Unit: </td>
-                <td>{{ $item->unit->unit_name }}</td>
+                <td>{{ optional($item->unit)->unit_name ?? 'N/A' }}</td>
             </tr>
 
             <tr>
                 <td style="font-weight: bold;">User:
                     <span style="font-weight: normal !important">
-                        {{ $item->assigned_to ?? \App\User::where('id', $item->user_id)->first()->name }} </span>
+                        {{ $item->assigned_to ?? optional(\App\User::where('id', $item->user_id)->first())->name ?? 'N/A' }} </span>
                 </td>
-                <td><b>Added By:</b> {{ \App\User::where('id', $item->added_by)->first()->name }}</td>
+                <td><b>Added By:</b> {{ optional(\App\User::where('id', $item->added_by)->first())->name ?? 'N/A' }}</td>
             </tr>
 
             <tr>

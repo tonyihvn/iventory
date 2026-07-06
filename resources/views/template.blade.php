@@ -13,10 +13,65 @@
     {{-- <link rel="stylesheet" href="{{ asset('/css/pmain.scss') }}"> --}}
     <link rel="stylesheet"
         href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    @php
+        $topbarColor = ($site_settings && $site_settings->topbar_color) ? $site_settings->topbar_color : '#009688';
+        $sidebarColor = ($site_settings && $site_settings->sidebar_color) ? $site_settings->sidebar_color : '#263238';
+        $footerColor = ($site_settings && $site_settings->footer_color) ? $site_settings->footer_color : '#00695c';
+        $footerBottomColor = ($site_settings && $site_settings->footer_bottom_color) ? $site_settings->footer_bottom_color : '#000000';
+    @endphp
     <style>
         nav {
-            background-color: white !important;
             box-shadow: none !important;
+        }
+
+        /* Top navigation bar color (configurable in Settings) */
+        nav,
+        nav .nav-wrapper {
+            background-color: {{ $topbarColor }} !important;
+        }
+
+        /* Sidebar color (configurable in Settings).
+           High-specificity selectors are required to override Materialize's
+           .teal / .white / .darken-* colour helper classes used in the markup. */
+        ul.side-nav,
+        ul.side-nav.teal,
+        ul.side-nav.teal.darken-2,
+        ul.side-nav li,
+        ul.side-nav li.white,
+        ul.side-nav li.teal,
+        ul.side-nav .collapsible,
+        ul.side-nav .collapsible-body,
+        ul.side-nav .collapsible-header {
+            background-color: {{ $sidebarColor }} !important;
+        }
+
+        ul.side-nav a,
+        ul.side-nav .collapsible-header,
+        ul.side-nav a i.material-icons,
+        ul.side-nav .collapsible-header i.material-icons {
+            color: #ffffff !important;
+        }
+
+        ul.side-nav li > a:hover,
+        ul.side-nav .collapsible-header:hover {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+        }
+
+        ul.side-nav li .divider {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Footer colours (configurable in Settings) */
+        footer.page-footer,
+        footer.page-footer.teal,
+        footer.page-footer.teal.darken-2 {
+            background-color: {{ $footerColor }} !important;
+        }
+
+        footer.page-footer .footer-copyright,
+        footer.page-footer .footer-copyright.black,
+        footer.page-footer .footer-copyright.black.darken-4 {
+            background-color: {{ $footerBottomColor }} !important;
         }
 
         .select2 {
@@ -31,19 +86,19 @@
             z-index: 1000000000000000000;
         }
 
-        .btn{
-            background-color: #0d201e !important;
-        }
-
         body {
-            background-image: url("{{ asset('/images/inventorybg.jpg') }}");
+            @if($site_settings && $site_settings->app_bg_image)
+                background-image: url("{{ asset('uploads/backgrounds/' . $site_settings->app_bg_image) }}");
+            @else
+                background-image: url("{{ asset('/images/inventorybg.jpg') }}");
+            @endif
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0.9; /* To make the image faint */
         }
 
-        .card, .row, form, table{
+        .card, form, table{
             background-color: white !important;
         }
 
@@ -58,6 +113,24 @@
         body .container{
             color: black !important;
             width: 100% !important;
+        }
+
+        .breadcrumbs-wrapper{
+            background-color: white !important;
+            padding: 15px 0 !important;
+        }
+
+        .breadcrumbs-wrapper nav,
+        .breadcrumbs-wrapper nav.nav-wrapper,
+        .breadcrumbs-wrapper nav .nav-wrapper {
+            background-color: white !important;
+            box-shadow: none !important;
+        }
+
+        /* Remove background from pagination and other non-topbar nav elements */
+        nav:not(.nav-wrapper) {
+            background-color: transparent !important;
+            box-shadow: none !important;
         }
 
         .s12 a.breadcrumb, .s12 span.breadcrumb{
@@ -86,7 +159,7 @@
                     <form action="{{ route('item_search') }}" method="POST" style="position: relative;"
                         id="searchform" class="row">
                         @csrf
-                        <input type="text" placeholder="Search Inventory" class="searchbox col s8" name="keyword" style="color: black">
+                        <input type="text" placeholder="Search Inventory" class="searchbox col s8" name="keyword" style="color: black" id="searchinput">
                         <button class="btn btn-small btn-floating tooltipped col s2" data-position="top"
                             data-tooltip="Search with IHVN Tag No, Item Name, etc" style="margin-top: 10px;"><i
                                 class="material-icons" style="margin-top:-10px !important;">search</i></button>
@@ -122,7 +195,7 @@
 
 
             <ul class="side-nav teal darken-2" id="mobile-demo">
-                <li class="teal center"><a href="#" style="color: white !important;"><i class="material-icons">menu</i>IHVN GF ASSETS </a></li>
+                <li class="teal center"><a href="#" style="color: white !important;"><i class="material-icons">menu</i>IHVN SI ASSETS </a></li>
                 <li class="white">
                     <div class="divider"></div>
                 </li>
@@ -144,6 +217,14 @@
                                                     class="material-icons">library_add</i>Add Item to Inventory</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
                                                     class="material-icons">transfer_within_a_station</i>Transfer/Movements Report</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/distribution') }}"><i
+                                                    class="material-icons">local_shipping</i>Item Distribution</a></li>
+
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/repair-requests') }}"><i
+                                                    class="material-icons">settings</i>Repair/Maintenance Requests</a></li>
+
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/file-management') }}"><i
+                                                    class="material-icons">folder</i>File Management</a></li>
 
                                         <li><a class="waves-effect waves-blue" href="{{ url('/requests') }}"><i
                                                     class="material-icons">receipt</i>Item Requests</a></li>
@@ -343,6 +424,14 @@
                                                     class="material-icons">library_add</i>Add Item to Inventory</a></li>
                                         <li><a class="waves-effect waves-blue" href="{{ url('/movements') }}"><i
                                                     class="material-icons">transfer_within_a_station</i>Transfer/Movements Report</a></li>
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/distribution') }}"><i
+                                                    class="material-icons">local_shipping</i>Item Distribution</a></li>
+
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/repair-requests') }}"><i
+                                                    class="material-icons">construction</i>Repair/Maintenance Requests</a></li>
+
+                                        <li><a class="waves-effect waves-blue" href="{{ url('/file-management') }}"><i
+                                                    class="material-icons">folder</i>File Management</a></li>
 
                                         <li><a class="waves-effect waves-blue" href="{{ url('/requests') }}"><i
                                                     class="material-icons">receipt</i>Item Requests</a></li>
@@ -480,11 +569,15 @@
     </nav>
 
 
-    <div class="container">
-        @if(Breadcrumbs::exists(Route::currentRouteName()))
-            {{ Breadcrumbs::render(Route::currentRouteName()) }}
-        @endif
+    <div class="breadcrumbs-wrapper">
+        <div class="container">
+            @if(Breadcrumbs::exists(Route::currentRouteName()))
+                {{ Breadcrumbs::render(Route::currentRouteName()) }}
+            @endif
+        </div>
+    </div>
 
+    <div class="container">
         <p>@include('/alerts')</p>
     </div>
 
@@ -512,6 +605,10 @@
                 <li>
                     <a class="btn-floating red tooltipped" data-position="top" data-tooltip="Item Movement/Transfers"
                         href="{{ url('/movements') }}"><i class="material-icons">repeat</i></a>
+                </li>
+                <li>
+                    <a class="btn-floating orange tooltipped" data-position="top" data-tooltip="Item Distribution"
+                        href="{{ url('/distribution') }}"><i class="material-icons">local_shipping</i></a>
                 </li>
                 @if (Auth()->user()->role == 'Admin')
                     <li>
@@ -562,7 +659,7 @@
             </div>
         </div>
         <div class="footer-copyright  black darken-4">
-            <div class="container">Developed by <a href="https://valueminds.ng">ValueMinds</a></div>
+            <div class="container">Developed by <a href="#">{{ $site_settings->organization_name }}</a></div>
         </div>
     </footer>
 
@@ -588,38 +685,95 @@
 
     </div>
 
-</body>
-<script src="{{ asset('/js/jquery-3.5.1.js') }}"></script>
+<!-- Load jQuery first -->
+<script src="{{ asset('/js/jquery.min.js') }}"></script>
+
+<!-- Fallback jQuery if needed -->
+<script>
+    if (typeof jQuery === 'undefined') {
+        var script = document.createElement('script');
+        script.src = 'https://code.jquery.com/jquery-3.5.1.min.js';
+        document.head.appendChild(script);
+    }
+</script>
+
+<!-- Load other libraries after jQuery -->
 <script src="{{ asset('/js/materialize.min.js') }}"></script>
 <script src="{{ asset('/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/js/dataTables.fixedHeader.min.js') }}"></script>
-<script src="{{ asset('/js/select2.min.js') }}"></script>
 <script src="{{ asset('/js/dataTables.select.min.js') }}"></script>
 <script src="{{ asset('/js/dataTables.searchPanes.min.js') }}"></script>
+<script src="{{ asset('/js/select2.min.js') }}"></script>
+
+<!-- DataTables buttons from CDN (optional enhancement) -->
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
+
+<!-- Dispatch librariesReady event -->
+<script>
+    document.dispatchEvent(new Event('librariesReady'));
+    console.log('All libraries loaded, librariesReady event dispatched');
+</script>
+
+<!-- Load pmain.js -->
 <script src="{{ asset('/js/pmain.js') }}"></script>
 
+<script>
+    // Wait for jQuery before running search form code
+    function setupSearchForm() {
+        if (typeof jQuery === 'undefined') {
+            setTimeout(setupSearchForm, 100);
+            return;
+        }
+        
+        jQuery(function($) {
+            $('#searchinput').on('keypress', function(event) {
+                if (event.key === 'Enter' || event.keyCode === 13) {
+                    event.preventDefault();
+                    $('#searchform').submit();
+                }
+            });
+        });
+    }
+    
+    setupSearchForm();
+</script>
 
 <script src="{{ asset('/js/highcharts.js') }}"></script>
 <script src="{{ asset('/js/exporting.js') }}"></script>
 <!-- Leaflet map library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 
 <?php if(isset($dashboard)){ ?>
     <script type="text/javascript">
-        // Initialize dashboard when document is ready
-        $(document).ready(function() {
-            initDashboard();
-        });
-
-        // Initialize dashboard
+        // NOTE: the global 'librariesReady' event is dispatched earlier in the page
+        // (before Highcharts/Leaflet are loaded) so a listener added here would never
+        // fire. Instead we poll for the dependencies this dashboard actually needs.
+        (function waitForDashboardDeps(attempts) {
+            attempts = attempts || 0;
+            if (typeof jQuery !== 'undefined' && typeof Highcharts !== 'undefined') {
+                initDashboard();
+            } else if (attempts < 100) {
+                setTimeout(function () { waitForDashboardDeps(attempts + 1); }, 100);
+            } else {
+                console.error('Dashboard dependencies (jQuery/Highcharts) failed to load');
+            }
+        })();
+        
         function initDashboard() {
-            // Ensure Highcharts is available for the column chart
-            if (typeof Highcharts === 'undefined') {
-                console.error('Highcharts not loaded');
+            // Ensure jQuery and Highcharts are available
+            if (typeof jQuery === 'undefined' || typeof Highcharts === 'undefined') {
+                console.error('Dependencies not ready for dashboard');
                 return;
             }
 
+            var $ = jQuery;
             var laptops = <?php echo $Laptops ?? '[]'; ?>;
             var phones = <?php echo $Phones ?? '[]'; ?>;
             var biometrics = <?php echo $Biometrics ?? '[]'; ?>;
@@ -867,59 +1021,66 @@
     }, true);
 </script>
 
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js" />
-</script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.flash.min.js" />
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" />
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" />
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" />
-</script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js" />
-</script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js" />
-</script>
-
 <script>
-    $('#new_username').hide();
+    // Wait for libraries to be ready
+    document.addEventListener('librariesReady', function() {
+        initializeSelectOptions();
+    });
 
-    var optionText = $('#item_id option:selected').text();
-    $('#item_name').val(optionText);
+    // Also run if libraries are already loaded
+    if (typeof jQuery !== 'undefined' && jQuery.fn.select2 !== undefined) {
+        initializeSelectOptions();
+    }
 
-    $('#dctool_select').hide();
-    $('#user').change(function() {
-        if ($(this).val() == "0") {
-            $('#new_username').show();
-        } else {
+    function initializeSelectOptions() {
+        try {
             $('#new_username').hide();
-        }
-    });
 
-    $('#item_id').change(function() {
-        var optionText = $('#item_id option:selected').text();  // Get the text of the selected option
-        $('#item_name').val(optionText);  // Set the text to the item_name input field
-    });
+            var optionText = $('#item_id option:selected').text();
+            $('#item_name').val(optionText);
 
-    $(document).ready(function() {
-        $('.select2').select2();
-
-        $('#state').change(function() {
-            var state = $(this).val();
-            $.ajax({
-                url: '{{url("get-facilities")}}/' + state,
-                type: 'GET',
-                success: function(data) {
-                    $('#facility').empty();
-                    $('#facility').append('<option value="" disabled selected>Facility</option>');
-                    $.each(data, function(index, facility) {
-                        $('#facility').append('<option value="' + facility.id + '">' + facility.facility_name + '</option>');
-                    });
+            $('#dctool_select').hide();
+            $('#user').change(function() {
+                if ($(this).val() == "0") {
+                    $('#new_username').show();
+                } else {
+                    $('#new_username').hide();
                 }
             });
-        });
-    });
+
+            $('#item_id').change(function() {
+                var optionText = $('#item_id option:selected').text();  // Get the text of the selected option
+                $('#item_name').val(optionText);  // Set the text to the item_name input field
+            });
+
+            // Initialize Select2 with proper configuration
+            if (jQuery.fn.select2 !== undefined) {
+                $('.select2').select2({
+                    width: '100%',
+                    allowClear: true,
+                    placeholder: 'Select an option',
+                    minimumResultsForSearch: 0
+                });
+            }
+
+            $('#state').change(function() {
+                var state = $(this).val();
+                $.ajax({
+                    url: '{{url("get-facilities")}}/' + state,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#facility').empty();
+                        $('#facility').append('<option value="" disabled selected>Facility</option>');
+                        $.each(data, function(index, facility) {
+                            $('#facility').append('<option value="' + facility.id + '">' + facility.facility_name + '</option>');
+                        });
+                    }
+                });
+            });
+        } catch(e) {
+            console.log('Error initializing select options:', e);
+        }
+    }
 
     $("#type").change(function() {
 

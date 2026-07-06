@@ -23,6 +23,7 @@
                         <div class="input-field">
                                 <select  onchange="getLGA();" name="state" id="state" class="browser-default validate">
                                     <option value="" selected="selected">- Select State -</option>
+                                    <option value="CENTRAL">CENTRAL</option>
                                     <option value="FCT">Abuja FCT</option>
                                     <option value="Abia">Abia</option>
                                     <option value="Adamawa">Adamawa</option>
@@ -97,6 +98,15 @@
                                 <label for="contact_person">Contact Person</label>
                         </div>
 
+                        <div class="input-field">
+                                <input id="principal" type="text" class="validate" name="principal">
+                                <label for="principal">Principal</label>
+                        </div>
+
+                        <div class="input-field">
+                                <input id="sub" type="text" class="validate" name="sub">
+                                <label for="sub">Sub</label>
+                        </div>
 
                         <div class="input-field text-right right" style="margin-bottom:20px;">
                             

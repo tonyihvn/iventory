@@ -16,6 +16,38 @@
 
         @if ($inventories != null)
 
+            @php
+                // Build sets of serial_no / tag_no values that appear on more than one
+                // row so the matching cells can be highlighted as potential duplicates.
+                $invCollection = $inventories instanceof \Illuminate\Pagination\AbstractPaginator
+                    ? $inventories->getCollection()
+                    : collect($inventories);
+
+                $dupSerials = $invCollection->pluck('serial_no')
+                    ->map(fn ($v) => trim((string) $v))
+                    ->filter(fn ($v) => $v !== '' && strtoupper($v) !== 'NA')
+                    ->countBy()
+                    ->filter(fn ($count) => $count > 1)
+                    ->keys();
+
+                $dupTags = $invCollection->pluck('tag_no')
+                    ->map(fn ($v) => trim((string) $v))
+                    ->filter(fn ($v) => $v !== '' && strtoupper($v) !== 'NA')
+                    ->countBy()
+                    ->filter(fn ($count) => $count > 1)
+                    ->keys();
+            @endphp
+
+            <style>
+                .dup-highlight {
+                    background-color: #ffcdd2;
+                    color: #b71c1c;
+                    font-weight: bold;
+                    padding: 0 3px;
+                    border-radius: 3px;
+                }
+            </style>
+
             @if (auth()->user()->role != 'Observer')
                 <div>
                     <a href="{{ url('/add_item') }}" class="btn btn-small btn-floating right pulse tooltipped"
@@ -35,6 +67,7 @@
 
                             <select name="state" id="state" materialize="material_select" class="select2">
                                 <option value="" disabled selected>Change State</option>
+                                <option value="CENTRAL">CENTRAL</option>
                                 <option value="ABIA">ABIA</option>
                                 <option value="ADAMAWA">ADAMAWA</option>
                                 <option value="AKWA IBOM">AKWA IBOM</option>
@@ -108,14 +141,16 @@
                             </select>
                         </div>
 
-                        <div class="input-field col s2">
-                            <select name="item_id"  materialize="material_select" class="select2">
-                                <option value='' disabled selected>Update Unique Name</option>
-                                @foreach ($items as $it)
-                                    <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if (auth()->user()->role == 'Admin')
+                            <div class="input-field col s2">
+                                <select name="item_id"  materialize="material_select" class="select2">
+                                    <option value='' disabled selected>Update Unique Name</option>
+                                    @foreach ($items as $it)
+                                        <option value='{{ $it->id }}'>{{ $it->item_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
                         @if (auth()->user()->role == 'Admin')
                             <div class="input-field col s1">
@@ -123,6 +158,11 @@
                                     <option value='' disabled selected>Delete?</option>
                                 <option value="Delete">Delete</option>
                                 </select>
+                            </div>
+                        @endif
+                        @if (auth()->user()->role == 'Admin')
+                            <div class="input-field col s6">
+                                <input type="text" name="comments" placeholder="Make Comments on Selected Items">
                             </div>
                         @endif
 
@@ -136,7 +176,6 @@
 
                     </div>
                 @endif
-
                 <table id="products" class="print_table display responsive-table" style="width:100%;">
                     <thead class="thead-dark">
                         <tr>
@@ -155,6 +194,7 @@
 
                             <th class="filter">Assigned To/User</th>
                             <th class="filter">Status</th>
+                            <th class="filter col-comments">Comments</th>
 
                             <th>Actions</th>
                         </tr>
@@ -169,17 +209,23 @@
                                 </td>
                               <td>{{ $inv->supplier }}</td>
                                 <td>{{ $inv->state }}</td>
-                                  <td>{{ $inv->facility_id == 2 ? $inv->type : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['lga'] }}</td>
+                                  <td>{{ $inv->facility_id == 2 ? $inv->type : optional($inv->facilities)->lga }}</td>
                               <td>
-                                    {{ $inv->facility_id == 2 ? $inv->facility : $facilities[array_search($inv->facility_id, array_column($facilities->toArray(), 'id'))]['facility_name'] }}
+                                    {{ $inv->facility_id == 2 ? $inv->facility : optional($inv->facilities)->facility_name }}
                                 </td>
                                 <td>{{ $inv->item_name }}</td>
-                                <td>{{ $inv->serial_no }} / {{ $inv->ihvn_no }} / {{ $inv->tag_no }}</td>
+                                <td>@php
+                                        $serialDup = trim((string) $inv->serial_no) !== '' && $dupSerials->contains(trim((string) $inv->serial_no));
+                                        $tagDup = trim((string) $inv->tag_no) !== '' && $dupTags->contains(trim((string) $inv->tag_no));
+                                    @endphp<span class="{{ $serialDup ? 'dup-highlight' : '' }}"
+                                        @if ($serialDup) title="Duplicate serial number" @endif>{{ $inv->serial_no }}</span>{{ $inv->ihvn_no ? ' / ' . $inv->ihvn_no : '' }}<span class="{{ $tagDup ? 'dup-highlight' : '' }}"
+                                        @if ($tagDup) title="Duplicate tag number" @endif>{{ $inv->tag_no ? ' / ' . $inv->tag_no : '' }}</span></td>
                                 <td>{{ $inv->category }}</td>
                                 
-                                <td>{{ $inv->user_id == 2 ? $inv->assigned_to : $usrs[array_search($inv->user_id, array_column($usrs->toArray(), 'id'))]['name'] }}
+                                <td>{{ $inv->user_id == 2 ? $inv->assigned_to : optional($inv->user)->name }}
                                 </td>
                                 <td>{{ $inv->status }}</td>
+                                <td class="col-comments">{{ $inv->remarks ?? 'N/A' }}</td>
                                 <td>
                                     @if (auth()->user()->role != 'Observer')
                                         <div class="fixed-action-btn horizontal direction-top direction-left click-to-toggle sales_action"
@@ -235,6 +281,44 @@
             <div id="float">
                 <button id="enable">Enable FixedHeader</button> <button id="disable">Disable FixedHeader</button>
             </div>
+            
+            {{-- Pagination Links --}}
+            @if($inventories instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col s12">
+                        <div style="display: flex; justify-content: center;">
+                            {{ $inventories->links() }}
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <script>
+                // Handle "Select All" checkbox
+                document.addEventListener('DOMContentLoaded', function() {
+                    const selectAllCheckbox = document.getElementById('select-all');
+                    const itemCheckboxes = document.querySelectorAll('.iselect');
+
+                    if (selectAllCheckbox) {
+                        selectAllCheckbox.addEventListener('change', function() {
+                            itemCheckboxes.forEach(checkbox => {
+                                checkbox.checked = this.checked;
+                            });
+                        });
+
+                        // Update select-all checkbox when individual checkboxes change
+                        itemCheckboxes.forEach(checkbox => {
+                            checkbox.addEventListener('change', function() {
+                                const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+                                const someChecked = Array.from(itemCheckboxes).some(cb => cb.checked);
+                                
+                                selectAllCheckbox.checked = allChecked;
+                                selectAllCheckbox.indeterminate = someChecked && !allChecked;
+                            });
+                        });
+                    }
+                });
+            </script>
         @else
             <blockquote>No items found in the database.</blockquote>
         @endif
@@ -251,4 +335,6 @@
             <a href="#!" class="modal-close waves-effect waves-green btn-flat">Close</a>
         </div>
     </div>
+
+
 @endsection
