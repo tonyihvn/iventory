@@ -4,7 +4,7 @@
     <div class="container">
         @if(isset($site_settings->logo))
         <div class="center">
-            <img src="/uploads/{{ $site_settings->logo }}" alt="Site Logo" height="80" width="auto">
+            <img src="{{ asset('/uploads/' . $site_settings->logo) }}" alt="Site Logo" height="80" width="auto">
         </div>
         @endif
 

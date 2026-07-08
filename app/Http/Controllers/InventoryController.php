@@ -807,7 +807,8 @@ class InventoryController extends Controller
             'unit_id'=>$request->unit,
             'facility_id'=>$request->facility,
             'internal_location'=>$request->internal_location,
-            'remarks'=>$request->remarks
+            'remarks'=>$request->remarks,
+            'added_by'=>Auth::user()->id
         ]);
 
         // Remove Inventory Specs and Recreate
