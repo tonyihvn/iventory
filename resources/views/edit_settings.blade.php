@@ -197,6 +197,14 @@
                                     <p style="font-size: 12px; color: #999; margin-top: 5px;">Secondary/muted text color</p>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">🎨 Materialize Primary Color</label>
+                                    <input type="color" name="materialize_primary_color" value="{{ isset($settings) && $settings->materialize_primary_color ? $settings->materialize_primary_color : '#26a69a' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Default color for all buttons, links, progress bars, and interactive elements in Materialize UI</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- TYPOGRAPHY SECTION -->

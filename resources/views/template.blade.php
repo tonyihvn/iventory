@@ -18,6 +18,7 @@
         $sidebarColor = ($site_settings && $site_settings->sidebar_color) ? $site_settings->sidebar_color : '#263238';
         $footerColor = ($site_settings && $site_settings->footer_color) ? $site_settings->footer_color : '#00695c';
         $footerBottomColor = ($site_settings && $site_settings->footer_bottom_color) ? $site_settings->footer_bottom_color : '#000000';
+        $materializePrimaryColor = ($site_settings && $site_settings->materialize_primary_color) ? $site_settings->materialize_primary_color : '#26a69a';
     @endphp
     <style>
         nav {
@@ -140,6 +141,268 @@
             color: rgb(92, 91, 91) !important;
             font-size: 0.8em;
             text-decoration: italic;
+        }
+
+        /* ========================================================
+           MATERIALIZE PRIMARY COLOR OVERRIDE (Globally Configurable)
+           ======================================================== */
+        
+        /* Buttons */
+        .btn,
+        .btn-large,
+        a.btn,
+        a.btn-large,
+        button.btn,
+        button.btn-large {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .btn:hover,
+        .btn-large:hover,
+        a.btn:hover,
+        a.btn-large:hover,
+        button.btn:hover,
+        button.btn-large:hover {
+            background-color: {{ $materializePrimaryColor }} !important;
+            opacity: 0.9;
+        }
+
+        .btn:focus,
+        .btn-large:focus,
+        a.btn:focus,
+        a.btn-large:focus {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Floating Action Buttons */
+        .btn-floating,
+        a.btn-floating,
+        button.btn-floating {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .btn-floating:hover,
+        a.btn-floating:hover,
+        button.btn-floating:hover {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Floating Action Button Backdrop */
+        .fixed-action-btn .fab-backdrop {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Progress Bars */
+        .progress {
+            background-color: rgba({{ implode(',', array_values(sscanf($materializePrimaryColor, "#%02x%02x%02x"))) }}, 0.2) !important;
+        }
+
+        .progress .determinate,
+        .progress .indeterminate {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Links and Text */
+        a.collection-item,
+        .collection a.collection-item,
+        a {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Collection Items */
+        .collection .collection-item.active,
+        .collection .collection-item.active a {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .collection .secondary-content,
+        .collection a.collection-item .secondary-content {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Dropdown */
+        .dropdown-content li>a,
+        .dropdown-content li>span {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Chips */
+        .chips.focus {
+            border-bottom: 1px solid {{ $materializePrimaryColor }} !important;
+            box-shadow: 0 1px 0 0 {{ $materializePrimaryColor }} !important;
+        }
+
+        .chips .chip.selected {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Form Elements - Focus States */
+        input:not([type]):focus:not([readonly]),
+        input[type=text]:focus:not([readonly]),
+        input[type=password]:focus:not([readonly]),
+        input[type=email]:focus:not([readonly]),
+        input[type=url]:focus:not([readonly]),
+        input[type=time]:focus:not([readonly]),
+        input[type=date]:focus:not([readonly]),
+        input[type=datetime]:focus:not([readonly]),
+        input[type=datetime-local]:focus:not([readonly]),
+        input[type=tel]:focus:not([readonly]),
+        input[type=number]:focus:not([readonly]),
+        input[type=search]:focus:not([readonly]),
+        textarea.materialize-textarea:focus:not([readonly]) {
+            border-bottom: 1px solid {{ $materializePrimaryColor }} !important;
+            box-shadow: 0 1px 0 0 {{ $materializePrimaryColor }} !important;
+        }
+
+        input:not([type]):focus:not([readonly])+label,
+        input[type=text]:focus:not([readonly])+label,
+        input[type=password]:focus:not([readonly])+label,
+        input[type=email]:focus:not([readonly])+label,
+        input[type=url]:focus:not([readonly])+label,
+        input[type=time]:focus:not([readonly])+label,
+        input[type=date]:focus:not([readonly])+label,
+        input[type=datetime]:focus:not([readonly])+label,
+        input[type=datetime-local]:focus:not([readonly])+label,
+        input[type=tel]:focus:not([readonly])+label,
+        input[type=number]:focus:not([readonly])+label,
+        input[type=search]:focus:not([readonly])+label,
+        textarea.materialize-textarea:focus:not([readonly])+label {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Form Prefix (Icons) */
+        .input-field .prefix.active {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Valid Input States */
+        input:not([type]).valid,
+        input:not([type]):focus.valid,
+        input[type=text].valid,
+        input[type=text]:focus.valid,
+        input[type=password].valid,
+        input[type=password]:focus.valid,
+        input[type=email].valid,
+        input[type=email]:focus.valid,
+        input[type=url].valid,
+        input[type=url]:focus.valid,
+        input[type=time].valid,
+        input[type=time]:focus.valid,
+        input[type=date].valid,
+        input[type=date]:focus.valid,
+        input[type=datetime].valid,
+        input[type=datetime]:focus.valid,
+        input[type=datetime-local].valid,
+        input[type=datetime-local]:focus.valid,
+        input[type=tel].valid,
+        input[type=tel]:focus.valid,
+        input[type=number].valid,
+        input[type=number]:focus.valid,
+        input[type=search].valid,
+        input[type=search]:focus.valid,
+        textarea.materialize-textarea.valid,
+        textarea.materialize-textarea:focus.valid {
+            border-bottom-color: {{ $materializePrimaryColor }} !important;
+            box-shadow: 0 1px 0 0 {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Checkboxes */
+        [type="checkbox"]:checked+label:before {
+            border-right: 2px solid {{ $materializePrimaryColor }} !important;
+            border-bottom: 2px solid {{ $materializePrimaryColor }} !important;
+        }
+
+        [type="checkbox"]:checked+label:after {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Radio Buttons */
+        [type="radio"]:checked+label:before,
+        [type="radio"].with-gap:checked+label:before,
+        [type="radio"].with-gap:checked+label:after {
+            border: 2px solid {{ $materializePrimaryColor }} !important;
+        }
+
+        [type="radio"]:checked+label:after,
+        [type="radio"].with-gap:checked+label:after {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Range Slider */
+        input[type=range]::-webkit-slider-thumb {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        input[type=range]::-moz-range-thumb {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Badge */
+        span.badge.new {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Teal Color Helper Classes (used by Materialize) */
+        .teal.lighten-1 {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .teal-text.text-lighten-1 {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Tabs */
+        .tabs .tab a {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .tabs .tab a:hover {
+            background-color: rgba({{ implode(',', array_values(sscanf($materializePrimaryColor, "#%02x%02x%02x"))) }}, 0.1) !important;
+        }
+
+        .tabs .indicator {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Pagination */
+        ul.pagination li.active {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        ul.pagination li a {
+            color: {{ $materializePrimaryColor }} !important;
+        }
+
+        ul.pagination li a:hover {
+            background-color: rgba({{ implode(',', array_values(sscanf($materializePrimaryColor, "#%02x%02x%02x"))) }}, 0.1) !important;
+        }
+
+        /* Switches/Toggle */
+        .switch label input[type=checkbox]:checked+.lever {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .switch label input[type=checkbox]:checked+.lever:after {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Spinners */
+        .spinner-layer {
+            border-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .spinner-layer .circle-clipper .circle {
+            border-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        /* Modals - Buttons */
+        .modal .modal-footer .btn {
+            background-color: {{ $materializePrimaryColor }} !important;
+        }
+
+        .modal .modal-footer .btn:hover {
+            background-color: {{ $materializePrimaryColor }} !important;
+            opacity: 0.9;
         }
     </style>
 </head>

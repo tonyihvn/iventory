@@ -2,10 +2,11 @@
 @section('content')
 
     <div class="container">
-
+        @if(isset($site_settings->logo))
         <div class="center">
-            <img src="/uploads/{{ $site_settings->logo }}" alt="No Image Uploaded!" height="80" width="auto">
+            <img src="/uploads/{{ $site_settings->logo }}" alt="Site Logo" height="80" width="auto">
         </div>
+        @endif
 
         <table class="striped">
             <tr>
@@ -13,7 +14,7 @@
                     <h5>{{ $item->item_name }}</h5>
                 </td>
                 <td>IHVN Tag No.: <br>
-                    <b>{{ $item->ihvn_no }}</b><br>
+                    <b>{{ $item->tag_no}} {{ $item->ihvn_no }}</b><br>
                     Serial No: <br>
                     <b>{{ $item->serial_no }}</b>
                 </td>
@@ -38,7 +39,7 @@
                     {{$item->uniqueName->specifications}}
 
                     @endif
-                    @if ($item->inventoryspec != null)
+                    @if ($item->inventoryspec->count() > 0)
                         <table class="table highlight" style="width: 50%; margin:auto">
 
                             <thead>
@@ -65,7 +66,7 @@
                     @endif
                 </td>
             </tr>
-
+            
             <tr>
                 <td width="40%" style="font-weight: bold;">Date Received: {{ $item->date_purchased }}</td>
                 <td>Quantity Received: {{ $item->quantity_purchased }}</td>
@@ -105,7 +106,7 @@
             <tr>
                 <td style="font-weight: bold;">User:
                     <span style="font-weight: normal !important">
-                        {{ $item->assigned_to ?? optional(\App\User::where('id', $item->user_id)->first())->name ?? 'N/A' }} </span>
+                        {{ optional(\App\User::where('id', $item->user_id)->first())->name ?? $item->assigned_to }} </span>
                 </td>
                 <td><b>Added By:</b> {{ optional(\App\User::where('id', $item->added_by)->first())->name ?? 'N/A' }}</td>
             </tr>
@@ -137,7 +138,7 @@
                         <td>{{$mv->inventory->item_name}}</td>
                         <td>{{$mv->inventory->serial_no}}</td>
                         <td>{{$mv->from}}</td>
-                        <td>{{ \App\User::where('id',$mv->to)->first()->name}}</td>
+                        <td>{{ $mv->to!=="" ? optional(\App\User::where('id', $mv->to)->first())->name ?? 'N/A' : 'N/A' }}</td>
                         <td>{{$mv->reason}}</td>
                         <td>{{$mv->date_moved}}</td>
                         <td>

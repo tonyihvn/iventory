@@ -70,6 +70,7 @@ class SettingsController extends Controller
             'footer_bottom_color'=>$request->footer_bottom_color ?? '#000000',
             'text_color'=>$request->text_color ?? '#333333',
             'text_light_color'=>$request->text_light_color ?? '#777777',
+            'materialize_primary_color'=>$request->materialize_primary_color ?? '#26a69a',
             // Site Builder - Typography
             'font_family'=>$request->font_family ?? 'Roboto',
             'heading_size'=>$request->heading_size ?? 32,
@@ -191,6 +192,7 @@ class SettingsController extends Controller
             'footer_bottom_color'=>$request->footer_bottom_color ?? '#000000',
             'text_color'=>$request->text_color ?? '#333333',
             'text_light_color'=>$request->text_light_color ?? '#777777',
+            'materialize_primary_color'=>$request->materialize_primary_color ?? '#26a69a',
             // Site Builder - Typography
             'font_family'=>$request->font_family ?? 'Roboto',
             'heading_size'=>$request->heading_size ?? 32,
