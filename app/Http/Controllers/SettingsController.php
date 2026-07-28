@@ -42,6 +42,14 @@ class SettingsController extends Controller
             'organization_name' => 'required|min:3'
         ]);
         
+        // Ensure upload directories exist
+        if (!file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+        if (!file_exists('uploads/backgrounds')) {
+            mkdir('uploads/backgrounds', 0755, true);
+        }
+        
         if ($request->hasFile('logo')) {
             $logoname = $request->file('logo')->getClientOriginalName();
             $file = request()->file('logo');
@@ -71,6 +79,13 @@ class SettingsController extends Controller
             'text_color'=>$request->text_color ?? '#333333',
             'text_light_color'=>$request->text_light_color ?? '#777777',
             'materialize_primary_color'=>$request->materialize_primary_color ?? '#26a69a',
+            // Site Builder - Button Colors
+            'button_primary_color'=>$request->button_primary_color ?? '#26a69a',
+            'button_primary_text_color'=>$request->button_primary_text_color ?? '#ffffff',
+            'button_secondary_color'=>$request->button_secondary_color ?? '#7e57c2',
+            'button_secondary_text_color'=>$request->button_secondary_text_color ?? '#ffffff',
+            'button_danger_color'=>$request->button_danger_color ?? '#f44336',
+            'button_danger_text_color'=>$request->button_danger_text_color ?? '#ffffff',
             // Site Builder - Typography
             'font_family'=>$request->font_family ?? 'Roboto',
             'heading_size'=>$request->heading_size ?? 32,
@@ -145,6 +160,14 @@ class SettingsController extends Controller
             'organization_name' => 'required|min:3'
         ]);
         
+        // Ensure upload directories exist
+        if (!file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+        if (!file_exists('uploads/backgrounds')) {
+            mkdir('uploads/backgrounds', 0755, true);
+        }
+        
         if ($request->hasFile('logo')) {
             $logoname = $request->file('logo')->getClientOriginalName();
             $file = request()->file('logo');
@@ -169,8 +192,14 @@ class SettingsController extends Controller
             $app_bg_name = $request->old_app_bg ?? null;
         }
 
-        $settings = settings::where('id','=', $request->id);
-        $settings->update([
+        $settingsRecord = settings::find($request->id);
+        
+        if (!$settingsRecord) {
+            session()->flash('error', 'Settings record not found!');
+            return redirect()->back();
+        }
+        
+        $settingsRecord->update([
             'organization_name'=>$request->organization_name,
             'description'=>$request->description,
             'logo'=>$logoname,
@@ -193,6 +222,13 @@ class SettingsController extends Controller
             'text_color'=>$request->text_color ?? '#333333',
             'text_light_color'=>$request->text_light_color ?? '#777777',
             'materialize_primary_color'=>$request->materialize_primary_color ?? '#26a69a',
+            // Site Builder - Button Colors
+            'button_primary_color'=>$request->button_primary_color ?? '#26a69a',
+            'button_primary_text_color'=>$request->button_primary_text_color ?? '#ffffff',
+            'button_secondary_color'=>$request->button_secondary_color ?? '#7e57c2',
+            'button_secondary_text_color'=>$request->button_secondary_text_color ?? '#ffffff',
+            'button_danger_color'=>$request->button_danger_color ?? '#f44336',
+            'button_danger_text_color'=>$request->button_danger_text_color ?? '#ffffff',
             // Site Builder - Typography
             'font_family'=>$request->font_family ?? 'Roboto',
             'heading_size'=>$request->heading_size ?? 32,

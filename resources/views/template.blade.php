@@ -19,6 +19,12 @@
         $footerColor = ($site_settings && $site_settings->footer_color) ? $site_settings->footer_color : '#00695c';
         $footerBottomColor = ($site_settings && $site_settings->footer_bottom_color) ? $site_settings->footer_bottom_color : '#000000';
         $materializePrimaryColor = ($site_settings && $site_settings->materialize_primary_color) ? $site_settings->materialize_primary_color : '#26a69a';
+        $buttonPrimaryColor = ($site_settings && $site_settings->button_primary_color) ? $site_settings->button_primary_color : '#26a69a';
+        $buttonPrimaryTextColor = ($site_settings && $site_settings->button_primary_text_color) ? $site_settings->button_primary_text_color : '#ffffff';
+        $buttonSecondaryColor = ($site_settings && $site_settings->button_secondary_color) ? $site_settings->button_secondary_color : '#7e57c2';
+        $buttonSecondaryTextColor = ($site_settings && $site_settings->button_secondary_text_color) ? $site_settings->button_secondary_text_color : '#ffffff';
+        $buttonDangerColor = ($site_settings && $site_settings->button_danger_color) ? $site_settings->button_danger_color : '#f44336';
+        $buttonDangerTextColor = ($site_settings && $site_settings->button_danger_text_color) ? $site_settings->button_danger_text_color : '#ffffff';
     @endphp
     <style>
         nav {
@@ -141,6 +147,55 @@
             color: rgb(92, 91, 91) !important;
             font-size: 0.8em;
             text-decoration: italic;
+        }
+
+        /* Button Colors (configurable in Settings) */
+        .btn:not(.red):not(.orange):not(.yellow):not(.green):not(.blue):not(.indigo):not(.purple):not(.pink):not(.brown):not(.grey):not(.black):not(.white):not(.teal):not(.cyan):not(.lime):not(.amber):not(.deep-orange):not(.deep-purple):not(.light-blue):not(.light-green),
+        .btn.teal,
+        .btn.teal.darken-1,
+        .btn.teal.darken-2 {
+            background-color: {{ $buttonPrimaryColor }} !important;
+            color: {{ $buttonPrimaryTextColor }} !important;
+        }
+
+        .btn.purple,
+        .btn.deep-purple {
+            background-color: {{ $buttonSecondaryColor }} !important;
+            color: {{ $buttonSecondaryTextColor }} !important;
+        }
+
+        .btn.red,
+        .btn.red.darken-1,
+        .btn.red.darken-2 {
+            background-color: {{ $buttonDangerColor }} !important;
+            color: {{ $buttonDangerTextColor }} !important;
+        }
+
+        /* Button hover states */
+        .btn:not(.red):not(.orange):not(.yellow):not(.green):not(.blue):not(.indigo):not(.purple):not(.pink):not(.brown):not(.grey):not(.black):not(.white):not(.teal):not(.cyan):not(.lime):not(.amber):not(.deep-orange):not(.deep-purple):not(.light-blue):not(.light-green):hover,
+        .btn.teal:hover,
+        .btn.teal.darken-1:hover,
+        .btn.teal.darken-2:hover {
+            background-color: {{ $buttonPrimaryColor }} !important;
+            opacity: 0.8;
+        }
+
+        .btn.purple:hover,
+        .btn.deep-purple:hover {
+            background-color: {{ $buttonSecondaryColor }} !important;
+            opacity: 0.8;
+        }
+
+        .btn.red:hover,
+        .btn.red.darken-1:hover,
+        .btn.red.darken-2:hover {
+            background-color: {{ $buttonDangerColor }} !important;
+            opacity: 0.8;
+        }
+
+        /* Button with waves (Materialize ripple effect) */
+        .btn-flat {
+            color: {{ $buttonPrimaryTextColor }} !important;
         }
 
         /* ========================================================
@@ -429,13 +484,13 @@
 
                     </form>
                 </li>
-                <li><a href="{{ url('/dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url('/dashboard') }}" class="white-text">Dashboard</a></li>
                 @auth
                     @if (Auth()->user()->role == 'Admin')
-                        <li><a href="{{ url('/edit_settings/1') }}">Settings</a></li>
+                        <li><a href="{{ url('/edit_settings/1') }}" class="white-text">Settings</a></li>
                     @endif
                 @endauth
-                <li><a href="{{ url('/help') }}">Help</a></li>
+                <li><a href="{{ url('/help') }}" class="white-text">Help</a></li>
                 <li>
 
 
@@ -1041,7 +1096,7 @@
             var phones = <?php echo $Phones ?? '[]'; ?>;
             var biometrics = <?php echo $Biometrics ?? '[]'; ?>;
             var desktops = <?php echo $Desktops ?? '[]'; ?>;
-            var vehicles = <?php echo isset($Vehicles) ? $Vehicles : '[]'; ?>;
+            var vehicles = <?php echo $Vehicles ?? '[]'; ?>;
 
             var categoris = [<?php echo $states ?? ''; ?>];
           

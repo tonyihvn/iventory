@@ -205,6 +205,47 @@
                                     <p style="font-size: 12px; color: #999; margin-top: 5px;">Default color for all buttons, links, progress bars, and interactive elements in Materialize UI</p>
                                 </div>
                             </div>
+
+                            <h6 style="color: #1976D2; margin-top: 20px; margin-bottom: 15px;">🔘 Button Colors</h6>
+
+                            <div class="row">
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Primary Button Color</label>
+                                    <input type="color" name="button_primary_color" value="{{ isset($settings) && $settings->button_primary_color ? $settings->button_primary_color : '#26a69a' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Main button background color</p>
+                                </div>
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Primary Button Text Color</label>
+                                    <input type="color" name="button_primary_text_color" value="{{ isset($settings) && $settings->button_primary_text_color ? $settings->button_primary_text_color : '#ffffff' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Main button text color</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Secondary Button Color</label>
+                                    <input type="color" name="button_secondary_color" value="{{ isset($settings) && $settings->button_secondary_color ? $settings->button_secondary_color : '#7e57c2' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Alternative button background color</p>
+                                </div>
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Secondary Button Text Color</label>
+                                    <input type="color" name="button_secondary_text_color" value="{{ isset($settings) && $settings->button_secondary_text_color ? $settings->button_secondary_text_color : '#ffffff' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Alternative button text color</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Danger Button Color</label>
+                                    <input type="color" name="button_danger_color" value="{{ isset($settings) && $settings->button_danger_color ? $settings->button_danger_color : '#f44336' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Delete/danger button background color</p>
+                                </div>
+                                <div class="col s6">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">Danger Button Text Color</label>
+                                    <input type="color" name="button_danger_text_color" value="{{ isset($settings) && $settings->button_danger_text_color ? $settings->button_danger_text_color : '#ffffff' }}" style="width: 100%; height: 50px; border: 1px solid #ddd; cursor: pointer;">
+                                    <p style="font-size: 12px; color: #999; margin-top: 5px;">Delete/danger button text color</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- TYPOGRAPHY SECTION -->
@@ -386,7 +427,7 @@
 
                         <div class="input-field text-right right" style="margin-bottom:20px; margin-top: 30px;">
 
-                                <button type="submit" class="btn">
+                                <button type="submit" class="btn" id="submitBtn">
                                     Update Settings
                                 </button>
 
@@ -397,4 +438,27 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    if (form && submitBtn) {
+        form.addEventListener('submit', function(e) {
+            // Disable the submit button to prevent double submissions
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="material-icons left">hourglass_empty</i> Saving...';
+            
+            // Re-enable button after 5 seconds if form hasn't submitted (fallback)
+            setTimeout(function() {
+                if (form.style.opacity !== '0.5') {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Update Settings';
+                }
+            }, 5000);
+        });
+    }
+});
+</script>
 @endsection

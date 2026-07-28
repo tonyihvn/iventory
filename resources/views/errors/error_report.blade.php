@@ -90,46 +90,55 @@ document.addEventListener('DOMContentLoaded', function() {
     let screenshotCaptured = false;
 
     // Capture screenshot
-    document.getElementById('captureScreenBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        M.toast({html: 'Capturing screenshot...'});
-        
-        // Capture only the main content, not the error report form
-        const contentArea = document.querySelector('.error-details') || document.body;
-        html2canvas(contentArea, {
-            allowTaint: true,
-            useCORS: true,
-            scale: 0.8,
-            backgroundColor: '#ffffff',
-            logging: false
-        }).then(canvas => {
-            const imageData = canvas.toDataURL('image/png');
-            document.getElementById('screenshotData').value = imageData;
-            document.getElementById('screenshotImg').src = imageData;
-            document.getElementById('screenshotPreview').style.display = 'block';
-            screenshotCaptured = true;
-            M.toast({html: 'Screenshot captured successfully!'});
+    const captureBtn = document.getElementById('captureScreenBtn');
+    if (captureBtn) {
+        captureBtn.addEventListener('click', function(e) {
+            e.preventDefault();
             
-            // Attach listener to remove button after it's visible
-            attachRemoveScreenListener();
-        }).catch(error => {
-            console.error('Error capturing screenshot:', error);
-            M.toast({html: 'Error capturing screenshot. Please try again. ' + error.message});
+            M.toast({html: 'Capturing screenshot...'});
+            
+            // Capture only the main content, not the error report form
+            const contentArea = document.querySelector('.error-details') || document.body;
+            
+            if (typeof html2canvas === 'undefined') {
+                M.toast({html: 'Screenshot library not loaded. Please try again.'});
+                return;
+            }
+            
+            html2canvas(contentArea, {
+                allowTaint: true,
+                useCORS: true,
+                scale: 0.8,
+                backgroundColor: '#ffffff',
+                logging: false
+            }).then(canvas => {
+                const imageData = canvas.toDataURL('image/png');
+                document.getElementById('screenshotData').value = imageData;
+                document.getElementById('screenshotImg').src = imageData;
+                document.getElementById('screenshotPreview').style.display = 'block';
+                screenshotCaptured = true;
+                M.toast({html: 'Screenshot captured successfully!'});
+                
+                // Attach listener to remove button after it's visible
+                attachRemoveScreenListener();
+            }).catch(error => {
+                console.error('Error capturing screenshot:', error);
+                M.toast({html: 'Error capturing screenshot. Please try again.'});
+            });
         });
-    });
+    }
 
     // Function to attach remove screenshot listener
     function attachRemoveScreenListener() {
         const removeBtn = document.getElementById('removeScreenBtn');
         if (removeBtn) {
-            removeBtn.onclick = function(e) {
+            removeBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 document.getElementById('screenshotData').value = '';
                 document.getElementById('screenshotPreview').style.display = 'none';
                 screenshotCaptured = false;
                 M.toast({html: 'Screenshot removed'});
-            };
+            });
         }
     }
 

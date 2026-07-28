@@ -147,15 +147,39 @@ $states = "'" . implode("','", $statelist) . "'";
             ->get()->toArray();
 
             $biometrics = array_column($biometricscount, 'count');
+
+            $desktopscount = inventory ::select(DB::raw("count(*) as count"))->where('state',auth()->user()->state)
+            ->where('category','Desktop Computers')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
+
+            $desktops = array_column($desktopscount, 'count');
+
+            $vehiclescount = inventory ::select(DB::raw("count(*) as count"))->where('state',auth()->user()->state)
+            ->where('category','Vehicles')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
+
+            $vehicles = array_column($vehiclescount, 'count');
             $states = "'".Auth()->user()->state."'";
+            
+            $inv_stock = stocks::select('item_id', 'quantity_remaining')->paginate(20);
+            $dc_stocks = dcstocks::select('item_id', 'quantity_remaining')->paginate(20);
+            $statelist = [Auth()->user()->state];
+            
             // dd($laptops);
 
             return view('dashboard')
             ->with('Laptops',json_encode($laptops,JSON_NUMERIC_CHECK))
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
+            ->with('Desktops',json_encode($desktops,JSON_NUMERIC_CHECK))
             ->with('Vehicles',json_encode($vehicles,JSON_NUMERIC_CHECK))
-            ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs])->with(['requests'=>$requests]);
+            ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs,'statelist'=>$statelist])->with(['requests'=>$requests])
+            ->with(['inv_stock'=>$inv_stock])
+            ->with(['dc_stocks'=>$dc_stocks]);
         }
         else if(auth()->user()->role=="Facility"){
             $categories = category::select('id','category_name')->get();

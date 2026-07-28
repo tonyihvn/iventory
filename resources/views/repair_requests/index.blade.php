@@ -10,11 +10,41 @@
                     <i class="material-icons">construction</i> Repair & Maintenance Requests
                 </span>
 
+                <!-- Error/Success Messages -->
+                @if ($errors->any())
+                    <div class="card-panel red lighten-4" style="border-left: 4px solid #f44336;">
+                        <span class="red-text text-darken-2">
+                            <strong><i class="material-icons tiny">error</i> Validation Errors:</strong>
+                        </span>
+                        <ul style="margin-top: 10px;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                @if (session('error'))
+                    <div class="card-panel red lighten-4" style="border-left: 4px solid #f44336;">
+                        <span class="red-text text-darken-2">
+                            <strong><i class="material-icons tiny">error</i> Error:</strong> {{ session('error') }}
+                        </span>
+                    </div>
+                @endif
+
+                @if (session('success'))
+                    <div class="card-panel green lighten-4" style="border-left: 4px solid #4caf50;">
+                        <span class="green-text text-darken-2">
+                            <strong><i class="material-icons tiny">check_circle</i> Success:</strong> {{ session('success') }}
+                        </span>
+                    </div>
+                @endif
+
                 <!-- Request Form -->
                 <div class="section">
                     <h5>Submit New Request</h5>
                     
-                    <form id="requestForm" novalidate>
+                    <form id="requestForm" method="POST" action="{{ route('repair-requests.store') }}" novalidate>
                         @csrf
 
                         @php
@@ -23,7 +53,7 @@
 
                         <div class="row">
                             <div class="input-field col s12 m6">
-                                <select id="rr_state" class="select2" {{ $isRestrictedSender ? 'disabled' : '' }}>
+                                <select id="rr_state" name="state" class="select2">
                                     <option value="">Select State</option>
                                     @foreach($states as $state)
                                         <option value="{{ $state }}" {{ $isRestrictedSender && $state === $userState ? 'selected' : '' }}>{{ $state }}</option>
@@ -33,7 +63,7 @@
                             </div>
 
                             <div class="input-field col s12 m6">
-                                <select id="rr_facility" class="select2">
+                                <select id="rr_facility" name="facility_id" class="select2">
                                     <option value="">Select Facility</option>
                                     @foreach($facilities as $fac)
                                         <option value="{{ $fac->id }}" data-state="{{ $fac->state }}">{{ $fac->facility_name }}</option>
@@ -56,7 +86,7 @@
 
                                 <div class="row">
                                     <div class="input-field col s12 m6">
-                                        <select class="item-select select2" data-row="0">
+                                        <select class="item-select select2" name="requests[0][item_id]" data-row="0">
                                             <option value="">Select Item</option>
                                             @foreach($itemList as $item)
                                                 <option value="{{ $item->id }}">{{ $item->item_name }}</option>
@@ -66,7 +96,7 @@
                                     </div>
 
                                     <div class="input-field col s12 m6">
-                                        <select class="status-select select2" data-row="0">
+                                        <select class="status-select select2" name="requests[0][status]" data-row="0">
                                             <option value="">Select Status</option>
                                             <option value="Need Repairs">Need Repairs</option>
                                             <option value="Not Operational">Not Operational</option>
@@ -79,29 +109,21 @@
 
                                 <div class="row">
                                     <div class="input-field col s12 m6">
-                                        <select class="serial-select select2" data-row="0">
-                                            <option value="">Select Serial Number</option>
-                                            @foreach($serialNumbers as $serial)
-                                                <option value="{{ $serial }}">{{ $serial }}</option>
-                                            @endforeach
-                                        </select>
-                                        <label>Serial Number</label>
+                                        <input type="text" class="serial-input" id="serial_0" name="requests[0][serial_number]" list="serialNumbers" data-row="0" placeholder="Enter or select serial number">
+                                        <label for="serial_0">Serial Number</label>
+                                        <small style="color: #666; display: block; margin-top: 5px;">Type to search or select from list. Can enter new values.</small>
                                     </div>
 
                                     <div class="input-field col s12 m6">
-                                        <select class="tag-select select2" data-row="0">
-                                            <option value="">Select Tag Number</option>
-                                            @foreach($tagNumbers as $tag)
-                                                <option value="{{ $tag }}">{{ $tag }}</option>
-                                            @endforeach
-                                        </select>
-                                        <label class="active">Tag Number</label>
+                                        <input type="text" class="tag-input" id="tag_0" name="requests[0][tag_number]" list="tagNumbers" data-row="0" placeholder="Enter or select tag number">
+                                        <label for="tag_0">Tag Number</label>
+                                        <small style="color: #666; display: block; margin-top: 5px;">Type to search or select from list. Can enter new values.</small>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <textarea class="materialize-textarea description-input" data-row="0" placeholder="Describe the issue..."></textarea>
+                                        <textarea class="materialize-textarea description-input" name="requests[0][description]" data-row="0" placeholder="Describe the issue..."></textarea>
                                         <label class="active">Description</label>
                                     </div>
                                 </div>
@@ -124,6 +146,19 @@
                             </div>
                         </div>
                     </form>
+
+                    <!-- Datalist elements for Serial and Tag Numbers -->
+                    <datalist id="serialNumbers">
+                        @foreach($serialNumbers as $serial)
+                            <option value="{{ $serial }}">{{ $serial }}</option>
+                        @endforeach
+                    </datalist>
+
+                    <datalist id="tagNumbers">
+                        @foreach($tagNumbers as $tag)
+                            <option value="{{ $tag }}">{{ $tag }}</option>
+                        @endforeach
+                    </datalist>
                 </div>
 
                 <hr>
@@ -137,7 +172,7 @@
                     </div>
 
                     <div class="table-responsive">
-                        <table id="products" class="striped bordered hover">
+                        <table id="products" class="striped bordered hover" data-initialized="false">
                             <thead class="teal white-text">
                                 <tr>
                                     <th>State</th>
@@ -316,6 +351,27 @@ document.addEventListener('DOMContentLoaded', function() {
         alert(message);
     }
 
+    // DataTables initialization with error handling
+    try {
+        const table = document.getElementById('products');
+        if (table && table.tbody && table.tbody.rows.length > 0) {
+            // Only initialize DataTables if table has data
+            if (typeof jQuery !== 'undefined' && jQuery.fn.dataTable) {
+                const dataTableInstance = jQuery(table).DataTable({
+                    paging: true,
+                    pageLength: 10,
+                    searching: true,
+                    ordering: true,
+                    info: true,
+                    autoWidth: false
+                });
+                table.setAttribute('data-initialized', 'true');
+            }
+        }
+    } catch (e) {
+        console.warn('DataTables initialization skipped:', e.message);
+    }
+
     // Initialize Materialize
     if (typeof M !== 'undefined') {
         M.AutoInit();
@@ -326,13 +382,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize Select2
     if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
         jQuery('.select2').each(function() {
-            if (!jQuery(this).hasClass('select2-hidden-accessible')) {
-                jQuery(this).select2({ width: '100%' });
+            // Destroy any existing Select2 instance
+            if (jQuery(this).hasClass('select2-hidden-accessible')) {
+                jQuery(this).select2('destroy');
             }
+            
+            jQuery(this).select2({ 
+                width: '100%',
+                allowClear: false,
+                minimumResultsForSearch: 0
+            });
         });
     }
-
-    // DataTables is initialized by pmain.js, no need to reinitialize here
 
     let requestCount = 1;  // Start from 1 since 0 is already shown
 
@@ -356,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 <div class="row">
                     <div class="input-field col s12 m6">
-                        <select class="item-select select2" data-row="${requestCount}">
+                        <select class="item-select select2" name="requests[${requestCount}][item_id]" data-row="${requestCount}">
                             <option value="">Select Item</option>
                             @foreach($itemList as $item)
                                 <option value="{{ $item->id }}">{{ $item->item_name }}</option>
@@ -366,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
 
                     <div class="input-field col s12 m6">
-                        <select class="status-select select2" data-row="${requestCount}">
+                        <select class="status-select select2" name="requests[${requestCount}][status]" data-row="${requestCount}">
                             <option value="">Select Status</option>
                             <option value="Need Repairs">Need Repairs</option>
                             <option value="Not Operational">Not Operational</option>
@@ -379,29 +440,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 <div class="row">
                     <div class="input-field col s12 m6">
-                        <select class="serial-select select2" data-row="${requestCount}">
-                            <option value="">Select Serial Number</option>
-                            @foreach($serialNumbers as $serial)
-                                <option value="{{ $serial }}">{{ $serial }}</option>
-                            @endforeach
-                        </select>
-                        <label>Serial Number</label>
+                        <input type="text" class="serial-input" id="serial_${requestCount}" name="requests[${requestCount}][serial_number]" list="serialNumbers" data-row="${requestCount}" placeholder="Enter or select serial number">
+                        <label for="serial_${requestCount}">Serial Number</label>
+                        <small style="color: #666; display: block; margin-top: 5px;">Type to search or select from list. Can enter new values.</small>
                     </div>
 
                     <div class="input-field col s12 m6">
-                        <select class="tag-select select2" data-row="${requestCount}">
-                            <option value="">Select Tag Number</option>
-                            @foreach($tagNumbers as $tag)
-                                <option value="{{ $tag }}">{{ $tag }}</option>
-                            @endforeach
-                        </select>
-                        <label>Tag Number</label>
+                        <input type="text" class="tag-input" id="tag_${requestCount}" name="requests[${requestCount}][tag_number]" list="tagNumbers" data-row="${requestCount}" placeholder="Enter or select tag number">
+                        <label for="tag_${requestCount}">Tag Number</label>
+                        <small style="color: #666; display: block; margin-top: 5px;">Type to search or select from list. Can enter new values.</small>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="input-field col s12">
-                        <textarea class="materialize-textarea description-input" data-row="${requestCount}" placeholder="Describe the issue..."></textarea>
+                        <textarea class="materialize-textarea description-input" name="requests[${requestCount}][description]" data-row="${requestCount}" placeholder="Describe the issue..."></textarea>
                         <label>Description</label>
                     </div>
                 </div>
@@ -418,10 +471,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!newRow) return;
 
             if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
-                jQuery(newRow).find('.select2').each(function () {
-                    if (!jQuery(this).hasClass('select2-hidden-accessible')) {
-                        jQuery(this).select2({ width: '100%' });
+                // Only initialize Select2 on item and status selects, not on serial/tag inputs
+                jQuery(newRow).find('.item-select, .status-select').each(function () {
+                    // Destroy any existing Select2 instance
+                    if (jQuery(this).hasClass('select2-hidden-accessible')) {
+                        jQuery(this).select2('destroy');
                     }
+                    
+                    jQuery(this).select2({ 
+                        width: '100%',
+                        allowClear: false,
+                        minimumResultsForSearch: 0
+                    });
                 });
             }
 
@@ -491,111 +552,18 @@ document.addEventListener('DOMContentLoaded', function() {
         renderFacilitiesForState(stateSelect.value);
     }
 
-    // Handle form submission
-    let isSubmitting = false;
+    // Handle form submission - Direct POST submission (no AJAX) for server error debugging
     document.getElementById('requestForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // Prevent duplicate submissions (double-click, Enter key, slow network).
-        if (isSubmitting) {
-            return;
-        }
-
-        const submitButton = this.querySelector('button[type="submit"]');
-        const stateSelectEl = document.getElementById('rr_state');
-        const state = stateSelectEl ? stateSelectEl.value : '';
-        const facility = document.getElementById('rr_facility').value;
         const rows = document.querySelectorAll('.request-row');
 
         if (rows.length === 0) {
+            e.preventDefault();
             showToast('Please add at least one request row.');
             return;
         }
 
-        const requests = [];
-        for (const row of rows) {
-            // Read each row's own fields. Select2 keeps the underlying <select>
-            // element's value in sync, so reading `.value` per row is reliable
-            // even when several rows are added via "Add More".
-            const itemSelectEl = row.querySelector('.item-select');
-            const statusSelectEl = row.querySelector('.status-select');
-            const serialSelectEl = row.querySelector('.serial-select');
-            const tagSelectEl = row.querySelector('.tag-select');
-            const descriptionEl = row.querySelector('.description-input');
-
-            const readValue = (el) => {
-                if (!el) return '';
-                if (typeof jQuery !== 'undefined' && jQuery(el).hasClass('select2-hidden-accessible')) {
-                    return jQuery(el).val() || el.value || '';
-                }
-                return el.value || '';
-            };
-
-            const itemId = readValue(itemSelectEl);
-            const statusValue = readValue(statusSelectEl);
-            const serialValue = readValue(serialSelectEl);
-            const tagValue = readValue(tagSelectEl);
-            const descriptionValue = descriptionEl ? descriptionEl.value : '';
-
-            // Accept all rows, even if fields are empty
-            const payload = {
-                item_id: itemId || null,
-                status: statusValue || '',
-                serial_number: serialValue || '',
-                tag_number: tagValue || '',
-                description: descriptionValue || '',
-                state: state || '',
-                facility_id: facility || null
-            };
-
-            requests.push(payload);
-        }
-
-        isSubmitting = true;
-        if (submitButton) {
-            submitButton.disabled = true;
-        }
-
-        fetch('/repair-requests/store', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-            },
-            body: JSON.stringify({ requests: requests })
-        })
-        .then(async response => {
-            const data = await response.json().catch(() => ({
-                success: false,
-                message: 'Unexpected server response.'
-            }));
-
-            if (!response.ok) {
-                throw new Error(data.message || `Request failed with status ${response.status}`);
-            }
-
-            return data;
-        })
-        .then(data => {
-            if (data.success) {
-                showToast(data.message || 'Requests submitted successfully.');
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                isSubmitting = false;
-                if (submitButton) {
-                    submitButton.disabled = false;
-                }
-                showToast('Error: ' + (data.message || 'Unable to submit requests.'));
-            }
-        })
-        .catch(error => {
-            isSubmitting = false;
-            if (submitButton) {
-                submitButton.disabled = false;
-            }
-            console.error('Error:', error);
-            showToast(error.message || 'An error occurred while submitting requests.');
-        });
+        // Form will submit directly via POST
+        // Any server errors will be displayed on the response page
     });
 
     // Handle edit request
@@ -1200,6 +1168,40 @@ document.addEventListener('DOMContentLoaded', function() {
 
     tbody tr:hover {
         background-color: #f5f5f5;
+    }
+
+    /* Select2 Dropdown Visibility Fix */
+    .input-field {
+        overflow: visible !important;
+    }
+
+    .select2-container {
+        z-index: 9999 !important;
+    }
+
+    .select2-container--open {
+        z-index: 10000 !important;
+    }
+
+    .select2-dropdown {
+        z-index: 10001 !important;
+    }
+
+    .select2-results {
+        max-height: 300px;
+    }
+
+    /* Fix for card content overflow */
+    .card-content {
+        overflow: visible !important;
+    }
+
+    .section {
+        overflow: visible !important;
+    }
+
+    .row {
+        overflow: visible !important;
     }
 </style>
 

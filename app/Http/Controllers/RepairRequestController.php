@@ -107,15 +107,19 @@ class RepairRequestController extends Controller
             $userState = optional($user)->state;
             $isAdmin = $user && in_array($user->role, ['Admin', 'Super']);
 
+            // Get top-level state and facility (shared across all requests)
+            $topLevelState = $request->input('state');
+            $topLevelFacilityId = $request->input('facility_id');
+
             $validated = $request->validate([
                 'requests' => 'required|array',
                 'requests.*.item_id' => 'nullable|exists:items,id',
                 'requests.*.serial_number' => 'nullable|string',
                 'requests.*.tag_number' => 'nullable|string',
-                'requests.*.state' => 'nullable|string',
-                'requests.*.facility_id' => 'nullable|exists:facilities,id',
                 'requests.*.description' => 'nullable|string',
                 'requests.*.status' => 'nullable|in:Need Repairs,Not Operational,Lost,Irreparable',
+                'state' => 'nullable|string',
+                'facility_id' => 'nullable|exists:facilities,id',
             ]);
 
             DB::beginTransaction();
@@ -123,42 +127,90 @@ class RepairRequestController extends Controller
             $processedRequests = [];
 
             foreach ($validated['requests'] as $reqData) {
-                $state = $reqData['state'] ?? $userState;
+                // Use top-level state/facility if not provided in individual request
+                $state = !empty($reqData['state']) ? $reqData['state'] : $topLevelState;
+                $facilityId = !empty($reqData['facility_id']) ? $reqData['facility_id'] : $topLevelFacilityId;
+                
                 if (!$isAdmin && (!$state || strtolower($state) === 'all')) {
                     DB::rollBack();
+                    // Check if this is a form submission (not AJAX)
+                    if (!$request->expectsJson()) {
+                        return redirect()->back()->with('error', 'Sender state is required for non-admin users.');
+                    }
                     return response()->json([
                         'success' => false,
                         'message' => 'Sender state is required for non-admin users.'
                     ], 422);
                 }
 
-                // Create repair request
-                $repairRequest = new RepairRequest();
-                $repairRequest->state = $state;
-                $repairRequest->facility_id = $reqData['facility_id'] ?? null;
-                $repairRequest->item_id = $reqData['item_id'] ?? null;
-                $repairRequest->serial_number = $reqData['serial_number'] ?? '';
-                $repairRequest->tag_number = $reqData['tag_number'] ?? '';
-                $repairRequest->description = $reqData['description'] ?? '';
-                $repairRequest->status = $reqData['status'] ?? 'Need Repairs';
-                $repairRequest->user_id = Auth::id();
-                $repairRequest->save();
-
                 $serialNumber = $reqData['serial_number'] ?? null;
                 $tagNumber = $reqData['tag_number'] ?? null;
+                $itemId = $reqData['item_id'] ?? null;
+                $status = $reqData['status'] ?? 'Need Repairs';
+                $description = $reqData['description'] ?? '';
 
+                // If both serial and tag numbers are provided
                 if ($serialNumber && $tagNumber) {
-                    // Update inventory item status only when both identifiers are provided.
+                    // Look for existing inventory item with these serial/tag numbers
                     $inventoryItem = inventory::where('serial_no', $serialNumber)
                         ->where('tag_no', $tagNumber)
                         ->first();
 
-                    if ($inventoryItem) {
-                        $inventoryItem->status = $repairRequest->status;
-                        $inventoryItem->remarks = $repairRequest->description;
+                    // If item doesn't exist, create it in inventories and concurrencies tables
+                    if (!$inventoryItem) {
+                        // Get facility name if facility_id is provided
+                        $facility = $facilityId ? facilities::find($facilityId) : null;
+                        $facilityName = $facility ? $facility->facility_name : 'Unknown Facility';
+
+                        // Create new inventory record
+                        $inventoryItem = new inventory();
+                        $inventoryItem->item_id = $itemId; // Link to items table if available
+                        $inventoryItem->item_name = $itemId ? items::find($itemId)->item_name : 'Item with Serial: ' . $serialNumber;
+                        $inventoryItem->serial_no = $serialNumber;
+                        $inventoryItem->tag_no = $tagNumber;
+                        $inventoryItem->state = $state;
+                        $inventoryItem->facility = $facilityName;
+                        $inventoryItem->facility_id = $facilityId;
+                        $inventoryItem->status = $status;
+                        $inventoryItem->remarks = $description;
+                        $inventoryItem->category = 'Equipment'; // Default category
+                        $inventoryItem->department_id = 1; // Default department (adjust as needed)
+                        $inventoryItem->unit_id = 1; // Default unit (adjust as needed)
+                        $inventoryItem->user_id = Auth::id();
+                        $inventoryItem->added_by = Auth::user()->name;
+                        $inventoryItem->save();
+
+                        // Create corresponding concurrency record
+                        $concurrencyRecord = new concurrency();
+                        $concurrencyRecord->state = $state;
+                        $concurrencyRecord->location = $facilityName;
+                        $concurrencyRecord->serial_number = $serialNumber;
+                        $concurrencyRecord->tag_number = $tagNumber;
+                        $concurrencyRecord->condition = $status;
+                        $concurrencyRecord->comments = $description;
+                        $concurrencyRecord->save();
+                    } else {
+                        // Update existing inventory item status
+                        $inventoryItem->status = $status;
+                        $inventoryItem->remarks = $description;
                         $inventoryItem->save();
                     }
+                } else if (!$itemId && ($serialNumber || $tagNumber)) {
+                    // If only serial OR tag is provided (not both), we cannot create/link to inventory
+                    // But we can still create the repair request with the provided data
                 }
+
+                // Create repair request
+                $repairRequest = new RepairRequest();
+                $repairRequest->state = $state;
+                $repairRequest->facility_id = $facilityId ?? null;
+                $repairRequest->item_id = $itemId ?? null;
+                $repairRequest->serial_number = $serialNumber ?? '';
+                $repairRequest->tag_number = $tagNumber ?? '';
+                $repairRequest->description = $description;
+                $repairRequest->status = $status;
+                $repairRequest->user_id = Auth::id();
+                $repairRequest->save();
 
                 $processedRequests[] = $repairRequest;
             }
@@ -168,13 +220,37 @@ class RepairRequestController extends Controller
             // Send email to admin
             $this->sendAdminNotification($processedRequests);
 
+            // Check if this is a form submission (not AJAX)
+            if (!$request->expectsJson()) {
+                return redirect()->route('repair-requests.index')->with('success', count($processedRequests) . ' repair request(s) submitted successfully');
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => count($processedRequests) . ' repair request(s) submitted successfully'
             ]);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            if (!$request->expectsJson()) {
+                return redirect()->back()->withErrors($e->errors())->withInput();
+            }
+            throw $e;
         } catch (\Exception $e) {
             DB::rollBack();
+            
+            // Log the detailed error for debugging
+            \Log::error('Repair Request Store Error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Check if this is a form submission (not AJAX)
+            if (!$request->expectsJson()) {
+                return redirect()->back()->with('error', 'Error: ' . $e->getMessage())->withInput();
+            }
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Error: ' . $e->getMessage()
