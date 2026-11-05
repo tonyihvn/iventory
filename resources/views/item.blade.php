@@ -24,9 +24,13 @@
                   	<div class="input-field">
                         <select name="sr" id="sr" materialize="material_select" class="select2">
                             <option value="{{$sr}}" selected>{{$sr}}</option>
-                            @foreach ($srs as $sr)
-                                <option value='{{ $sr->id }}'>{{ $sr->facility_no }}</option>
-                            @endforeach
+                            <!-- @foreach ($srs as $sr)
+                                <option value='{{ $sr->id }}'>{{ $sr->sub }}</option>
+                            @endforeach -->
+
+                            @foreach ($srs->pluck('sub')->unique()->filter()->values() as $sr)
+                                    <option value="{{ $sr }}">{{ $sr }}</option>
+                                @endforeach
                         </select>
                         <label for="sr" class="active">Select SR</label>
                     </div>
@@ -56,7 +60,7 @@
 
                     <div class="input-field">
                         <select name="facility"  materialize="material_select" class="select2" @if (Auth()->user()->role!=="Admin" && Auth()->user()->role!=="Super" && Auth()->user()->role!=="Manager") disabled @endif>
-                            <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name }}
+                            <option selected value='{{ $item->facility_id }}'>{{ $item->facilities->facility_name ?? "" }}
                             </option>
                             @foreach ($facilities as $facility)
                                 <option value='{{ $facility->id }}'>{{ $facility->facility_name }}</option>
@@ -70,7 +74,7 @@
                             <option selected value='{{ $item->department_id }}'>{{ optional($item->department)->department_name ?? 'Select Department' }}
                             </option>
                             @foreach ($departments as $department)
-                                <option value='{{ $department->id }}'>{{ $department->department_name }}</option>
+                                <option value='{{ $department->id ?? "" }}'>{{ $department->department_name }}</option>
                             @endforeach
                         </select>
                         <label>Select Department</label>
@@ -229,7 +233,7 @@
                     <div class="row">
                         <div class="input-field col s6">
                             <select name="user"  materialize="material_select" class="select2" id="user">
-                                <option selected value='{{ $item->user->id }}'>{{ $item->user->name }}</option>
+                                <option selected value='{{ $item->user->id ?? "" }}'>{{ $item->user->name ?? "" }}</option>
                                 @if (Auth()->user()->role != 'User')
                                     @foreach ($users as $user)
                                         <option value='{{ $user->id }}'>{{ $user->name }}</option>
@@ -285,6 +289,9 @@
                         <button type="submit" class="btn">
                             Update Item
                         </button>
+                        <a href="{{ route('inventory.notes', $item->id) }}" class="btn waves-effect waves-light" style="color: white;">
+                            <i class="material-icons left">note</i>View Notes
+                        </a>
 
                     </div>
                 </form>

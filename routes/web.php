@@ -180,3 +180,9 @@ Route::get('error-reports/{id}', 'ErrorReportController@show')->name('error-repo
 Route::get('help', 'HelpPageController@show')->name('help.show');
 Route::get('help-edit', 'HelpPageController@edit')->name('help.edit')->middleware('role:Super,Admin');
 Route::post('help-update', 'HelpPageController@update')->name('help.update')->middleware('role:Super,Admin');
+
+// NOTES & DOCUMENTS
+Route::resource('notes', 'NoteController')->middleware('auth');
+Route::get('notes/{note}/attachment/{attachmentId}/download', 'NoteController@downloadAttachment')->name('notes.attachment.download')->middleware('auth');
+Route::delete('notes/{attachmentId}/attachment-delete', 'NoteController@deleteAttachment')->name('notes.attachment.delete')->middleware('auth');
+Route::get('inventory/{inventory}/notes', 'NoteController@getInventoryNotes')->name('inventory.notes')->middleware('auth');

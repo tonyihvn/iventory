@@ -26,7 +26,7 @@
                     </div>
 
                     <div class="input-field">
-                        <select onchange="toggleLGA(this);" name="state" id="state">
+                        <select onchange="getLGA();" name="state" id="state">
                             <option value="{{ $facility->state }}" selected="selected">{{ $facility->state }}</option>
                             <option value="Abuja FCT">Abuja FCT</option>
                             <option value="Abia">Abia</option>
@@ -71,10 +71,10 @@
                     </div>
 
                     <div class="input-field">
-                        <select name="lga" id="lga" class="select-lga">
+                        <select name="lga" id="lga" class="select-lga  browser-default" required>
                             <option value="{{ $facility->lga }}" selected="selected">{{ $facility->lga }}</option>
                         </select>
-                        <label for="lga">LGA</label>
+                        <label for="lga" class="active">LGA</label>
                     </div>
 
                     <div class="input-field">
@@ -126,5 +126,5 @@
             </div>
         </div>
     </div>
-    <script src="{{ asset('/js/lga.js') }}"></script>
+<script src="{{asset('/js/lga2.js')}}"></script>
 @endsection

@@ -21,7 +21,7 @@
                         </div>
 
                         <div class="input-field">
-                                <select  onchange="getLGA();" name="state" id="state" class="browser-default validate">
+                                <select onchange="getLGA();" name="state" id="state" class="browser-default validate">
                                     <option value="" selected="selected">- Select State -</option>
                                     <option value="CENTRAL">CENTRAL</option>
                                     <option value="FCT">Abuja FCT</option>
@@ -67,12 +67,7 @@
                         </div>
 
                         <div class="input-field">
-                                <select
-                            name="lga"
-                            id="lga"
-                            class="select-lga browser-default"
-                            required
-                            >
+                                <select name="lga" id="lga" class="select-lga browser-default" required>
                             <option value="" disabled selected>Select LGA</option>
                             </select>
                             <label for="lga" class="active">LGA</label>

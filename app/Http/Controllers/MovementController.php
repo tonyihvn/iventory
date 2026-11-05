@@ -26,7 +26,16 @@ class MovementController extends Controller
      */
     public function index()
     {
-        $movements = movement::orderBy('date_moved', 'desc')->paginate(100);
+        // see only movement that occured within your state except you are an admin
+        if(Auth::user()->role != 'Admin'){
+            $movements = movement::whereHas('inventory', function ($query) {
+                $query->where('state', Auth::user()->state);
+            })->orderBy('date_moved', 'desc')->paginate(100);
+        }else{
+            $movements = movement::orderBy('date_moved', 'desc')->paginate(100);
+        }
+        
+        // $movements = movement::orderBy('date_moved', 'desc')->paginate(100);
         return view('movements', compact('movements'));
     }
 

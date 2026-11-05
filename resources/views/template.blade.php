@@ -864,6 +864,7 @@
                 <li class="white">
                     <div class="divider"></div>
                 </li>
+                <li class="white"><a href="{{ url('/notes') }}"><i class="material-icons">note</i>Notes & Documents</a></li>
                 <li class="white"><a href="{{ url('/help') }}"><i class="material-icons">help</i>Help</a></li>
                 <li class="green">
                     <a class="btn-flat dropdown-button waves-effect waves-light white-text large" href="#"

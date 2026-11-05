@@ -632,7 +632,7 @@
           "Shomolu",
           "Surulere"
         ],
-        Nassarawa: [
+        Nasarawa: [
           "Akwanga",
           "Awe",
           "Doma",
@@ -889,7 +889,7 @@
     $.each(lgaList[state], function(key, value) {   
         $('#lga')
             .append($("<option></option>")
-                       .attr("value", key)
+                       .attr("value", value)
                        .text(value)); 
    });
 }

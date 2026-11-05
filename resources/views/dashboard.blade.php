@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="col s12 card" style="padding: 24px;">
                         <div class="card-title" style="margin-bottom: 8px;">
-                            <b>Nigeria State Asset Distribution</b>
+                            <b>Asset Distribution by State</b>
                         </div>
                         <div id="nigeria-map" style="height: 700px; width: 100%;"></div>
                     </div>
@@ -62,6 +62,26 @@
                                 <i class="material-icons">desktop_windows</i>
                                 <span class="card-title">Desktop Computers</span>
                                 <h4>{{ $allcats->where('category', 'Desktop Computers')->first()->quantity ?? 0 }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col s12 m6 l3">
+                        <div class="card deep-orange lighten-1 white-text">
+                            <div class="card-content center">
+                                <i class="material-icons">storage</i>
+                                <span class="card-title">Tower Servers</span>
+                                <h4>{{ $allcats->where('category', 'Tower Server')->first()->quantity ?? 0 }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col s12 m6 l3">
+                        <div class="card amber lighten-1 white-text">
+                            <div class="card-content center">
+                                <i class="material-icons">power</i>
+                                <span class="card-title">Portable Power Devices</span>
+                                <h4>{{ $allcats->where('category', 'Portable Power Devices')->first()->quantity ?? 0 }}</h4>
                             </div>
                         </div>
                     </div>
@@ -150,8 +170,6 @@
                             <b>Inventory Categories</b>
                         </div>
 
-
-
                         <table id="categories" class="table striped display responsive-table"
                             style="width:100%; font-size:0.7em !important;">
                             <thead class="thead-dark">
@@ -179,6 +197,7 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        <a href="{{ url('inventorycategory/empty') }}">View Items without Category</a>
 
                     </div>
                     <div class="col m6">

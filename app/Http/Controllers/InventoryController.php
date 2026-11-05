@@ -314,59 +314,106 @@ class InventoryController extends Controller
     {
         $categories = category::select('id','category_name')->get();
         $items = items::select('id','item_name')->get();
+        
+        // Check if category is "empty" to filter null/empty categories
+        $isEmptyFilter = ($category === 'empty');
+        
         if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get();
             $facilities = facilities::select('id','facility_name')->get();
-            $query = inventory::where('category',$category)
-                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
-                ->with(['facilities' => function($q) {
-                    $q->select('id', 'facility_name', 'lga');
-                }, 'user' => function($q) {
-                    $q->select('id', 'name');
-                }])
-                ->orderBy('item_name', 'asc');
+            
+            if($isEmptyFilter){
+                $query = inventory::where(function($q) {
+                    $q->whereNull('category')
+                      ->orWhere('category', '');
+                })
+                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            } else {
+                $query = inventory::where('category',$category)
+                    ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            }
+            
+            $query = $query->with(['facilities' => function($q) {
+                $q->select('id', 'facility_name', 'lga');
+            }, 'user' => function($q) {
+                $q->select('id', 'name');
+            }])
+            ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
         }else if(auth()->user()->role=="Manager"){
             $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
-            $query = inventory::where('category',$category)
-                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
+            
+            if($isEmptyFilter){
+                $query = inventory::where(function($q) {
+                    $q->whereNull('category')
+                      ->orWhere('category', '');
+                })
                 ->where('state',auth()->user()->state)
-                ->with(['facilities' => function($q) {
-                    $q->select('id', 'facility_name', 'lga');
-                }, 'user' => function($q) {
-                    $q->select('id', 'name');
-                }])
-                ->orderBy('item_name', 'asc');
+                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            } else {
+                $query = inventory::where('category',$category)
+                    ->where('state',auth()->user()->state)
+                    ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            }
+            
+            $query = $query->with(['facilities' => function($q) {
+                $q->select('id', 'facility_name', 'lga');
+            }, 'user' => function($q) {
+                $q->select('id', 'name');
+            }])
+            ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
         }else if(auth()->user()->role=="Facility"){
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
-            $query = inventory::where('category',$category)
-                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
+            
+            if($isEmptyFilter){
+                $query = inventory::where(function($q) {
+                    $q->whereNull('category')
+                      ->orWhere('category', '');
+                })
                 ->where('facility_id',auth()->user()->facility)
-                ->with(['facilities' => function($q) {
-                    $q->select('id', 'facility_name', 'lga');
-                }, 'user' => function($q) {
-                    $q->select('id', 'name');
-                }])
-                ->orderBy('item_name', 'asc');
+                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            } else {
+                $query = inventory::where('category',$category)
+                    ->where('facility_id',auth()->user()->facility)
+                    ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            }
+            
+            $query = $query->with(['facilities' => function($q) {
+                $q->select('id', 'facility_name', 'lga');
+            }, 'user' => function($q) {
+                $q->select('id', 'name');
+            }])
+            ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
         }else{
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
-            $query = inventory::where('category',$category)
-                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
+            
+            if($isEmptyFilter){
+                $query = inventory::where(function($q) {
+                    $q->whereNull('category')
+                      ->orWhere('category', '');
+                })
                 ->where('user_id',auth()->user()->id)
-                ->with(['facilities' => function($q) {
-                    $q->select('id', 'facility_name', 'lga');
-                }, 'user' => function($q) {
-                    $q->select('id', 'name');
-                }])
-                ->orderBy('item_name', 'asc');
+                ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            } else {
+                $query = inventory::where('category',$category)
+                    ->where('user_id',auth()->user()->id)
+                    ->select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks');
+            }
+            
+            $query = $query->with(['facilities' => function($q) {
+                $q->select('id', 'facility_name', 'lga');
+            }, 'user' => function($q) {
+                $q->select('id', 'name');
+            }])
+            ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
         }
@@ -541,6 +588,11 @@ class InventoryController extends Controller
             }
         }
 
+        // Initialize tracking for duplicates and saved items
+        $duplicates = [];
+        $savedCount = 0;
+        $lastItemId = null;
+
         if($request->quantity_added>1){
             $serialno = ''; $tagno='';
             if($request->ihvn_no==""){
@@ -564,6 +616,20 @@ class InventoryController extends Controller
                     $user_id=$userid[$key];
                 }else{
                     $user_id=$userid[0];
+                }
+
+                // Check for duplicates before saving
+                $isDuplicate = $this->checkDuplicateInventory($ihvnno, $serialno, $tagno);
+                
+                if($isDuplicate){
+                    // Record the duplicate information
+                    $duplicates[] = [
+                        'ihvn_no' => $ihvnno,
+                        'serial_no' => $serialno,
+                        'tag_no' => $tagno,
+                        'item_name' => $request->item_name
+                    ];
+                    continue; // Skip saving this item
                 }
 
                 $itemid = inventory::create([
@@ -590,6 +656,9 @@ class InventoryController extends Controller
                     'file'=>$singlefile
                 ])->id;
 
+                $lastItemId = $itemid;
+                $savedCount++;
+
                 // if(isset($request->concurrency) && $request->concurrency=="Yes"){
                     concurrency::create([
                         'state'=>$request->state,
@@ -611,6 +680,37 @@ class InventoryController extends Controller
 
             }
         }else{
+            // Check for duplicate on single item
+            $isDuplicate = $this->checkDuplicateInventory($request->ihvn_no, $request->serial_no, $request->tag_no);
+            
+            if($isDuplicate){
+                $duplicates[] = [
+                    'ihvn_no' => $request->ihvn_no,
+                    'serial_no' => $request->serial_no,
+                    'tag_no' => $request->tag_no,
+                    'item_name' => $request->item_name
+                ];
+                
+                // Build duplicate alert message
+                $duplicateMsg = "⚠️ <strong>Duplicate Item(s) Found:</strong><br>";
+                foreach ($duplicates as $dup) {
+                    $duplicateMsg .= "• Item: {$dup['item_name']}<br>";
+                    if($dup['ihvn_no'] != 'NA' && $dup['ihvn_no'] != ''){
+                        $duplicateMsg .= "  IHVN No: {$dup['ihvn_no']}<br>";
+                    }
+                    if($dup['serial_no']){
+                        $duplicateMsg .= "  Serial No: {$dup['serial_no']}<br>";
+                    }
+                    if($dup['tag_no']){
+                        $duplicateMsg .= "  Tag No: {$dup['tag_no']}<br>";
+                    }
+                }
+                $duplicateMsg .= "<br>This item was not saved because it already exists in the system.";
+                
+                session()->flash('error', $duplicateMsg);
+                return redirect()->back();
+            }
+
             $itemid = inventory::create([
                 'item_id'=>$request->item_id,
                 'item_name'=>$request->item_name,
@@ -635,6 +735,9 @@ class InventoryController extends Controller
                 'file'=>$singlefile
             ])->id;
 
+            $lastItemId = $itemid;
+            $savedCount++;
+
             // if(isset($request->concurrency) && $request->concurrency=="Yes"){
                 concurrency::create([
                     'state'=>$request->state,
@@ -655,72 +758,140 @@ class InventoryController extends Controller
             // }
         }
 
-        if($request->hasFile('file'))
-        {
-            $files = $request->file('file');
+        if($savedCount > 0){
+            if($request->hasFile('file') && $lastItemId)
+            {
+                $files = $request->file('file');
 
-            if(count($request->file('file'))>1){
-                foreach ($files as $key => $file) {
-                    $filename = $files[$key]->getClientOriginalName();
-                   //  $file->store('users/' . $this->user->id . '/messages');
+                if(count($request->file('file'))>1){
+                    foreach ($files as $key => $file) {
+                        $filename = $files[$key]->getClientOriginalName();
+                       //  $file->store('users/' . $this->user->id . '/messages');
 
-                   $file->move('uploads/'.$itemid, $filename);
+                       $file->move('uploads/'.$lastItemId, $filename);
 
-                   files::create([
-                    'filename'=>$filename,
-                    'itemid'=>$itemid
+                       files::create([
+                        'filename'=>$filename,
+                        'itemid'=>$lastItemId
+                        ]);
+                    }
+                }else{
+
+                    foreach ($files as $key => $file) {
+                        $filename = $files[$key]->getClientOriginalName();
+                       //  $file->store('users/' . $this->user->id . '/messages');
+
+                       $file->move('uploads/'.$lastItemId, $filename);
+
+                       files::create([
+                        'filename'=>$filename,
+                        'itemid'=>$lastItemId
+                        ]);
+                    }
+                }
+
+            }
+
+            if(isset($request->deduct_stock) && $request->deduct_stock=="Yes"){
+                $itemstock = stocks::where('item_id',$request->item_id)->first();
+                if(isset($itemstock)){
+                    $itemstock->decrement('quantity_remaining',$savedCount);
+                }else{
+                    stocks::create([
+                        'item_id'=>$request->item_id,
+                        'quantity_remaining'=>$savedCount
                     ]);
                 }
-            }else{
+            }
 
-                foreach ($files as $key => $file) {
-                    $filename = $files[$key]->getClientOriginalName();
-                   //  $file->store('users/' . $this->user->id . '/messages');
-
-                   $file->move('uploads/'.$itemid, $filename);
-
-                   files::create([
-                    'filename'=>$filename,
-                    'itemid'=>$itemid
-                    ]);
+            $i = 0;
+            if(isset($request->property) && $lastItemId){
+                foreach ($request->property as $pp){
+                // RECORD SPECS
+                    inventoryspec::create([
+                        'property'=>$pp,
+                        'value'=>$request->value[$i],
+                        'itemid'=>$lastItemId
+                        ]);
+                        $i++;
                 }
             }
 
-        }
+            audit::create([
+                'action'=>"Added new inventory item(s). " . $savedCount . " item(s) saved.",
+                'description'=>'A new item was created',
+                'doneby'=>Auth()->user()->id
+            ]);
 
-        if(isset($request->deduct_stock) && $request->deduct_stock=="Yes"){
-            $itemstock = stocks::where('item_id',$request->item_id)->first();
-            if(isset($itemstock)){
-                $itemstock->decrement('quantity_remaining',$request->quantity_added);
-            }else{
-                stocks::create([
-                    'item_id'=>$request->item_id,
-                    'quantity_remaining'=>$request->quantity_added
-                ]);
+            $message = "✓ <strong>Success:</strong> " . $savedCount . " item(s) have been added successfully!";
+            if(!empty($duplicates)){
+                $message .= "<br><br>⚠️ <strong>Duplicate Item(s) Found and NOT saved:</strong><br>";
+                foreach ($duplicates as $dup) {
+                    $message .= "• Item: {$dup['item_name']}<br>";
+                    if($dup['ihvn_no'] != 'NA' && $dup['ihvn_no'] != ''){
+                        $message .= "  IHVN No: {$dup['ihvn_no']}<br>";
+                    }
+                    if($dup['serial_no']){
+                        $message .= "  Serial No: {$dup['serial_no']}<br>";
+                    }
+                    if($dup['tag_no']){
+                        $message .= "  Tag No: {$dup['tag_no']}<br>";
+                    }
+                }
             }
-        }
-
-        $i = 0;
-        if(isset($request->property)){
-            foreach ($request->property as $pp){
-            // RECORD SPECS
-                inventoryspec::create([
-                    'property'=>$pp,
-                    'value'=>$request->value[$i],
-                    'itemid'=>$itemid
-                    ]);
-                    $i++;
+            session()->flash('message', $message);
+        }else{
+            // All items were duplicates
+            $duplicateMsg = "⚠️ <strong>All items are duplicates:</strong><br>";
+            foreach ($duplicates as $dup) {
+                $duplicateMsg .= "• Item: {$dup['item_name']}<br>";
+                if($dup['ihvn_no'] != 'NA' && $dup['ihvn_no'] != ''){
+                    $duplicateMsg .= "  IHVN No: {$dup['ihvn_no']}<br>";
+                }
+                if($dup['serial_no']){
+                    $duplicateMsg .= "  Serial No: {$dup['serial_no']}<br>";
+                }
+                if($dup['tag_no']){
+                    $duplicateMsg .= "  Tag No: {$dup['tag_no']}<br>";
+                }
             }
+            $duplicateMsg .= "<br>No items were saved.";
+            session()->flash('error', $duplicateMsg);
         }
-
-        audit::create([
-            'action'=>"Added new inventory item". $itemid,
-            'description'=>'A new item was created',
-            'doneby'=>Auth()->user()->id
-        ]);
-        session()->flash('message','The New Item has been added successfully!');
 
         return redirect()->back();
+    }
+
+    /**
+     * Check if an inventory item with the given identifiers already exists
+     *
+     * @param  string  $ihvn_no
+     * @param  string  $serial_no
+     * @param  string  $tag_no
+     * @return bool
+     */
+    private function checkDuplicateInventory($ihvn_no, $serial_no, $tag_no)
+    {
+        // Check if any of the identifiers already exist in the inventory
+        if($ihvn_no && $ihvn_no != '' && $ihvn_no != 'NA'){
+            if(inventory::where('ihvn_no', $ihvn_no)->exists()){
+                return true;
+            }
+        }
+        
+        if($serial_no && $serial_no != ''){
+            if(inventory::where('serial_no', $serial_no)->exists()){
+                return true;
+            }
+        }
+        
+        if($tag_no && $tag_no != ''){
+            if(inventory::where('tag_no', $tag_no)->exists()){
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**
@@ -747,7 +918,7 @@ class InventoryController extends Controller
         $item = inventory::where('id','=',$id)->with('inventoryspec')->first();
         $items = items::select('id','item_name')->get();
         $facilities = facilities::select('id','facility_name')->get();
-        $srs = facilities::select('id','facility_no')->distinct()->get();
+        $srs = facilities::select('id','facility_no','sub')->distinct()->get();
         $srCheck = facilities::select('facility_no')->where('facility_name','=',$item->facility)->first();
         if(isset($srCheck)){
             $sr = $srCheck->facility_no;
@@ -1233,16 +1404,20 @@ class InventoryController extends Controller
         
         $items = items::select('id','item_name')->get();
         $categories = category::select('id','category_name')->get();
+        $keyword = $request->keyword;
 
         if(auth()->user()->role=="Admin" || auth()->user()->role=='Observer'){
             $usrs = User::select('id','name')->get();
             $facilities = facilities::select('id','facility_name')->get();
+            
+            // Search in inventory table
             $query = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
-                ->where(function($q) use ($request) {
-                    $q->where('ihvn_no', 'like', '%' . $request->keyword . '%')
-                    ->orWhere('tag_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('item_name', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('serial_no', 'like', '%' . $request->keyword . '%');
+                ->where(function($q) use ($keyword) {
+                    $q->where('ihvn_no', 'like', '%' . $keyword . '%')
+                    ->orWhere('tag_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('item_name', 'like', '%' . $keyword . '%')
+                      ->orWhere('serial_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('assigned_to', 'like', '%' . $keyword . '%');
                 })
                 ->with(['facilities' => function($q) {
                     $q->select('id', 'facility_name', 'lga');
@@ -1252,16 +1427,40 @@ class InventoryController extends Controller
                 ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
+            
+            // Also search in users table and add their inventories
+            $users_by_name = User::select('id','name')->where('name', 'like', '%' . $keyword . '%')->get();
+            foreach($users_by_name as $user) {
+                // Get inventories for this user
+                $user_inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
+                    ->where('user_id', $user->id)
+                    ->with(['facilities' => function($q) {
+                        $q->select('id', 'facility_name', 'lga');
+                    }, 'user' => function($q) {
+                        $q->select('id', 'name');
+                    }])
+                    ->orderBy('item_name', 'asc')
+                    ->get();
+                
+                // Merge with main inventory results
+                $inventories = $inventories->merge($user_inventories);
+            }
+            
+            // Remove duplicates based on ID
+            $inventories = $inventories->unique('id')->values();
+            
         }else if(auth()->user()->role=="Manager"){
             $usrs = User::select('id','name')->where('state',auth()->user()->state)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            
             $query = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
                 ->where('state',auth()->user()->state)
-                ->where(function($q) use ($request) {
-                    $q->where('ihvn_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('item_name', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('serial_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('tag_no', 'like', '%' . $request->keyword . '%');
+                ->where(function($q) use ($keyword) {
+                    $q->where('ihvn_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('item_name', 'like', '%' . $keyword . '%')
+                      ->orWhere('serial_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('tag_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('assigned_to', 'like', '%' . $keyword . '%');
                 })
                 ->with(['facilities' => function($q) {
                     $q->select('id', 'facility_name', 'lga');
@@ -1271,16 +1470,41 @@ class InventoryController extends Controller
                 ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
+            
+            // Also search in users table (limited to same state) and add their inventories
+            $users_by_name = User::select('id','name')->where('state', auth()->user()->state)->where('name', 'like', '%' . $keyword . '%')->get();
+            foreach($users_by_name as $user) {
+                // Get inventories for this user
+                $user_inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status','remarks')
+                    ->where('user_id', $user->id)
+                    ->where('state', auth()->user()->state)
+                    ->with(['facilities' => function($q) {
+                        $q->select('id', 'facility_name', 'lga');
+                    }, 'user' => function($q) {
+                        $q->select('id', 'name');
+                    }])
+                    ->orderBy('item_name', 'asc')
+                    ->get();
+                
+                // Merge with main inventory results
+                $inventories = $inventories->merge($user_inventories);
+            }
+            
+            // Remove duplicates based on ID
+            $inventories = $inventories->unique('id')->values();
+            
         }else if(auth()->user()->role=="Facility"){
             $usrs = User::select('id','name')->where('facility',auth()->user()->facility)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            
             $query = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')
                 ->where('facility_id',auth()->user()->facility)
-                ->where(function($q) use ($request) {
-                    $q->where('ihvn_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('item_name', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('serial_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('tag_no', 'like', '%' . $request->keyword . '%');
+                ->where(function($q) use ($keyword) {
+                    $q->where('ihvn_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('item_name', 'like', '%' . $keyword . '%')
+                      ->orWhere('serial_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('tag_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('assigned_to', 'like', '%' . $keyword . '%');
                 })
                 ->with(['facilities' => function($q) {
                     $q->select('id', 'facility_name', 'lga');
@@ -1290,16 +1514,41 @@ class InventoryController extends Controller
                 ->orderBy('item_name', 'asc');
             
             $inventories = $query->get();
+            
+            // Also search in users table (limited to same facility) and add their inventories
+            $users_by_name = User::select('id','name')->where('facility', auth()->user()->facility)->where('name', 'like', '%' . $keyword . '%')->get();
+            foreach($users_by_name as $user) {
+                // Get inventories for this user
+                $user_inventories = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')
+                    ->where('user_id', $user->id)
+                    ->where('facility_id', auth()->user()->facility)
+                    ->with(['facilities' => function($q) {
+                        $q->select('id', 'facility_name', 'lga');
+                    }, 'user' => function($q) {
+                        $q->select('id', 'name');
+                    }])
+                    ->orderBy('item_name', 'asc')
+                    ->get();
+                
+                // Merge with main inventory results
+                $inventories = $inventories->merge($user_inventories);
+            }
+            
+            // Remove duplicates based on ID
+            $inventories = $inventories->unique('id')->values();
+            
         }else{
             $usrs = User::select('id','name')->where('id',auth()->user()->id)->get();
             $facilities = facilities::select('id','facility_name')->where('state',auth()->user()->state)->get();
+            
             $query = inventory::select('id','state','item_name','serial_no','ihvn_no','tag_no','category','facility','facility_id','user_id','assigned_to','status')
                 ->where('user_id',auth()->user()->id)
-                ->where(function($q) use ($request) {
-                    $q->where('ihvn_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('item_name', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('serial_no', 'like', '%' . $request->keyword . '%')
-                      ->orWhere('tag_no', 'like', '%' . $request->keyword . '%');
+                ->where(function($q) use ($keyword) {
+                    $q->where('ihvn_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('item_name', 'like', '%' . $keyword . '%')
+                      ->orWhere('serial_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('tag_no', 'like', '%' . $keyword . '%')
+                      ->orWhere('assigned_to', 'like', '%' . $keyword . '%');
                 })
                 ->with(['facilities' => function($q) {
                     $q->select('id', 'facility_name', 'lga');

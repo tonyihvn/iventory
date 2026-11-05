@@ -76,6 +76,7 @@
                                         <i class="small material-icons">menu</i>
                                     </a>
                                     <ul style="top: 0px !important">
+                                        @if(Auth::user()->role == 'Admin')
 
                                         <li>
                                                 <form method="POST" action="{{route('movements.destroy',$mv->id)}}">
@@ -84,6 +85,7 @@
                                                 <button onclick="return confirm('Are you sure you want to delete this transaction history?')" class="btn-floating btn-small waves-effect red waves-light tooltipped" data-position="top" data-tooltip="Delete this Item"><i class="material-icons">delete</i></button>
                                                 </form>
                                         </li>
+                                        @endif
 
                                         <li>
                                                 <a href="{{url('/item/'.$mv->inventories_id)}}" class="btn-floating btn-small waves-effect blue waves-light tooltipped" data-position="top" data-tooltip="View Item History"><i class="material-icons">remove_red_eye</i></a>

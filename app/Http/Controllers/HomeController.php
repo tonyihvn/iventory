@@ -56,49 +56,53 @@ class HomeController extends Controller
             $audits = audit::orderBy('created_at','desc')->paginate(20);
 
             // Step 1: Get all distinct states (sorted) - exclude empty states, normalize casing
-$statelist = Inventory::selectRaw('UPPER(state) as state')
-    ->distinct()
-    ->where('state', '!=', '')
-    ->where('state', '!=', null)
-    ->orderBy('state')
-    ->pluck('state')
-    ->toArray();
+            $statelist = Inventory::selectRaw('UPPER(state) as state')
+                ->distinct()
+                ->where('state', '!=', '')
+                ->where('state', '!=', null)
+                ->orderBy('state')
+                ->pluck('state')
+                ->toArray();
 
-// Step 2: Define categories you want to count
-$categories = ['Laptops', 'Phones', 'Biometrics', 'Desktop Computers', 'Vehicles'];
+            // Step 2: Define categories you want to count
+            $categories = ['Laptops', 'Phones', 'Biometrics', 'Desktop Computers', 'Tower Server', 'Portable Power Devices', 'Vehicles'];
 
-// Step 3: Fetch all counts grouped by state and category - exclude empty categories, normalize state casing
-$rawCounts = Inventory::selectRaw('UPPER(state) as state, category, COUNT(*) as count')
-    ->whereIn('category', $categories)
-    ->where('category', '!=', '')
-    ->where('category', '!=', null)
-    ->groupBy('state', 'category')
-    ->get();
+            // Step 3: Fetch all counts grouped by state and category - exclude empty categories, normalize state casing
+            $rawCounts = Inventory::selectRaw('UPPER(state) as state, category, COUNT(*) as count')
+                ->whereIn('category', $categories)
+                ->where('category', '!=', '')
+                ->where('category', '!=', null)
+                ->groupBy('state', 'category')
+                ->get();
 
-// Step 4: Organize results into a lookup array like: $counts[state][category] = number
-$counts = [];
-foreach ($rawCounts as $row) {
-    $counts[$row->state][$row->category] = $row->count;
-}
+            // Step 4: Organize results into a lookup array like: $counts[state][category] = number
+            $counts = [];
+            foreach ($rawCounts as $row) {
+                $counts[$row->state][$row->category] = $row->count;
+            }
 
-// Step 5: Build aligned arrays with zeros where missing
-$laptops = [];
-$phones = [];
-$biometrics = [];
-$desktops = [];
-$vehicles = [];
+            // Step 5: Build aligned arrays with zeros where missing
+            $laptops = [];
+            $phones = [];
+            $biometrics = [];
+            $desktops = [];
+            $towerservers = [];
+            $portablepower = [];
+            $vehicles = [];
 
-foreach ($statelist as $state) {
-    $state = trim($state); // Ensure no whitespace issues
-    $laptops[]    = $counts[$state]['Laptops'] ?? 0;
-    $phones[]     = $counts[$state]['Phones'] ?? 0;
-    $biometrics[] = $counts[$state]['Biometrics'] ?? 0;
-    $desktops[]   = $counts[$state]['Desktop Computers'] ?? 0;
-    $vehicles[]   = $counts[$state]['Vehicles'] ?? 0;
-}
+            foreach ($statelist as $state) {
+                $state = trim($state); // Ensure no whitespace issues
+                $laptops[]    = $counts[$state]['Laptops'] ?? 0;
+                $phones[]     = $counts[$state]['Phones'] ?? 0;
+                $biometrics[] = $counts[$state]['Biometrics'] ?? 0;
+                $desktops[]   = $counts[$state]['Desktop Computers'] ?? 0;
+                $towerservers[] = $counts[$state]['Tower Server'] ?? 0;
+                $portablepower[] = $counts[$state]['Portable Power Devices'] ?? 0;
+                $vehicles[]   = $counts[$state]['Vehicles'] ?? 0;
+            }
 
-// Step 6: Construct the states string for template (after statelist is finalized)
-$states = "'" . implode("','", $statelist) . "'";
+            // Step 6: Construct the states string for template (after statelist is finalized)
+            $states = "'" . implode("','", $statelist) . "'";
 
             // dd($states);
         
@@ -107,6 +111,8 @@ $states = "'" . implode("','", $statelist) . "'";
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
             ->with('Desktops',json_encode($desktops,JSON_NUMERIC_CHECK))
+            ->with('TowerServers',json_encode($towerservers,JSON_NUMERIC_CHECK))
+            ->with('PortablePower',json_encode($portablepower,JSON_NUMERIC_CHECK))
             ->with('Vehicles',json_encode($vehicles,JSON_NUMERIC_CHECK))
             ->with(['allcats'=>$allcats,'audits'=>$audits, 'states'=>$states,'usrs'=>$usrs])
             ->with(['requests'=>$requests])
@@ -156,6 +162,22 @@ $states = "'" . implode("','", $statelist) . "'";
 
             $desktops = array_column($desktopscount, 'count');
 
+            $towerserverscount = inventory ::select(DB::raw("count(*) as count"))->where('state',auth()->user()->state)
+            ->where('category','Tower Server')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
+
+            $towerservers = array_column($towerserverscount, 'count');
+
+            $portablepowercount = inventory ::select(DB::raw("count(*) as count"))->where('state',auth()->user()->state)
+            ->where('category','Portable Power Devices')
+            ->groupBy(DB::raw("state"))
+            ->orderBy("state")
+            ->get()->toArray();
+
+            $portablepower = array_column($portablepowercount, 'count');
+
             $vehiclescount = inventory ::select(DB::raw("count(*) as count"))->where('state',auth()->user()->state)
             ->where('category','Vehicles')
             ->groupBy(DB::raw("state"))
@@ -176,6 +198,8 @@ $states = "'" . implode("','", $statelist) . "'";
             ->with('Phones',json_encode($phones,JSON_NUMERIC_CHECK))
             ->with('Biometrics',json_encode($biometrics,JSON_NUMERIC_CHECK))
             ->with('Desktops',json_encode($desktops,JSON_NUMERIC_CHECK))
+            ->with('TowerServers',json_encode($towerservers,JSON_NUMERIC_CHECK))
+            ->with('PortablePower',json_encode($portablepower,JSON_NUMERIC_CHECK))
             ->with('Vehicles',json_encode($vehicles,JSON_NUMERIC_CHECK))
             ->with(['allcats'=>$allcats,'audits'=>$audits,'states'=>$states,'usrs'=>$usrs,'statelist'=>$statelist])->with(['requests'=>$requests])
             ->with(['inv_stock'=>$inv_stock])
@@ -244,6 +268,26 @@ $states = "'" . implode("','", $statelist) . "'";
     {
         $assets = $request->input('assets');
         Log::info("Submitted Data:",$assets);
+        
+        // Field mapping from concurrency to inventory
+        $fieldMapping = [
+            'state' => 'state',
+            'location' => 'facility',
+            'model' => 'item_name',
+            'serial_number' => 'serial_no',
+            'tag_number' => 'tag_no',
+            'user' => 'assigned_to',
+            'date_of_purchase' => 'date_purchased',
+            'grant' => 'grants',
+            'category' => 'category',
+            'batch' => 'batch',
+            'condition' => 'status',
+            'date_delivered' => 'date_delivered',
+            'received_by' => 'received_by',
+            'comments' => 'remarks',
+            'other_info' => 'description'
+        ];
+        
         foreach ($assets as $assetData) {
             $asset = concurrency::find($assetData['id']);
             if (!empty($asset)) {
@@ -257,6 +301,43 @@ $states = "'" . implode("','", $statelist) . "'";
                     }
                 }
                 $asset->save();
+                
+                // Update related inventory record
+                $inv = null;
+                if (!empty($asset->iid)) {
+                    $inv = inventory::find($asset->iid);
+                }
+                if (!$inv) {
+                    $inv = inventory::where('cid', $asset->id)->first();
+                }
+                if ($inv) {
+                    // Map and update inventory fields
+                    foreach ($assetData as $column => $value) {
+                        if ($column !== 'id' && isset($fieldMapping[$column])) {
+                            $invColumn = $fieldMapping[$column];
+                            if ($column == 'date_of_purchase') {
+                                $inv->$invColumn = date("Y-m-d", strtotime($value));
+                            } else {
+                                $inv->$invColumn = $value;
+                            }
+                        }
+
+                        // Also update the facility_id and user_id in inventory based on the facility name and assigned user name
+                        if ($column === 'location') {
+                            $facility = facilities::where('facility_name', $value)->first();
+                            if ($facility) {
+                                $inv->facility_id = $facility->id;
+                            }
+                        }
+                        if ($column === 'assigned_user') {
+                            $user = User::where('name', $value)->first();
+                            if ($user) {
+                                $inv->user_id = $user->id;
+                            }
+                        }
+                    }
+                    $inv->save();
+                }
             }else{
                 if(!is_numeric($assetData['id'])){
                     $assetData['id'] = 0;
@@ -281,6 +362,55 @@ $states = "'" . implode("','", $statelist) . "'";
 
                 }
                 $newAsset->save();
+                
+                // Create/update related inventory record for new concurrency
+                $inv = null;
+                if (!empty($newAsset->iid)) {
+                    $inv = inventory::find($newAsset->iid);
+                }
+                if (!$inv) {
+                    $inv = inventory::where('cid', $newAsset->id)->first();
+                }
+                
+                // If no related inventory exists, create one
+                if (!$inv) {
+                    $inv = new inventory();
+                }
+                
+                if ($inv) {
+                    // Map and update inventory fields
+                    foreach ($assetData as $column => $value) {
+                        if ($column !== 'id' && isset($fieldMapping[$column])) {
+                            $invColumn = $fieldMapping[$column];
+                            if ($column == 'date_of_purchase') {
+                                $inv->$invColumn = date("Y-m-d", strtotime($value));
+                            } else {
+                                $inv->$invColumn = $value;
+                            }
+                        }
+
+                        // Also update the the facility_id and user_id in inventory based on the facility name and assigned user name
+                        if ($column === 'location') {
+                            $facility = facilities::where('facility_name', $value)->first();
+                            if ($facility) {
+                                $inv->facility_id = $facility->id;
+                            }
+                        }
+                        if ($column === 'assigned_user') {
+                            $user = User::where('name', $value)->first();
+                            if ($user) {
+                                $inv->user_id = $user->id;
+                            }
+                        }
+                    }
+                    $inv->save();
+                    
+                    // Link the inventory back to concurrency
+                    if (empty($newAsset->iid)) {
+                        $newAsset->iid = $inv->id;
+                        $newAsset->save();
+                    }
+                }
             }
         }
 
