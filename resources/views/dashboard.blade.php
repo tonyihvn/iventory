@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="col s12 card" style="padding: 24px;">
                         <div class="card-title" style="margin-bottom: 8px;">
-                            <b>Asset Distribution by State</b>
+                            <b>SI Asset Distribution by State (TONY)</b>
                         </div>
                         <div id="nigeria-map" style="height: 700px; width: 100%;"></div>
                     </div>
